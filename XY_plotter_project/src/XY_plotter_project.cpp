@@ -58,7 +58,7 @@ static void vLEDTask1(void *pvParameters) {
 		LedState = (bool) !LedState;
 
 		/* About a 3Hz on/off toggle rate */
-		vTaskDelay(configTICK_RATE_HZ / 6);
+		vTaskDelay(6000);
 	}
 }
 
@@ -71,7 +71,7 @@ static void vLEDTask2(void *pvParameters) {
 		LedState = (bool) !LedState;
 
 		/* About a 7Hz on/off toggle rate */
-		vTaskDelay(configTICK_RATE_HZ / 14);
+		vTaskDelay(14000);
 	}
 }
 
