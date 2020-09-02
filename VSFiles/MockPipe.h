@@ -1,0 +1,23 @@
+#pragma once
+
+#include <string>
+
+#include "GcodePipe.h"
+
+class MockPipe : GcodePipe {
+private:
+	static const int numOfLines = 5;
+	static const int maxLineLen = 50;
+	char gCodeLines[numOfLines][maxLineLen];
+	int currLine;
+
+public:
+	MockPipe();
+	virtual ~MockPipe();
+	virtual bool init();
+	virtual bool clean();
+	virtual bool getLine(char* dest);
+	virtual bool sendAck();
+	virtual bool sendErr();
+};
+
