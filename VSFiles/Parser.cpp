@@ -5,11 +5,13 @@
 
 #include "FileHandler.h"
 #include "MockPipe.h"
+#include "ParsedGdata.h"
 
 int main()
 {
-	MockPipe pipe;
-
+	FileHandler pipe("gcode01.txt");
+	//MockPipe pipe;
+	
 	const int maxLineLen = 50;
 	char gCodeStr[maxLineLen];
 	std::string gCodeLine;
@@ -21,60 +23,80 @@ int main()
 	std::regex m4("M4 ([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])");
 	std::regex m5("M5 A0 B0 H310 W380 S80");
 	std::regex m10("M10");
+	std::regex m11("M11");
 
 	if (pipe.init()) {
 
-		int times = 25;
-		while (pipe.getLine(gCodeStr) && --times > 0) { //reads the file line by line
+		while (pipe.getLine(gCodeStr)) { //reads the file line by line
 			gCodeLine.assign(gCodeStr);
+
+			// The place to extract all the parsed data:
+			// It's not used for anything, yet!
+			ParsedGdata data;
 
 			std::printf("%s\r\n", gCodeStr);
 
-			if (gCodeLine[0] == 'G') {
-				if (gCodeLine[1] == '1') {
-					if (std::regex_match(gCodeLine, g1)) {
-						pipe.sendAck();
-						std::printf("coords to go to = X:%s Y:%s\r\n",
-							gCodeLine.substr(gCodeLine.find("X") + 1, (gCodeLine.substr(gCodeLine.find("X") + 1)).find(" ")).c_str(),
-							gCodeLine.substr(gCodeLine.find("Y") + 1, (gCodeLine.substr(gCodeLine.find("Y") + 1)).find(" ")).c_str());
+			if (gCodeLine.length() >= 3) {
+				if (gCodeLine[0] == 'G') {
+					if (gCodeLine[1] == '1') {
+						if (std::regex_match(gCodeLine, g1)) {
+							pipe.sendAck();
+
+							data.codeType = GcodeType::G1;
+							data.PenXY.X = std::stof(gCodeLine.substr(gCodeLine.find("X") + 1, (gCodeLine.substr(gCodeLine.find("X") + 1)).find(" ")));
+							data.PenXY.Y = std::stof(gCodeLine.substr(gCodeLine.find("Y") + 1, (gCodeLine.substr(gCodeLine.find("Y") + 1)).find(" ")));
+						}
+						else {
+							pipe.sendErr();
+						}
 					}
-					else {
-						pipe.sendErr();
-					}
-				}
-				else if (gCodeLine[1] == '2' && gCodeLine[2] == '8') {
-					if (std::regex_match(gCodeLine, g28)) {
-						pipe.sendAck();
-						std::printf("going to origin\r\n");
-					}
-					else {
-						pipe.sendErr();
-					}
-				}
-			}
-			else if (gCodeLine[0] == 'M') {
-				if (gCodeLine[1] == '1' && gCodeLine[2] == '0') {
-					if (std::regex_match(gCodeLine, m10)) {
-						pipe.sendAck();
-						std::printf("COM-port opened\r\n");
-					}
-					else {
-						pipe.sendErr();
+					else if (gCodeLine[1] == '2' && gCodeLine[2] == '8') {
+						if (std::regex_match(gCodeLine, g28)) {
+							pipe.sendAck();
+
+							data.codeType = GcodeType::G28;
+						}
+						else {
+							pipe.sendErr();
+						}
 					}
 				}
-				else if (gCodeLine[1] == '1') {
-					if (std::regex_match(gCodeLine, m1)) {
-						pipe.sendAck();
-						std::printf("penposition = %s\r\n", gCodeLine.substr(gCodeLine.find(" ") + 1).c_str());
+				else if (gCodeLine[0] == 'M') {
+
+					if (gCodeLine[1] == '1' && gCodeLine[2] == '0') {
+						if (std::regex_match(gCodeLine, m10)) {
+							pipe.sendAck();
+
+							data.codeType = GcodeType::M10;
+						}
+						else {
+							pipe.sendErr();
+						}
 					}
-					else {
-						pipe.sendErr();
+					else if (gCodeLine[1] == '1' && gCodeLine[2] == '1' && gCodeLine.length() == 2) {
+						pipe.sendAck();
+
+						data.codeType = GcodeType::M11;
+					}
+					else if (gCodeLine[1] == '1') {
+						if (std::regex_match(gCodeLine, m1)) {
+							pipe.sendAck();
+
+							data.codeType = GcodeType::M1;
+							data.penPosition = std::stoi(gCodeLine.substr(gCodeLine.find(" ") + 1));
+						}
+						else {
+							pipe.sendErr();
+						}
 					}
 				}
 				else if (gCodeLine[1] == '2') {
 					if (std::regex_match(gCodeLine, m2)) {
 						pipe.sendAck();
-						std::printf("penUp = %s ; penDown = %s\r\n", gCodeLine.substr(gCodeLine.find(" ") + 1).c_str(), gCodeLine.substr(gCodeLine.find("D")).c_str());
+
+						data.codeType = GcodeType::M2;
+						data.penUp = stoi(gCodeLine.substr(gCodeLine.find(" ") + 1));
+						data.penDown = stoi(gCodeLine.substr(gCodeLine.find("D")));
 					}
 					else {
 						pipe.sendErr();
@@ -83,7 +105,9 @@ int main()
 				else if (gCodeLine[1] == '4') {
 					if (std::regex_match(gCodeLine, m4)) {
 						pipe.sendAck();
-						std::printf("penpower = %s\r\n", gCodeLine.substr(gCodeLine.find(" ") + 1).c_str());
+
+						data.codeType = GcodeType::M4;
+						data.laserPower = std::stoi(gCodeLine.substr(gCodeLine.find(" ") + 1));
 					}
 					else {
 						pipe.sendErr();
@@ -92,17 +116,19 @@ int main()
 				else if (gCodeLine[1] == '5') {
 					if (std::regex_match(gCodeLine, m5)) {
 						pipe.sendAck();
-						std::printf("plotter setting setted");
+
+						data.codeType = GcodeType::M5;
 					}
 					else pipe.sendErr();
 				}
+				else {
+					pipe.sendErr();
+				}
 
 			}
-
 			else {
 				pipe.sendErr();
 			}
-
 		}
 	}
 	else {

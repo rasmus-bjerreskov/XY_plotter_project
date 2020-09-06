@@ -32,6 +32,7 @@ bool FileHandler::clean() {
 
 bool FileHandler::getLine(char* str) {
 	if (fgets(str, 60, fp) != NULL) {
+		strtok(str, "\n");
 		fprintf(log_p, "%s\n", str);
 		return true;
 	}

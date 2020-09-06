@@ -11,8 +11,11 @@ private:
 	char gCodeLines[numOfLines][maxLineLen];
 	int currLine;
 
+	int maxLines;
+
 public:
 	MockPipe();
+	MockPipe(int _maxLines);
 	virtual ~MockPipe();
 	virtual bool init();
 	virtual bool clean();
