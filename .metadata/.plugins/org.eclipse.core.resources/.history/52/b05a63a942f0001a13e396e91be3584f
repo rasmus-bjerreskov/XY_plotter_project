@@ -49,13 +49,11 @@ static void prvSetupHardware(void)
 	Board_LED_Set(0, false);
 }
 
-/* The parser task */
+/* LED1 toggle thread */
 static void vParserTask(void *pvParameters) {
 
 	while (1) {
-
 	}
-
 }
 
 /* the following is required if runtime statistics are to be collected */
@@ -78,6 +76,7 @@ int main(void)
 {
 	prvSetupHardware();
 
+	/* LED1 toggle thread */
 	xTaskCreate(vParserTask, "vParserTask",
 				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
 				(TaskHandle_t *) NULL);
@@ -89,6 +88,7 @@ int main(void)
 	/* Start the scheduler */
 	vTaskStartScheduler();
 
+	/* Should never arrive here */
 	return 1;
 }
 
