@@ -6,7 +6,7 @@
 #include "FileHandler.h"
 #include "MockPipe.h"
 
-int main()
+Parser::Parser()
 {
 	MockPipe pipe;
 
