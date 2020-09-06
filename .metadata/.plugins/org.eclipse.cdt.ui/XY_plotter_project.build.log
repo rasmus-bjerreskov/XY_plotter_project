@@ -1,16 +1,16 @@
-11:04:03 **** Incremental Build of configuration Debug for project XY_plotter_project ****
-make -r -j12 all 
+15:05:31 **** Incremental Build of configuration Debug for project XY_plotter_project ****
+make -r -j8 all 
 Building file: ../src/XY_plotter_project.cpp
 Invoking: MCU C++ Compiler
-arm-none-eabi-c++ -std=c++11 -DDEBUG -D__CODE_RED -D__NEWLIB__ -DCORE_M3 -D__USE_LPCOPEN -DCPP_USE_HEAP -D__LPC15XX__ -I"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\inc" -I"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\inc" -I"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\inc" -I"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\src\include" -I"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\src\portable\GCC\ARM_CM3" -O0 -fno-common -g3 -Wall -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions -fmerge-constants -fmacro-prefix-map="../src/"=. -mcpu=cortex-m3 -mthumb -fstack-usage -MMD -MP -MF"src/XY_plotter_project.d" -MT"src/XY_plotter_project.o" -MT"src/XY_plotter_project.d" -o "src/XY_plotter_project.o" "../src/XY_plotter_project.cpp"
+arm-none-eabi-c++ -std=c++11 -DDEBUG -D__CODE_RED -D__NEWLIB__ -DCORE_M3 -D__USE_LPCOPEN -DCPP_USE_HEAP -D__LPC15XX__ -I"C:\Koulu\3Vuosi\Embedded systems project\XY_Plotter_project\lpc_board_nxp_lpcxpresso_1549\inc" -I"C:\Koulu\3Vuosi\Embedded systems project\XY_Plotter_project\lpc_chip_15xx\inc" -I"C:\Koulu\3Vuosi\Embedded systems project\XY_Plotter_project\FreeRTOS\inc" -I"C:\Koulu\3Vuosi\Embedded systems project\XY_Plotter_project\FreeRTOS\src\include" -I"C:\Koulu\3Vuosi\Embedded systems project\XY_Plotter_project\FreeRTOS\src\portable\GCC\ARM_CM3" -O0 -fno-common -g3 -Wall -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions -fmerge-constants -fmacro-prefix-map="../src/"=. -mcpu=cortex-m3 -mthumb -fstack-usage -MMD -MP -MF"src/XY_plotter_project.d" -MT"src/XY_plotter_project.o" -MT"src/XY_plotter_project.d" -o "src/XY_plotter_project.o" "../src/XY_plotter_project.cpp"
 Finished building: ../src/XY_plotter_project.cpp
  
 Building target: XY_plotter_project.axf
 Invoking: MCU C++ Linker
-arm-none-eabi-c++ -nostdlib -L"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug" -L"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug" -L"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug" -Xlinker -Map="XY_plotter_project.map" -Xlinker --cref -Xlinker --gc-sections -Xlinker -print-memory-usage -mcpu=cortex-m3 -mthumb -T "XY_plotter_project_Debug.ld" -o "XY_plotter_project.axf"  ./src/XY_plotter_project.o ./src/cr_cpp_config.o ./src/cr_startup_lpc15xx.o ./src/crp.o ./src/heap_lock_monitor.o ./src/sysinit.o   -llpc_board_nxp_lpcxpresso_1549 -llpc_chip_15xx -lFreeRTOS
+arm-none-eabi-c++ -nostdlib -L"C:\Koulu\3Vuosi\Embedded systems project\XY_Plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug" -L"C:\Koulu\3Vuosi\Embedded systems project\XY_Plotter_project\lpc_chip_15xx\Debug" -L"C:\Koulu\3Vuosi\Embedded systems project\XY_Plotter_project\FreeRTOS\Debug" -Xlinker -Map="XY_plotter_project.map" -Xlinker --cref -Xlinker --gc-sections -Xlinker -print-memory-usage -mcpu=cortex-m3 -mthumb -T "XY_plotter_project_Debug.ld" -o "XY_plotter_project.axf"  ./src/XY_plotter_project.o ./src/cr_cpp_config.o ./src/cr_startup_lpc15xx.o ./src/crp.o ./src/heap_lock_monitor.o ./src/sysinit.o   -llpc_board_nxp_lpcxpresso_1549 -llpc_chip_15xx -lFreeRTOS
 Memory region         Used Size  Region Size  %age Used
-       MFlash256:       36144 B       256 KB     13.79%
-      Ram0_16_32:        2936 B        32 KB      8.96%
+       MFlash256:       15384 B       256 KB      5.87%
+      Ram0_16_32:        2536 B        32 KB      7.74%
           Ram2_4:          0 GB         4 KB      0.00%
 Finished building target: XY_plotter_project.axf
  
@@ -18,8 +18,8 @@ make --no-print-directory post-build
 Performing post-build steps
 arm-none-eabi-size "XY_plotter_project.axf"; # arm-none-eabi-objcopy -v -O binary "XY_plotter_project.axf" "XY_plotter_project.bin" ; # checksum -p LPC1549 -d "XY_plotter_project.bin";
    text	   data	    bss	    dec	    hex	filename
-  33668	   2476	    460	  36604	   8efc	XY_plotter_project.axf
+  13272	   2112	    424	  15808	   3dc0	XY_plotter_project.axf
  
 
-11:04:04 Build Finished. 0 errors, 0 warnings. (took 705ms)
+15:05:32 Build Finished. 0 errors, 0 warnings. (took 882ms)
 
