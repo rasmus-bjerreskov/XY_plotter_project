@@ -15,6 +15,7 @@
 #include "GcodePipe.h"
 //#include <fstream>
 #include <cstdio>
+#include <string.h>
 
 class FileHandler : public GcodePipe {
 public:

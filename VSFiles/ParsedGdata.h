@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef _ParsedGdata_h_
+#define _ParsedGdata_h_
 
 enum class GcodeType { M1, M2, M4, M5, M10, M11, G1, G28 };
 
@@ -13,10 +13,7 @@ typedef struct ParsedGdata
 {
 	GcodeType codeType;
 	Coordinates PenXY;
-	Coordinates UpperRightLimit;
-	Coordinates LowerLeftLimit;
-	int height;
-	int width;
+	Coordinates canvasLimits;
 	int speed;
 	int Adir;
 	int Bdir;
@@ -24,5 +21,7 @@ typedef struct ParsedGdata
 	int penDown;
 	int penPosition;
 	int laserPower;
-	int limitSw[4];
+    int limitSw[4];
 } ParsedGdata;
+
+#endif
