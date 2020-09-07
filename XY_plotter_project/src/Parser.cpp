@@ -30,24 +30,30 @@ Parser::~Parser() {
  *
  * @return the first token in the tokenized codeLine
  */
-char *Parser::tokenize(){
-	tokens.numTokens = 0;
-	tokens.currTokenNum = 0;
-	tokens.currToken = codeLine;
+char* Parser::tokenize() {
+    tokens.numTokens = 0;
+    tokens.currTokenNum = 0;
+    tokens.currToken = codeLine;
 
-	char *currPos = codeLine;
+    char* currPos = codeLine;
 
 
-	while(*currPos != '\0') {
-		if(*currPos == tokenDelimChar) {
-			tokens.numTokens++;
-			*currPos = '\0';
-		}
+    while (*currPos != '\0') {
+        if (*currPos == tokenDelimChar) {
+            tokens.numTokens++;
+            *currPos = '\0';
+        }
 
-		currPos++;
-	}
+        currPos++;
+    }
 
-	return tokens.currToken;
+    if (tokens.numTokens > 0){
+        tokens.numTokens++;
+        return tokens.currToken;
+    }
+    else {
+        return NULL;
+    }
 }
 
 /**
@@ -57,17 +63,20 @@ char *Parser::tokenize(){
  *
  * @return pointer to the next token if there are more tokens, NULL otherwise.
  */
-char *Parser::nextToken(void) {
-	char *currToken = tokens.currToken;
+char* Parser::nextToken(void) {
+    char* currToken = tokens.currToken;
 
-	if (*currToken == tokens.numTokens-1) {
-		return NULL;
-	}
-	else {
-		while(*(currToken++) != '\0') ;
+    if (tokens.currTokenNum == tokens.numTokens - 1) {
+        return NULL;
+    }
+    else {
+        while (*currToken != '\0') currToken++;
 
-		return currToken;
-	}
+        currToken++;
+        tokens.currTokenNum++;
+        tokens.currToken = currToken;
+        return currToken;
+    }
 }
 
 /**
