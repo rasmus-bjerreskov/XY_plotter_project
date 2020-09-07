@@ -32,6 +32,11 @@ bool MockPipe::getLine(char* dest) {
 	return false;
 }
 
+bool MockPipe::sendLine(const char* dest) {
+	printf("Plotter replies: %s", dest);
+	return true;
+}
+
 bool MockPipe::sendAck() {
 	printf("[%s]: passed\n", gCodeLines[currLine]);
 	return true;

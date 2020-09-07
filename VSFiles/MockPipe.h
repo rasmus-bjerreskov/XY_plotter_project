@@ -4,7 +4,7 @@
 
 #include "GcodePipe.h"
 
-class MockPipe : GcodePipe {
+class MockPipe : public GcodePipe {
 private:
 	static const int numOfLines = 5;
 	static const int maxLineLen = 50;
@@ -20,6 +20,7 @@ public:
 	virtual bool init();
 	virtual bool clean();
 	virtual bool getLine(char* dest);
+	virtual bool sendLine(const char* dest);
 	virtual bool sendAck();
 	virtual bool sendErr();
 };

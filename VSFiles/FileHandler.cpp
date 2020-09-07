@@ -42,6 +42,11 @@ bool FileHandler::getLine(char* str) {
 	}
 }
 
+bool FileHandler::sendLine(const char* dest) {
+	fprintf(log_p, dest);
+	return true;
+}
+
 bool FileHandler::sendAck() {
 	fprintf(log_p, "OK\n");
 	return true;
