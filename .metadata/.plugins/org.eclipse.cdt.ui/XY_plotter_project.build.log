@@ -1,50 +1,25 @@
-14:30:51 **** Incremental Build of configuration Debug for project XY_plotter_project ****
+19:57:15 **** Incremental Build of configuration Debug for project XY_plotter_project ****
 make -r -j8 all 
 Building file: ../src/Parser.cpp
 Invoking: MCU C++ Compiler
 arm-none-eabi-c++ -std=c++11 -DDEBUG -D__CODE_RED -D__NEWLIB__ -DCORE_M3 -D__USE_LPCOPEN -DCPP_USE_HEAP -D__LPC15XX__ -I"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\inc" -I"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\lpc_chip_15xx\inc" -I"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\FreeRTOS\inc" -I"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\FreeRTOS\src\include" -I"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\FreeRTOS\src\portable\GCC\ARM_CM3" -O0 -fno-common -g3 -Wall -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions -fmerge-constants -fmacro-prefix-map="../src/"=. -mcpu=cortex-m3 -mthumb -fstack-usage -MMD -MP -MF"src/Parser.d" -MT"src/Parser.o" -MT"src/Parser.d" -o "src/Parser.o" "../src/Parser.cpp"
-In file included from ../src/Parser.cpp:12:
-../src/Parser.h:17:12: error: cannot declare field 'Parser::pipe' to be of abstract type 'GcodePipe'
-   17 |  GcodePipe pipe;
-      |            ^~~~
-In file included from ../src/Parser.h:11,
-                 from ../src/Parser.cpp:12:
-../src/GcodePipe.h:3:7: note:   because the following virtual functions are pure within 'GcodePipe':
-    3 | class GcodePipe {
-      |       ^~~~~~~~~
-../src/GcodePipe.h:5:15: note: 	'virtual bool GcodePipe::init()'
-    5 |  virtual bool init() = 0;
-      |               ^~~~
-../src/GcodePipe.h:6:15: note: 	'virtual bool GcodePipe::clean()'
-    6 |  virtual bool clean() = 0;
-      |               ^~~~~
-../src/GcodePipe.h:7:15: note: 	'virtual bool GcodePipe::getLine(char*)'
-    7 |  virtual bool getLine(char* dest) = 0;
-      |               ^~~~~~~
-../src/GcodePipe.h:8:15: note: 	'virtual bool GcodePipe::sendLine(const char*)'
-    8 |  virtual bool sendLine(const char* dest) = 0;
-      |               ^~~~~~~~
-../src/GcodePipe.h:9:15: note: 	'virtual bool GcodePipe::sendAck()'
-    9 |  virtual bool sendAck() = 0;
-      |               ^~~~~~~
-../src/GcodePipe.h:10:15: note: 	'virtual bool GcodePipe::sendErr()'
-   10 |  virtual bool sendErr() = 0;
-      |               ^~~~~~~
-../src/GcodePipe.h:11:10: note: 	'virtual GcodePipe::~GcodePipe()'
-   11 |  virtual ~GcodePipe() = 0;
-      |          ^
-../src/Parser.cpp: In constructor 'Parser::Parser(GcodePipe*)':
-../src/Parser.cpp:18:9: error: no match for 'operator=' (operand types are 'GcodePipe' and 'GcodePipe*')
-   18 |  pipe = _pipe;
-      |         ^~~~~
-In file included from ../src/Parser.h:11,
-                 from ../src/Parser.cpp:12:
-../src/GcodePipe.h:3:7: note: candidate: 'GcodePipe& GcodePipe::operator=(const GcodePipe&)'
-    3 | class GcodePipe {
-      |       ^~~~~~~~~
-../src/GcodePipe.h:3:7: note:   no known conversion for argument 1 from 'GcodePipe*' to 'const GcodePipe&'
-make: *** [src/subdir.mk:51: src/Parser.o] Error 1
-"make -r -j8 all" terminated with exit code 2. Build might be incomplete.
+Finished building: ../src/Parser.cpp
+ 
+Building target: XY_plotter_project.axf
+Invoking: MCU C++ Linker
+arm-none-eabi-c++ -nostdlib -L"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug" -L"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\lpc_chip_15xx\Debug" -L"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\FreeRTOS\Debug" -Xlinker -Map="XY_plotter_project.map" -Xlinker --cref -Xlinker --gc-sections -Xlinker -print-memory-usage -mcpu=cortex-m3 -mthumb -T "XY_plotter_project_Debug.ld" -o "XY_plotter_project.axf"  ./src/FileHandler.o ./src/GcodePipe.o ./src/MockPipe.o ./src/Parser.o ./src/XY_plotter_project.o ./src/cr_cpp_config.o ./src/cr_startup_lpc15xx.o ./src/crp.o ./src/heap_lock_monitor.o ./src/sysinit.o   -llpc_board_nxp_lpcxpresso_1549 -llpc_chip_15xx -lFreeRTOS
+Memory region         Used Size  Region Size  %age Used
+       MFlash256:       15428 B       256 KB      5.89%
+      Ram0_16_32:        2552 B        32 KB      7.79%
+          Ram2_4:          0 GB         4 KB      0.00%
+Finished building target: XY_plotter_project.axf
+ 
+make --no-print-directory post-build
+Performing post-build steps
+arm-none-eabi-size "XY_plotter_project.axf"; # arm-none-eabi-objcopy -v -O binary "XY_plotter_project.axf" "XY_plotter_project.bin" ; # checksum -p LPC1549 -d "XY_plotter_project.bin";
+   text	   data	    bss	    dec	    hex	filename
+  13316	   2112	    440	  15868	   3dfc	XY_plotter_project.axf
+ 
 
-14:30:51 Build Failed. 3 errors, 0 warnings. (took 537ms)
+19:57:17 Build Finished. 0 errors, 0 warnings. (took 1s.263ms)
 

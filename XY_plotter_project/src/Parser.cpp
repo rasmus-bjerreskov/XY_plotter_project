@@ -11,11 +11,11 @@
 #include <ctype.h>
 #include "Parser.h"
 
-const char *Parser::tokenDelimStr = " ";
-const char *Parser::lineEndStr = "\n";
-
 Parser::Parser(GcodePipe *_pipe) {
 	pipe = _pipe;
+	tokens.currToken = NULL;
+	tokens.numTokens = 0;
+	tokens.currTokenNum = 0;
 
 }
 
@@ -23,18 +23,68 @@ Parser::~Parser() {
 	// TODO Auto-generated destructor stub
 }
 
+/*
+ * Tokenizes the codeLine string. The codeLine string will change permanently.
+ * After the tokenization, the nextToken-function can be used to access
+ * consequent tokens of the string.
+ *
+ * @return the first token in the tokenized codeLine
+ */
+char *Parser::tokenize(){
+	tokens.numTokens = 0;
+	tokens.currTokenNum = 0;
+	tokens.currToken = codeLine;
+
+	char *currPos = codeLine;
+
+
+	while(*currPos != '\0') {
+		if(*currPos == tokenDelimChar) {
+			tokens.numTokens++;
+			*currPos = '\0';
+		}
+
+		currPos++;
+	}
+
+	return tokens.currToken;
+}
+
+/**
+ * Is used to get to the next token in the tokenized codeLine string.
+ * Note: the next codeLine to be parsed has to be fetched first,
+ * and tokenize has to be called before using nextToken!
+ *
+ * @return pointer to the next token if there are more tokens, NULL otherwise.
+ */
+char *Parser::nextToken(void) {
+	char *currToken = tokens.currToken;
+
+	if (*currToken == tokens.numTokens-1) {
+		return NULL;
+	}
+	else {
+		while(*(currToken++) != '\0') ;
+
+		return currToken;
+	}
+}
+
 /**
  * The main interface function for parsing gCodeLines
  * in the pipe. Waits until there's somethin to parse,
- * and then parses it
+ * and then parses it.
+ *
+ * The parser follows the Context Free Grammar defined in
+ * the file "CFG for Gcode" exactly.
  *
  * @param data Pointer to the parsed data
  * @return true if parsing was successful, false if not.
  */
 bool Parser::parse(ParsedGdata *data) {
-	while (!pipe.getLine(codeLine)) ;
+	while (!pipe->getLine(codeLine)) ;
 
-	char *tokLine = strtok(codeLine, " ");
+	char *tokLine = tokenize();
 
 	if (tokLine == NULL)
 		return false;
@@ -54,11 +104,11 @@ bool Parser::parse(ParsedGdata *data) {
 	}
 
 	if (success == true) {
-		pipe.sendAck();
+		pipe->sendAck();
 		return true;
 	}
 	else {
-		pipe.sendErr();
+		pipe->sendErr();
 		return false;
 	}
 }
@@ -72,26 +122,33 @@ bool Parser::parse(ParsedGdata *data) {
  */
 bool Parser::gParser(ParsedGdata *data, char *tokLine) {
 	if (strcmp(tokLine+1, "1"))
-		return savePenUDPosParser(data, strtok(NULL, tokLine));
-	else if (strcmp(tokLine+1, "28"))
-		return gotoOriginParser(data, strtok(NULL, tokLine));
+		return savePenUDPosParser(data, nextToken());
+	else if (strcmp(tokLine+1, "28\n"))
+		return gotoOriginParser(data, nextToken());
 	else
 		return false;
 }
 
 /**
- * The parser for M-code lines: "M1 ..." and "M2 ..." and so on
+ * The parser for M-code lines: "M1 ...", "M2 ..." and so on
+ *
+ *NOT FINISHED YET: currently only parses M10 and M11
  *
  * @param data Pointer to the parsed data
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
 bool Parser::mParser(ParsedGdata *data, char *tokLine) {
-return true;
+	if (strcmp(tokLine+1, "10\n"))
+		return comOpenParser(data, nextToken());
+	else if(strcmp(tokLine+1, "11\n"))
+		return limitSwQueryParser(data, nextToken());
+	else
+		return true; // INCOMPLETE!!!
 }
 
 /**
- * The parser for "G1 ...": gotoPosition -command
+ * The parser for "G1 ...": GOTO-POSITION -command
  *
  * @param data Pointer to the parsed data
  * @param tokLine The tokenized code line to be parsed
@@ -107,7 +164,7 @@ bool Parser::savePenUDPosParser(ParsedGdata *data, char *tokLine) {
 
 	data->PenXY.X = strtof(tokLine+1, NULL);
 
-	strtok(tokLine, NULL);
+	tokLine = nextToken();
 
 	// Parse the second token: "Y123.456"
 	if (tokLine == NULL || tokLine[0] != 'Y')
@@ -118,7 +175,7 @@ bool Parser::savePenUDPosParser(ParsedGdata *data, char *tokLine) {
 
 	data->PenXY.X = strtof(tokLine+1, NULL);
 
-	strtok(tokLine, NULL);
+	tokLine = nextToken();
 
 	// Parse the final token: "A0" or "A1":
 	if (tokLine == NULL || tokLine[0] != 'A')
@@ -136,19 +193,21 @@ bool Parser::savePenUDPosParser(ParsedGdata *data, char *tokLine) {
 	}
 
 	// finally, check that there's nothing more to be parsed:
-	if (tokLine[2] != '\0')
+	if (tokLine[2] != lineEndChar)
 		return false;
 
-	strtok(tokLine, NULL);
+	tokLine = nextToken();
 
 	if (tokLine != NULL)
 		return false;
-	else
-		return true;
+
+	// Finally, add the code type to data:
+	data->codeType = GcodeType::G1;
+	return true;
 }
 
 /**
- * The parser for "G28 ..." gotoOrigin -command
+ * The parser for "G28\n" GOTO-ORIGIN -command
  *
  * @param data Pointer to the parsed data
  * @param tokLine The tokenized code line to be parsed
@@ -156,15 +215,44 @@ bool Parser::savePenUDPosParser(ParsedGdata *data, char *tokLine) {
  */
 bool Parser::gotoOriginParser(ParsedGdata *data, char *tokLine) {
 	if (tokLine == NULL) {
-		return false;
-	}
-	else if (strcmp(tokLine, lineEndStr)) {
 		data->codeType = GcodeType::G28;
 		return true;
 	}
 	else {
 		return false;
 	}
+}
+
+/**
+ * The parser for "M10\n" COMOPEN -command
+ *
+ * @param data Pointer to the parsed data
+ * @param tokLine The tokenized code line to be parsed
+ * @return true if parsing was successful, false if it was not.
+ */
+bool Parser::comOpenParser(ParsedGdata *data, char *tokLine) {
+	if (tokLine == NULL) {
+		data->codeType = GcodeType::M10;
+		return true;
+	}
+		else
+			return true;
+}
+
+/**
+ * The parser for "M11\n" LIMIT-SW-QUERY -command
+ *
+ * @param data Pointer to the parsed data
+ * @param tokLine The tokenized code line to be parsed
+ * @return true if parsing was successful, false if it was not.
+ */
+bool Parser::limitSwQueryParser(ParsedGdata *data, char *tokLine) {
+	if (tokLine == NULL) {
+		data->codeType = GcodeType::M11;
+		return true;
+	}
+	else
+		return false;
 }
 
 /**
