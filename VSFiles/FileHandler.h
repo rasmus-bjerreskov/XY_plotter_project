@@ -23,6 +23,7 @@ public:
 	bool init();
 	bool clean();
 	bool getLine(char*);
+	bool sendLine(const char*);
 	bool sendAck();
 	bool sendErr();
 	virtual ~FileHandler();

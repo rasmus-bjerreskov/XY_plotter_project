@@ -1,23 +1,29 @@
-typedef enum {
-	m1, m10, m11, m2, m4, g1, g28
-} gCode_t
-
-typdef struct gCodecontainer_t{ //maybe some of these fields should be in a different init struct, for the first m10 command
-	gCode_t type;
-	int xArea;
-	int yArea;
-	int aDir;
-	int bDir;
-	int speed;
-	int penUpPos;
-	int penDownPos;
-	int laserPwr
-	float xCoord;
-	float yCoord;
-	bool relCoords;
-	int lmtSw[4];
-} gCodecontainer_t;
-
+#include "Parser.h"
+#include "ParsedGdata.h"
+#include "GcodePipe.h"
+#include "MockPipe.h"
 int main() {
+	ParsedGdata data;
+	data.codeType = GcodeType::M1;
+	data.PenXY = { 0,0 };
+	data.UpperRightLimit = { 0,0 };
+	data.LowerLeftLimit = { 0,0 };
+	data.height = 380;
+	data.width = 310;
+	data.speed = 80;
+	data.Adir = 0;
+	data.Bdir = 0;
+	data.penUp = 160;
+	data.penDown = 90;
+	data.penPosition = 160;
+	data.laserPower = 0;
+	for (int i = 0; i < 4; i++) {
+		data.limitSw[i] = 1;
+	}
 
+	MockPipe pipe;
+	Parser parser(&pipe);
+	for (int i = 0; i < 10; i++){
+		parser.parseLine(&data);
+	}
 }
