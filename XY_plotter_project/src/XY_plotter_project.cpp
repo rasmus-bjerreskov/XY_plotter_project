@@ -24,7 +24,13 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 #include "heap_lock_monitor.h"
+
+#include "ParsedGdata.h"
+#include "GcodePipe.h"
+#include "SimpleUARTWrapper.h"
+#include "Parser.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -33,7 +39,8 @@
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
-
+SemaphoreHandle_t mutex;
+ParsedGdata data;
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -51,9 +58,17 @@ static void prvSetupHardware(void)
 
 /* The parser task */
 static void vParserTask(void *pvParameters) {
+	data.canvasLimits.Y = 380;
+	data.canvasLimits.X = 310;
+	data.penDown = 90;
+	data.penUp = 160;
+	data.speed = 80;
+	SimpleUART_Wrapper pipe(mutex);
+	Parser parser(&pipe);
 
 	while (1) {
-
+		if (parser.parse(&data))
+			pipe.sendAck();
 	}
 
 }
@@ -78,15 +93,10 @@ int main(void)
 {
 	prvSetupHardware();
 
+	mutex = xSemaphoreCreateMutex();
 	xTaskCreate(vParserTask, "vParserTask",
-				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+				configMINIMAL_STACK_SIZE + 256, NULL, (tskIDLE_PRIORITY + 1UL),
 				(TaskHandle_t *) NULL);
-
-/*	xTaskCreate(cdc_task, "cdc_USB",
-			    configMINIMAL_STACK_SIZE*3, NULL, (tskIDLE_PRIORITY + 1UL),
-				(TaskHandle_t *) NULL);*/
-
-	/* Start the scheduler */
 	vTaskStartScheduler();
 
 	return 1;

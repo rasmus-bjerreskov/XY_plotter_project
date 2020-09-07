@@ -14,10 +14,6 @@ MockPipe::~MockPipe() {
 
 }
 
-bool MockPipe::init() {
-	return true;
-}
-
 bool MockPipe::clean() {
 	return true;
 }

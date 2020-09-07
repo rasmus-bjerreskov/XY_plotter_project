@@ -3,9 +3,8 @@ GcodePipe.h:3:7:constexpr GcodePipe::GcodePipe()	16	static
 MockPipe.cpp:3:1:MockPipe::MockPipe()	16	static
 MockPipe.cpp:13:1:MockPipe::~MockPipe()	16	static
 MockPipe.cpp:13:1:virtual MockPipe::~MockPipe()	16	static
-MockPipe.cpp:17:6:virtual bool MockPipe::init()	16	static
-MockPipe.cpp:21:6:virtual bool MockPipe::clean()	16	static
-MockPipe.cpp:25:6:virtual bool MockPipe::getLine(char*)	16	static
-MockPipe.cpp:35:6:virtual bool MockPipe::sendLine(const char*)	16	static
-MockPipe.cpp:40:6:virtual bool MockPipe::sendAck()	16	static
-MockPipe.cpp:45:6:virtual bool MockPipe::sendErr()	16	static
+MockPipe.cpp:17:6:virtual bool MockPipe::clean()	16	static
+MockPipe.cpp:21:6:virtual bool MockPipe::getLine(char*)	16	static
+MockPipe.cpp:31:6:virtual bool MockPipe::sendLine(const char*)	16	static
+MockPipe.cpp:36:6:virtual bool MockPipe::sendAck()	16	static
+MockPipe.cpp:41:6:virtual bool MockPipe::sendErr()	16	static

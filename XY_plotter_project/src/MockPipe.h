@@ -17,7 +17,6 @@ public:
 	MockPipe();
 	MockPipe(int _maxLines);
 	virtual ~MockPipe();
-	virtual bool init();
 	virtual bool clean();
 	virtual bool getLine(char* dest);
 	virtual bool sendLine(const char* dest);

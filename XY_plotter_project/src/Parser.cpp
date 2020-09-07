@@ -104,7 +104,6 @@ bool Parser::parse(ParsedGdata *data) {
 	}
 
 	if (success == true) {
-		pipe->sendAck();
 		return true;
 	}
 	else {

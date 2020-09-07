@@ -4,10 +4,10 @@ Parser.cpp:22:1:virtual Parser::~Parser()	16	static
 Parser.cpp:33:7:char* Parser::tokenize()	24	static
 Parser.cpp:60:7:char* Parser::nextToken()	24	static
 Parser.cpp:84:6:bool Parser::parse(ParsedGdata*)	24	static
-Parser.cpp:123:6:bool Parser::gParser(ParsedGdata*, char*)	24	static
-Parser.cpp:141:6:bool Parser::mParser(ParsedGdata*, char*)	24	static
-Parser.cpp:157:6:bool Parser::savePenUDPosParser(ParsedGdata*, char*)	24	static
-Parser.cpp:216:6:bool Parser::gotoOriginParser(ParsedGdata*, char*)	24	static
-Parser.cpp:233:6:bool Parser::comOpenParser(ParsedGdata*, char*)	24	static
-Parser.cpp:249:6:bool Parser::limitSwQueryParser(ParsedGdata*, char*)	24	static
-Parser.cpp:264:6:bool Parser::validateFloatStr(char*)	24	static
+Parser.cpp:122:6:bool Parser::gParser(ParsedGdata*, char*)	24	static
+Parser.cpp:140:6:bool Parser::mParser(ParsedGdata*, char*)	24	static
+Parser.cpp:156:6:bool Parser::savePenUDPosParser(ParsedGdata*, char*)	24	static
+Parser.cpp:215:6:bool Parser::gotoOriginParser(ParsedGdata*, char*)	24	static
+Parser.cpp:232:6:bool Parser::comOpenParser(ParsedGdata*, char*)	24	static
+Parser.cpp:248:6:bool Parser::limitSwQueryParser(ParsedGdata*, char*)	24	static
+Parser.cpp:263:6:bool Parser::validateFloatStr(char*)	24	static

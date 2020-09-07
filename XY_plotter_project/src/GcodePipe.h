@@ -2,7 +2,6 @@
 
 class GcodePipe {
 public:
-	virtual bool init() = 0;
 	virtual bool clean() = 0;
 	virtual bool getLine(char* dest) = 0;
 	virtual bool sendLine(const char* dest) = 0;
