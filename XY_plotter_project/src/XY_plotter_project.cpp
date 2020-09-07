@@ -82,9 +82,9 @@ int main(void)
 				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
 				(TaskHandle_t *) NULL);
 
-	xTaskCreate(cdc_task, "cdc_USB",
+/*	xTaskCreate(cdc_task, "cdc_USB",
 			    configMINIMAL_STACK_SIZE*3, NULL, (tskIDLE_PRIORITY + 1UL),
-				(TaskHandle_t *) NULL);
+				(TaskHandle_t *) NULL);*/
 
 	/* Start the scheduler */
 	vTaskStartScheduler();
