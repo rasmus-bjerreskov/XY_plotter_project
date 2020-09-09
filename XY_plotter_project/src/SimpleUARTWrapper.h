@@ -20,14 +20,16 @@ public:
 	SimpleUART_Wrapper(SemaphoreHandle_t mutex);
 	bool init();
 	bool clean();
-	bool getLine(char *dest);
-	bool sendLine(const char *dest);
+	bool getLine(char *destination_string);
+	bool getLine(char *destination_string, int buffer_size);
+	bool sendLine(const char *destination_string);
 	bool sendAck();
 	bool sendErr();
 	virtual ~SimpleUART_Wrapper();
 
 private:
 	SemaphoreHandle_t mutex;
+	static const int MAX_BUF_LEN = 80;
 };
 
 #endif /* SIMPLEUARTWRAPPER_H_ */

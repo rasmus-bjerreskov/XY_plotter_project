@@ -22,9 +22,17 @@ bool SimpleUART_Wrapper::clean() {
 	return true;
 }
 
-bool SimpleUART_Wrapper::getLine(char *str) { //TODO buffer limit param
+bool SimpleUART_Wrapper::getLine(char* str){
+	return SimpleUART_Wrapper::getLine(str, MAX_BUF_LEN);
+}
+
+
+/* Receive text line from uart via board_uart
+ Fills param str with characters from uart until LF or CR, which is stripped
+ Returns false if buffer is empty at time of calling, otherwise true*/
+bool SimpleUART_Wrapper::getLine(char *str, int n) { //TODO maybe n should be set just once on construction
 	int c = 0;
-	int buflen = 50;
+	int buflen = (n <= MAX_BUF_LEN) ? n : MAX_BUF_LEN;
 	int i = 0;
 
 	xSemaphoreTake(mutex, portMAX_DELAY);
@@ -34,7 +42,7 @@ bool SimpleUART_Wrapper::getLine(char *str) { //TODO buffer limit param
 	if (c == EOF)
 		return false; //mdraw not yet ready
 
-	while (c != '\r' && i < (buflen - 1)) {
+	while (c != '\r' && c != '\n' && i < (buflen - 1)) {
 		if (c != EOF){
 			str[i] = c;
 			i++;

@@ -1,12 +1,12 @@
 /*
-===============================================================================
+ ===============================================================================
  Name        : main.c
  Author      : $(author)
  Version     :
  Copyright   : $(copyright)
  Description : main definition
-===============================================================================
-*/
+ ===============================================================================
+ */
 
 #if defined (__USE_LPCOPEN)
 #if defined(NO_BOARD_LIB)
@@ -31,6 +31,7 @@
 #include "GcodePipe.h"
 #include "SimpleUARTWrapper.h"
 #include "Parser.h"
+#include "MockPipe.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -46,8 +47,7 @@ ParsedGdata data;
  ****************************************************************************/
 
 /* Sets up system hardware */
-static void prvSetupHardware(void)
-{
+static void prvSetupHardware(void) {
 	SystemCoreClockUpdate();
 	Board_Init();
 	heap_monitor_setup();
@@ -64,11 +64,15 @@ static void vParserTask(void *pvParameters) {
 	data.penUp = 160;
 	data.speed = 80;
 	SimpleUART_Wrapper pipe(mutex);
+	//MockPipe pipe;
 	Parser parser(&pipe);
-
+	char str[50];
+	int c;
 	while (1) {
-		if (parser.parse(&data))
+		if (pipe.getLine(str)){
+			Board_UARTPutSTR(str);
 			pipe.sendAck();
+		}
 	}
 
 }
@@ -76,7 +80,7 @@ static void vParserTask(void *pvParameters) {
 /* the following is required if runtime statistics are to be collected */
 extern "C" {
 
-void vConfigureTimerForRunTimeStats( void ) {
+void vConfigureTimerForRunTimeStats(void) {
 	Chip_SCT_Init(LPC_SCTSMALL1);
 	LPC_SCTSMALL1->CONFIG = SCT_CONFIG_32BIT_COUNTER;
 	LPC_SCTSMALL1->CTRL_U = SCT_CTRL_PRE_L(255) | SCT_CTRL_CLRCTR_L; // set prescaler to 256 (255 + 1), and start timer
@@ -89,14 +93,13 @@ void vConfigureTimerForRunTimeStats( void ) {
  * @brief	main routine for FreeRTOS blinky example
  * @return	Nothing, function should not exit
  */
-int main(void)
-{
+int main(void) {
 	prvSetupHardware();
 
 	mutex = xSemaphoreCreateMutex();
 	xTaskCreate(vParserTask, "vParserTask",
-				configMINIMAL_STACK_SIZE + 256, NULL, (tskIDLE_PRIORITY + 1UL),
-				(TaskHandle_t *) NULL);
+	configMINIMAL_STACK_SIZE + 256, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t*) NULL);
 	vTaskStartScheduler();
 
 	return 1;

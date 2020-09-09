@@ -2,9 +2,10 @@ GcodePipe.h:3:7:constexpr GcodePipe::GcodePipe()	16	static
 SimpleUARTWrapper.cpp:13:1:SimpleUART_Wrapper::SimpleUART_Wrapper(SemaphoreHandle_t)	16	static
 SimpleUARTWrapper.cpp:17:6:bool SimpleUART_Wrapper::init()	16	static
 SimpleUARTWrapper.cpp:21:6:virtual bool SimpleUART_Wrapper::clean()	16	static
-SimpleUARTWrapper.cpp:25:6:virtual bool SimpleUART_Wrapper::getLine(char*)	32	static
-SimpleUARTWrapper.cpp:57:6:virtual bool SimpleUART_Wrapper::sendLine(const char*)	16	static
-SimpleUARTWrapper.cpp:64:6:virtual bool SimpleUART_Wrapper::sendAck()	16	static
-SimpleUARTWrapper.cpp:71:6:virtual bool SimpleUART_Wrapper::sendErr()	16	static
-SimpleUARTWrapper.cpp:78:1:SimpleUART_Wrapper::~SimpleUART_Wrapper()	16	static
-SimpleUARTWrapper.cpp:78:1:virtual SimpleUART_Wrapper::~SimpleUART_Wrapper()	16	static
+SimpleUARTWrapper.cpp:25:6:virtual bool SimpleUART_Wrapper::getLine(char*)	16	static
+SimpleUARTWrapper.cpp:33:6:virtual bool SimpleUART_Wrapper::getLine(char*, int)	40	static
+SimpleUARTWrapper.cpp:65:6:virtual bool SimpleUART_Wrapper::sendLine(const char*)	16	static
+SimpleUARTWrapper.cpp:72:6:virtual bool SimpleUART_Wrapper::sendAck()	16	static
+SimpleUARTWrapper.cpp:79:6:virtual bool SimpleUART_Wrapper::sendErr()	16	static
+SimpleUARTWrapper.cpp:86:1:SimpleUART_Wrapper::~SimpleUART_Wrapper()	16	static
+SimpleUARTWrapper.cpp:86:1:virtual SimpleUART_Wrapper::~SimpleUART_Wrapper()	16	static
