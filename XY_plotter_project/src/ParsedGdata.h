@@ -15,6 +15,8 @@ typedef struct CanvasSize
 	int Y;
 } CanvasSize;
 
+// Coordinates and CanvasSize could be merged into one union...
+
 typedef struct ParsedGdata
 {
 	GcodeType codeType;
