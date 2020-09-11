@@ -9,11 +9,17 @@ typedef struct Coordinates
 	float Y;
 } Coordinates;
 
+typedef struct CanvasSize
+{
+	int X;
+	int Y;
+} CanvasSize;
+
 typedef struct ParsedGdata
 {
 	GcodeType codeType;
 	Coordinates PenXY;
-	Coordinates canvasLimits;
+	CanvasSize canvasLimits;
 	bool relativityMode;
 	int speed;
 	int Adir;
