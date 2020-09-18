@@ -121,9 +121,9 @@ bool Parser::parse(ParsedGdata *data) {
  */
 bool Parser::gParser(ParsedGdata *data, char *tokLine) {
 	char *gCode = tokLine+1;
-	if (strcmp(gCode, "1"))
+	if (strcmp(gCode, "1") == 0)
 		return gotoPositionParser(data, nextToken());
-	else if (strcmp(gCode, "28\n"))
+	else if (strcmp(gCode, "28\n") == 0)
 		return gotoOriginParser(data, nextToken());
 	else
 		return false;
@@ -141,20 +141,20 @@ bool Parser::gParser(ParsedGdata *data, char *tokLine) {
 bool Parser::mParser(ParsedGdata *data, char *tokLine) {
 	char *mCode = tokLine+1;
 
-	if (strcmp(mCode, "10\n"))
+	if (strcmp(mCode, "10\n") == 0)
 		return comOpenParser(data, nextToken());
-	else if (strcmp(mCode, "11\n"))
+	else if (strcmp(mCode, "11\n") == 0)
 		return limitSwQueryParser(data, nextToken());
-	else if (strcmp(mCode, "1"))
+	else if (strcmp(mCode, "1") == 0)
 		return setPenPosParser(data, nextToken());
-	else if (strcmp(mCode, "2"))
+	else if (strcmp(mCode, "2") == 0)
 		return savePenUDPosParser(data, nextToken());
-	else if (strcmp(mCode, "4"))
+	else if (strcmp(mCode, "4") == 0)
 		return setLaserPowParser(data, nextToken());
-	else if (strcmp(mCode, "5"))
+	else if (strcmp(mCode, "5") == 0)
 		return saveStepperInfoParser(data, nextToken());
 	else
-		return true; // INCOMPLETE!!!
+		return false;
 }
 
 /**
