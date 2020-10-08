@@ -81,7 +81,7 @@ char *Parser::nextToken(void) {
  * @param data Pointer to the parsed data
  * @return true if parsing was successful, false if not.
  */
-bool Parser::parse(ParsedGdata *data) {
+bool Parser::parse(ParsedGdata_t *data) {
 	while (!pipe->getLine(codeLine)) ;
 
 	char *tokLine = tokenize();
@@ -119,7 +119,7 @@ bool Parser::parse(ParsedGdata *data) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::gParser(ParsedGdata *data, char *tokLine) {
+bool Parser::gParser(ParsedGdata_t *data, char *tokLine) {
 	char *gCode = tokLine+1;
 	if (strcmp(gCode, "1") == 0)
 		return gotoPositionParser(data, nextToken());
@@ -138,7 +138,7 @@ bool Parser::gParser(ParsedGdata *data, char *tokLine) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::mParser(ParsedGdata *data, char *tokLine) {
+bool Parser::mParser(ParsedGdata_t *data, char *tokLine) {
 	char *mCode = tokLine+1;
 
 	if (strcmp(mCode, "10\n") == 0)
@@ -164,7 +164,7 @@ bool Parser::mParser(ParsedGdata *data, char *tokLine) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::gotoPositionParser(ParsedGdata *data, char *tokLine) {
+bool Parser::gotoPositionParser(ParsedGdata_t *data, char *tokLine) {
 	// quick checking that the number of tokens mathces the G1 -code requirements:
 	if (tokens.numTokens != 4)
 		return false;
@@ -222,7 +222,7 @@ bool Parser::gotoPositionParser(ParsedGdata *data, char *tokLine) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::gotoOriginParser(ParsedGdata *data, char *tokLine) {
+bool Parser::gotoOriginParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine == NULL) {
 		data->codeType = GcodeType::G28;
 		return true;
@@ -239,7 +239,7 @@ bool Parser::gotoOriginParser(ParsedGdata *data, char *tokLine) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::comOpenParser(ParsedGdata *data, char *tokLine) {
+bool Parser::comOpenParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine == NULL) {
 		data->codeType = GcodeType::M10;
 		return true;
@@ -255,7 +255,7 @@ bool Parser::comOpenParser(ParsedGdata *data, char *tokLine) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::limitSwQueryParser(ParsedGdata *data, char *tokLine) {
+bool Parser::limitSwQueryParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine == NULL) {
 		data->codeType = GcodeType::M11;
 		return true;
@@ -271,7 +271,7 @@ bool Parser::limitSwQueryParser(ParsedGdata *data, char *tokLine) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::setPenPosParser(ParsedGdata *data, char *tokLine) {
+bool Parser::setPenPosParser(ParsedGdata_t *data, char *tokLine) {
 	// quick checking that the number of tokens mathces the M1 -code requirements:
 	if (tokens.numTokens != 2)
 		return false;
@@ -289,7 +289,7 @@ bool Parser::setPenPosParser(ParsedGdata *data, char *tokLine) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::savePenUDPosParser(ParsedGdata *data, char *tokLine) {
+bool Parser::savePenUDPosParser(ParsedGdata_t *data, char *tokLine) {
 	// quick checking that the number of tokens mathces the M2 -code requirements:
 	if (tokens.numTokens != 3)
 		return false;
@@ -321,7 +321,7 @@ bool Parser::savePenUDPosParser(ParsedGdata *data, char *tokLine) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::setLaserPowParser(ParsedGdata *data, char *tokLine) {
+bool Parser::setLaserPowParser(ParsedGdata_t *data, char *tokLine) {
 	// quick checking that the number of tokens mathces the M4 -code requirements:
 	if (tokens.numTokens != 2)
 		return false;
@@ -341,7 +341,7 @@ bool Parser::setLaserPowParser(ParsedGdata *data, char *tokLine) {
  * @param tokLine The tokenized code line to be parsed
  * @return true if parsing was successful, false if it was not.
  */
-bool Parser::saveStepperInfoParser(ParsedGdata *data, char *tokLine) {
+bool Parser::saveStepperInfoParser(ParsedGdata_t *data, char *tokLine) {
 	// M5 A0 B0 H310 W380 S80<LF>
 	// quick checking that the number of tokens mathces the M5 -code requirements:
 	if (tokens.numTokens != 6)

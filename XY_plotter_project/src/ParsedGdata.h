@@ -3,25 +3,25 @@
 
 enum class GcodeType { M1, M2, M4, M5, M10, M11, G1, G28 };
 
-typedef struct Coordinates
+typedef struct
 {
 	float X;
 	float Y;
-} Coordinates;
+} Coordinates_t;
 
-typedef struct CanvasSize
+typedef struct
 {
 	int X;
 	int Y;
-} CanvasSize;
+} CanvasSize_t;
 
-// Coordinates and CanvasSize could be merged into one union...
+// Coordinates_t and CanvasSize could be merged into one union...
 
-typedef struct ParsedGdata
+typedef struct
 {
 	GcodeType codeType;
-	Coordinates PenXY;
-	CanvasSize canvasLimits;
+	Coordinates_t PenXY;
+	CanvasSize_t canvasLimits;
 	bool relativityMode;
 	int speed;
 	int Adir;
@@ -31,6 +31,6 @@ typedef struct ParsedGdata
 	int penPosition;
 	int laserPower;
     int limitSw[4];
-} ParsedGdata;
+} ParsedGdata_t;
 
 #endif

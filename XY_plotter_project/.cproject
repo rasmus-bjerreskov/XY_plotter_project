@@ -313,7 +313,14 @@
 		<boardId>LPCXpresso1549</boardId>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/XY_plotter_project"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/XY_plotter_project"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.1270518666;com.crt.advproject.config.exe.debug.1270518666.;com.crt.advproject.gas.exe.debug.1419855166;com.crt.advproject.assembler.input.853892887">

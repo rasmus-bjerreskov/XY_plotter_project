@@ -29,16 +29,16 @@ private:
 	char *tokenize();
 	char *nextToken(void);
 
-	bool gParser(ParsedGdata *data, char *tokLine);
-	bool mParser(ParsedGdata *data, char *tokLine);
-	bool gotoPositionParser(ParsedGdata *data, char *tokLine);
-	bool gotoOriginParser(ParsedGdata *data, char *tokLine);
-	bool comOpenParser(ParsedGdata *data, char *tokLine);
-	bool limitSwQueryParser(ParsedGdata *data, char *tokLine);
-	bool setPenPosParser(ParsedGdata *data, char *tokLine);
-	bool savePenUDPosParser(ParsedGdata *data, char *tokLine);
-	bool setLaserPowParser(ParsedGdata *data, char *tokLine);
-	bool saveStepperInfoParser(ParsedGdata *data, char *tokLine);
+	bool gParser(ParsedGdata_t *data, char *tokLine);
+	bool mParser(ParsedGdata_t *data, char *tokLine);
+	bool gotoPositionParser(ParsedGdata_t *data, char *tokLine);
+	bool gotoOriginParser(ParsedGdata_t *data, char *tokLine);
+	bool comOpenParser(ParsedGdata_t *data, char *tokLine);
+	bool limitSwQueryParser(ParsedGdata_t *data, char *tokLine);
+	bool setPenPosParser(ParsedGdata_t *data, char *tokLine);
+	bool savePenUDPosParser(ParsedGdata_t *data, char *tokLine);
+	bool setLaserPowParser(ParsedGdata_t *data, char *tokLine);
+	bool saveStepperInfoParser(ParsedGdata_t *data, char *tokLine);
 
 	bool extractDirection(int *storage, char *tokLine, bool hasDelimChar = false, char delimChar = '\0');
 	bool extractInt(int *storage, char *tokLine, bool hasDelimChar = false, char delimChar = '\0');
@@ -50,7 +50,7 @@ public:
 	Parser(GcodePipe *fetcher);
 	virtual ~Parser();
 
-	bool parse(ParsedGdata *_data);
+	bool parse(ParsedGdata_t *_data);
 };
 
 #endif /* PARSER_H_ */
