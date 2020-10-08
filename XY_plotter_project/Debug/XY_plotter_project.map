@@ -740,7 +740,7 @@ Discarded input sections
                 0x00000000       0x1e ./src/PenServo.o
  .rodata._ZTV8PenServo
                 0x00000000       0x10 ./src/PenServo.o
- .debug_info    0x00000000     0x1676 ./src/PenServo.o
+ .debug_info    0x00000000     0x1652 ./src/PenServo.o
  .debug_abbrev  0x00000000      0x3d5 ./src/PenServo.o
  .debug_aranges
                 0x00000000       0x50 ./src/PenServo.o
@@ -813,7 +813,7 @@ Discarded input sections
  .debug_macro   0x00000000      0x114 ./src/PenServo.o
  .debug_macro   0x00000000       0x20 ./src/PenServo.o
  .debug_line    0x00000000      0x871 ./src/PenServo.o
- .debug_str     0x00000000    0x136b3 ./src/PenServo.o
+ .debug_str     0x00000000    0x13684 ./src/PenServo.o
  .comment       0x00000000       0x7a ./src/PenServo.o
  .debug_frame   0x00000000      0x110 ./src/PenServo.o
  .ARM.attributes
@@ -6549,36 +6549,36 @@ END GROUP
                 0x000073ac                _image_size = (_image_end - _image_start)
 OUTPUT(XY_plotter_project.axf elf32-littlearm)
 
-.debug_info     0x00000000    0x188fb
+.debug_info     0x00000000    0x188b3
  .debug_info    0x00000000      0xee1 ./src/FileHandler.o
  .debug_info    0x00000ee1      0x222 ./src/GcodePipe.o
- .debug_info    0x00001103     0x1d0d ./src/Parser.o
- .debug_info    0x00002e10     0x1013 ./src/SimpleUARTWrapper.o
- .debug_info    0x00003e23     0x3544 ./src/XY_plotter_project.o
- .debug_info    0x00007367     0x1276 ./src/cr_cpp_config.o
- .debug_info    0x000085dd      0x2a0 ./src/cr_startup_lpc15xx.o
- .debug_info    0x0000887d       0x40 ./src/crp.o
- .debug_info    0x000088bd      0xc1a ./src/heap_lock_monitor.o
- .debug_info    0x000094d7      0x9fc ./src/sysinit.o
- .debug_info    0x00009ed3     0x145c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_info    0x0000b32f     0x1606 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board_sysinit.o)
- .debug_info    0x0000c935      0xa44 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(chip_15xx.o)
- .debug_info    0x0000d379      0xe46 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(clock_15xx.o)
- .debug_info    0x0000e1bf      0x6d1 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(gpio_15xx.o)
- .debug_info    0x0000e890      0x29c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(iocon_15xx.o)
- .debug_info    0x0000eb2c      0x69b C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(swm_15xx.o)
- .debug_info    0x0000f1c7      0x802 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysctl_15xx.o)
- .debug_info    0x0000f9c9      0x7ee C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysinit_15xx.o)
- .debug_info    0x000101b7      0x9ce C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(uart_15xx.o)
- .debug_info    0x00010b85     0x1c5a C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
- .debug_info    0x000127df     0x278d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
- .debug_info    0x00014f6c      0xa6e C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(heap_3.o)
- .debug_info    0x000159da      0xd35 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(port.o)
- .debug_info    0x0001670f      0xb1c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(FreeRTOSCommonHooks.o)
- .debug_info    0x0001722b      0xc2f C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(list.o)
- .debug_info    0x00017e5a      0x9f8 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_sbrk.o)
- .debug_info    0x00018852       0x38 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(cr_abort.o)
- .debug_info    0x0001888a       0x71 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_check_heap.o)
+ .debug_info    0x00001103     0x1ce9 ./src/Parser.o
+ .debug_info    0x00002dec     0x1013 ./src/SimpleUARTWrapper.o
+ .debug_info    0x00003dff     0x3520 ./src/XY_plotter_project.o
+ .debug_info    0x0000731f     0x1276 ./src/cr_cpp_config.o
+ .debug_info    0x00008595      0x2a0 ./src/cr_startup_lpc15xx.o
+ .debug_info    0x00008835       0x40 ./src/crp.o
+ .debug_info    0x00008875      0xc1a ./src/heap_lock_monitor.o
+ .debug_info    0x0000948f      0x9fc ./src/sysinit.o
+ .debug_info    0x00009e8b     0x145c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_info    0x0000b2e7     0x1606 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board_sysinit.o)
+ .debug_info    0x0000c8ed      0xa44 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(chip_15xx.o)
+ .debug_info    0x0000d331      0xe46 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(clock_15xx.o)
+ .debug_info    0x0000e177      0x6d1 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(gpio_15xx.o)
+ .debug_info    0x0000e848      0x29c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(iocon_15xx.o)
+ .debug_info    0x0000eae4      0x69b C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(swm_15xx.o)
+ .debug_info    0x0000f17f      0x802 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysctl_15xx.o)
+ .debug_info    0x0000f981      0x7ee C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysinit_15xx.o)
+ .debug_info    0x0001016f      0x9ce C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(uart_15xx.o)
+ .debug_info    0x00010b3d     0x1c5a C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
+ .debug_info    0x00012797     0x278d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
+ .debug_info    0x00014f24      0xa6e C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(heap_3.o)
+ .debug_info    0x00015992      0xd35 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(port.o)
+ .debug_info    0x000166c7      0xb1c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(FreeRTOSCommonHooks.o)
+ .debug_info    0x000171e3      0xc2f C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(list.o)
+ .debug_info    0x00017e12      0x9f8 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_sbrk.o)
+ .debug_info    0x0001880a       0x38 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(cr_abort.o)
+ .debug_info    0x00018842       0x71 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_check_heap.o)
 
 .debug_abbrev   0x00000000     0x4652
  .debug_abbrev  0x00000000      0x336 ./src/FileHandler.o
@@ -6840,64 +6840,64 @@ OUTPUT(XY_plotter_project.axf elf32-littlearm)
  .debug_line    0x0000f3c8       0x56 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(cr_abort.o)
  .debug_line    0x0000f41e       0x61 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_check_heap.o)
 
-.debug_str      0x00000000    0x234b4
+.debug_str      0x00000000    0x234b0
  .debug_str     0x00000000     0x6d18 ./src/FileHandler.o
                                0x6f25 (size before relaxing)
  .debug_str     0x00006d18       0x39 ./src/GcodePipe.o
                                0x329b (size before relaxing)
- .debug_str     0x00006d51     0x1fb1 ./src/Parser.o
-                               0x8cb2 (size before relaxing)
- .debug_str     0x00008d02    0x10bac ./src/SimpleUARTWrapper.o
+ .debug_str     0x00006d51     0x1fad ./src/Parser.o
+                               0x8c83 (size before relaxing)
+ .debug_str     0x00008cfe    0x10bac ./src/SimpleUARTWrapper.o
                               0x17a12 (size before relaxing)
- .debug_str     0x000198ae     0x2cda ./src/XY_plotter_project.o
-                              0x1c2bb (size before relaxing)
- .debug_str     0x0001c588       0xd6 ./src/cr_cpp_config.o
+ .debug_str     0x000198aa     0x2cda ./src/XY_plotter_project.o
+                              0x1c28c (size before relaxing)
+ .debug_str     0x0001c584       0xd6 ./src/cr_cpp_config.o
                                0x7eaf (size before relaxing)
- .debug_str     0x0001c65e      0x1f2 ./src/cr_startup_lpc15xx.o
+ .debug_str     0x0001c65a      0x1f2 ./src/cr_startup_lpc15xx.o
                                0x3377 (size before relaxing)
- .debug_str     0x0001c850      0x2c5 ./src/crp.o
+ .debug_str     0x0001c84c      0x2c5 ./src/crp.o
                                0x2f3f (size before relaxing)
- .debug_str     0x0001cb15      0x3b6 ./src/heap_lock_monitor.o
+ .debug_str     0x0001cb11      0x3b6 ./src/heap_lock_monitor.o
                               0x16753 (size before relaxing)
- .debug_str     0x0001cecb       0x11 ./src/sysinit.o
+ .debug_str     0x0001cec7       0x11 ./src/sysinit.o
                               0x129df (size before relaxing)
- .debug_str     0x0001cedc     0x159e C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_str     0x0001ced8     0x159e C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
                               0x13f7a (size before relaxing)
- .debug_str     0x0001e47a      0x86b C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board_sysinit.o)
+ .debug_str     0x0001e476      0x86b C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board_sysinit.o)
                               0x145aa (size before relaxing)
- .debug_str     0x0001ece5      0x157 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(chip_15xx.o)
+ .debug_str     0x0001ece1      0x157 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(chip_15xx.o)
                                0xfde4 (size before relaxing)
- .debug_str     0x0001ee3c      0x894 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(clock_15xx.o)
+ .debug_str     0x0001ee38      0x894 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(clock_15xx.o)
                               0x101ff (size before relaxing)
- .debug_str     0x0001f6d0       0xdf C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(gpio_15xx.o)
+ .debug_str     0x0001f6cc       0xdf C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(gpio_15xx.o)
                                0xf8a1 (size before relaxing)
- .debug_str     0x0001f7af       0x41 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(iocon_15xx.o)
+ .debug_str     0x0001f7ab       0x41 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(iocon_15xx.o)
                                0xf3be (size before relaxing)
- .debug_str     0x0001f7f0      0x55d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(swm_15xx.o)
+ .debug_str     0x0001f7ec      0x55d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(swm_15xx.o)
                                0xfdc6 (size before relaxing)
- .debug_str     0x0001fd4d      0x183 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysctl_15xx.o)
+ .debug_str     0x0001fd49      0x183 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysctl_15xx.o)
                                0xf8ac (size before relaxing)
- .debug_str     0x0001fed0      0x13f C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysinit_15xx.o)
+ .debug_str     0x0001fecc      0x13f C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysinit_15xx.o)
                                0xf89a (size before relaxing)
- .debug_str     0x0002000f      0x20f C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(uart_15xx.o)
+ .debug_str     0x0002000b      0x20f C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(uart_15xx.o)
                                0xf9fd (size before relaxing)
- .debug_str     0x0002021e      0xab9 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
+ .debug_str     0x0002021a      0xab9 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
                               0x1841d (size before relaxing)
- .debug_str     0x00020cd7     0x1e5a C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
+ .debug_str     0x00020cd3     0x1e5a C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
                               0x1941b (size before relaxing)
- .debug_str     0x00022b31       0x6a C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(heap_3.o)
+ .debug_str     0x00022b2d       0x6a C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(heap_3.o)
                               0x171b6 (size before relaxing)
- .debug_str     0x00022b9b      0x5fe C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(port.o)
+ .debug_str     0x00022b97      0x5fe C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(port.o)
                               0x178c2 (size before relaxing)
- .debug_str     0x00023199       0xc4 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(FreeRTOSCommonHooks.o)
+ .debug_str     0x00023195       0xc4 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(FreeRTOSCommonHooks.o)
                               0x17147 (size before relaxing)
- .debug_str     0x0002325d       0x9b C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(list.o)
+ .debug_str     0x00023259       0x9b C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(list.o)
                               0x16bcb (size before relaxing)
- .debug_str     0x000232f8      0x192 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_sbrk.o)
+ .debug_str     0x000232f4      0x192 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_sbrk.o)
                                 0x63c (size before relaxing)
- .debug_str     0x0002348a       0x12 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(cr_abort.o)
+ .debug_str     0x00023486       0x12 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(cr_abort.o)
                                 0x14f (size before relaxing)
- .debug_str     0x0002349c       0x18 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_check_heap.o)
+ .debug_str     0x00023498       0x18 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_check_heap.o)
                                 0x194 (size before relaxing)
 
 .comment        0x00000000       0x79
