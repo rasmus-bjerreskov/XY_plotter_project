@@ -60,8 +60,7 @@ static void prvSetupHardware(void) {
 static void vParserTask(void *pvParameters) {
 	data.canvasLimits.Y = 380;
 	data.canvasLimits.X = 310;
-	data.penDown = 90;
-	data.penUp = 160;
+	data.penServo = new PenServoController(160, 90);
 	data.speed = 80;
 	SimpleUART_Wrapper pipe(mutex);
 	//MockPipe pipe;

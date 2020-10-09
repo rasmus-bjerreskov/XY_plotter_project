@@ -47,7 +47,7 @@ c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2
 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_truncdfsf2.o)
                               ./src/Parser.o (__aeabi_d2f)
 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_addsubsf3.o)
-                              ./src/PenServo.o (__aeabi_i2f)
+                              ./src/PenServo.o (__aeabi_fadd)
 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_muldivsf3.o)
                               ./src/PenServo.o (__aeabi_fdiv)
 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_fixunssfsi.o)
@@ -724,28 +724,24 @@ Discarded input sections
  .text          0x00000000        0x0 ./src/PenServo.o
  .data          0x00000000        0x0 ./src/PenServo.o
  .bss           0x00000000        0x0 ./src/PenServo.o
- .text._ZN8PenServoC2EP13ParsedGdata_tP9LPC_SCT_T
-                0x00000000       0xe8 ./src/PenServo.o
- .text._ZN8PenServo10update_posEv
-                0x00000000       0x1e ./src/PenServo.o
- .text._ZN8PenServo8pen_downEv
-                0x00000000       0x1e ./src/PenServo.o
- .text._ZN8PenServo6pen_upEv
-                0x00000000       0x1e ./src/PenServo.o
- .text._ZN8PenServo7set_posEi
-                0x00000000       0x64 ./src/PenServo.o
+ .text._ZN8PenServoC2Ev
+                0x00000000       0xc8 ./src/PenServo.o
+ .text._ZN8PenServoaSEi
+                0x00000000       0x88 ./src/PenServo.o
+ .text._ZN8PenServo9getCurPosEv
+                0x00000000       0x16 ./src/PenServo.o
  .text._ZN8PenServoD2Ev
                 0x00000000       0x20 ./src/PenServo.o
  .text._ZN8PenServoD0Ev
                 0x00000000       0x1e ./src/PenServo.o
  .rodata._ZTV8PenServo
                 0x00000000       0x10 ./src/PenServo.o
- .debug_info    0x00000000     0x1652 ./src/PenServo.o
- .debug_abbrev  0x00000000      0x3d5 ./src/PenServo.o
+ .debug_info    0x00000000     0x14bb ./src/PenServo.o
+ .debug_abbrev  0x00000000      0x3e7 ./src/PenServo.o
  .debug_aranges
-                0x00000000       0x50 ./src/PenServo.o
- .debug_ranges  0x00000000       0x40 ./src/PenServo.o
- .debug_macro   0x00000000      0x38f ./src/PenServo.o
+                0x00000000       0x40 ./src/PenServo.o
+ .debug_ranges  0x00000000       0x30 ./src/PenServo.o
+ .debug_macro   0x00000000      0x385 ./src/PenServo.o
  .debug_macro   0x00000000      0xb62 ./src/PenServo.o
  .debug_macro   0x00000000       0x1c ./src/PenServo.o
  .debug_macro   0x00000000       0x22 ./src/PenServo.o
@@ -812,10 +808,10 @@ Discarded input sections
  .debug_macro   0x00000000       0x16 ./src/PenServo.o
  .debug_macro   0x00000000      0x114 ./src/PenServo.o
  .debug_macro   0x00000000       0x20 ./src/PenServo.o
- .debug_line    0x00000000      0x871 ./src/PenServo.o
- .debug_str     0x00000000    0x13684 ./src/PenServo.o
+ .debug_line    0x00000000      0x82f ./src/PenServo.o
+ .debug_str     0x00000000    0x13582 ./src/PenServo.o
  .comment       0x00000000       0x7a ./src/PenServo.o
- .debug_frame   0x00000000      0x110 ./src/PenServo.o
+ .debug_frame   0x00000000       0xcc ./src/PenServo.o
  .ARM.attributes
                 0x00000000       0x2d ./src/PenServo.o
  .group         0x00000000        0xc ./src/SimpleUARTWrapper.o
@@ -7304,10 +7300,10 @@ GcodePipe::GcodePipe()                            ./src/FileHandler.o
                                                   ./src/SimpleUARTWrapper.o
                                                   ./src/MockPipe.o
 GcodePipe::~GcodePipe()                           ./src/GcodePipe.o
-GcodePipe::~GcodePipe()                           ./src/GcodePipe.o
                                                   ./src/SimpleUARTWrapper.o
                                                   ./src/MockPipe.o
                                                   ./src/FileHandler.o
+GcodePipe::~GcodePipe()                           ./src/GcodePipe.o
 GcodePipe::~GcodePipe()                           ./src/GcodePipe.o
 HardFault_Handler                                 ./src/cr_startup_lpc15xx.o
 I2C0_IRQHandler                                   ./src/cr_startup_lpc15xx.o
@@ -7359,12 +7355,10 @@ Parser::validateFloatStr(char*, bool, char)       ./src/Parser.o
 Parser::~Parser()                                 ./src/Parser.o
 Parser::~Parser()                                 ./src/Parser.o
 Parser::~Parser()                                 ./src/Parser.o
-PenServo::PenServo(ParsedGdata_t*, LPC_SCT_T*)    ./src/PenServo.o
-PenServo::PenServo(ParsedGdata_t*, LPC_SCT_T*)    ./src/PenServo.o
-PenServo::pen_down()                              ./src/PenServo.o
-PenServo::pen_up()                                ./src/PenServo.o
-PenServo::set_pos(int)                            ./src/PenServo.o
-PenServo::update_pos()                            ./src/PenServo.o
+PenServo::PenServo()                              ./src/PenServo.o
+PenServo::PenServo()                              ./src/PenServo.o
+PenServo::getCurPos()                             ./src/PenServo.o
+PenServo::operator=(int)                          ./src/PenServo.o
 PenServo::~PenServo()                             ./src/PenServo.o
 PenServo::~PenServo()                             ./src/PenServo.o
 PenServo::~PenServo()                             ./src/PenServo.o
@@ -7396,8 +7390,8 @@ SPI1_IRQHandler                                   ./src/cr_startup_lpc15xx.o
 SVC_Handler                                       C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(port.o)
                                                   ./src/cr_startup_lpc15xx.o
 SimpleUART_Wrapper::SimpleUART_Wrapper(QueueDefinition*) ./src/SimpleUARTWrapper.o
-SimpleUART_Wrapper::SimpleUART_Wrapper(QueueDefinition*) ./src/SimpleUARTWrapper.o
                                                   ./src/XY_plotter_project.o
+SimpleUART_Wrapper::SimpleUART_Wrapper(QueueDefinition*) ./src/SimpleUARTWrapper.o
 SimpleUART_Wrapper::clean()                       ./src/SimpleUARTWrapper.o
 SimpleUART_Wrapper::getLine(char*)                ./src/SimpleUARTWrapper.o
                                                   ./src/XY_plotter_project.o
@@ -7551,6 +7545,7 @@ __aeabi_f2d                                       c:/nxp/mcuxpressoide_11.2.0_41
 __aeabi_f2uiz                                     c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_fixunssfsi.o)
                                                   ./src/PenServo.o
 __aeabi_fadd                                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_addsubsf3.o)
+                                                  ./src/PenServo.o
 __aeabi_fcmpeq                                    c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_cmpsf2.o)
 __aeabi_fcmpge                                    c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_cmpsf2.o)
 __aeabi_fcmpgt                                    c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7-m/nofp\libgcc.a(_arm_cmpsf2.o)
@@ -7678,8 +7673,8 @@ __cxxabiv1::__class_type_info::__do_upcast(__cxxabiv1::__class_type_info const*,
                                                   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(si_class_type_info.o)
 __cxxabiv1::__class_type_info::~__class_type_info() c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(class_type_info.o)
 __cxxabiv1::__class_type_info::~__class_type_info() c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(class_type_info.o)
-                                                  c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(si_class_type_info.o)
 __cxxabiv1::__class_type_info::~__class_type_info() c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(class_type_info.o)
+                                                  c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(si_class_type_info.o)
 __cxxabiv1::__forced_unwind::~__forced_unwind()   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 __cxxabiv1::__forced_unwind::~__forced_unwind()   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 __cxxabiv1::__forced_unwind::~__forced_unwind()   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
@@ -8297,8 +8292,8 @@ sprintf                                           c:/nxp/mcuxpressoide_11.2.0_41
                                                   C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
 std::bad_exception::what() const                  c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 std::bad_exception::~bad_exception()              c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
-                                                  c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_call.o)
 std::bad_exception::~bad_exception()              c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
+                                                  c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_call.o)
 std::bad_exception::~bad_exception()              c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 std::exception::what() const                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 std::exception::~exception()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
@@ -8331,8 +8326,8 @@ std::type_info::operator==(std::type_info const&) const c:/nxp/mcuxpressoide_11.
                                                   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(class_type_info.o)
                                                   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(si_class_type_info.o)
 std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(tinfo.o)
-                                                  c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(class_type_info.o)
 std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(tinfo.o)
+                                                  c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(class_type_info.o)
 std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(tinfo.o)
 std::uncaught_exception()                         c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_catch.o)
 std::uncaught_exceptions()                        c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_catch.o)

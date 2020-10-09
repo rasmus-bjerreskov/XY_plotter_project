@@ -17,21 +17,20 @@
 #endif
 #endif
 
-#include "ParsedGdata.h"
-
-class PenServo {
+class PenServoController {
 public:
-	PenServo(ParsedGdata_t* data, LPC_SCT_T* pSCT);
-	void update_pos();
-	void pen_down();
-	void pen_up();
-	virtual ~PenServo();
+	PenServoController(int up, int down);
+	int getCurPos();
 
+	void operator=(const int);
+	virtual ~PenServoController();
+
+	int up;
+	int down;
 private:
+	int curPos;
 	void set_pos(int);
 
-	ParsedGdata_t* plot_data;
-	LPC_SCT_T* pSCT;
 	static const int SERVO_MIN = 1000;
 	static const int SERVO_MAX = 2000;
 };
