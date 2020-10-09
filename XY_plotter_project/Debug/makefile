@@ -44,7 +44,7 @@ all: XY_plotter_project.axf
 XY_plotter_project.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU C++ Linker'
-	arm-none-eabi-c++ -nostdlib -L"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug" -L"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug" -L"C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug" -Xlinker -Map="XY_plotter_project.map" -Xlinker --cref -Xlinker --gc-sections -Xlinker -print-memory-usage -mcpu=cortex-m3 -mthumb -T "XY_plotter_project_Debug.ld" -o "XY_plotter_project.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-c++ -nostdlib -L"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug" -L"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\lpc_chip_15xx\Debug" -L"C:\Koulu\3Vuosi\Embedded systems project\XY_plotter_project\FreeRTOS\Debug" -Xlinker -Map="XY_plotter_project.map" -Xlinker --cref -Xlinker --gc-sections -Xlinker -print-memory-usage -mcpu=cortex-m3 -mthumb -T "XY_plotter_project_Debug.ld" -o "XY_plotter_project.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
