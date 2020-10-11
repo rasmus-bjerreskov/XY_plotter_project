@@ -47,10 +47,15 @@ bool SimpleUART_Wrapper::getLine(char *str, int n) { //TODO maybe n should be se
 			str[i] = c;
 			i++;
 		}
+
 		xSemaphoreTake(mutex, portMAX_DELAY);
 		c = Board_UARTGetChar();
 		xSemaphoreGive(mutex);
 	}
+
+	if (i < buflen - 1)
+		str[i++] = '\n';
+
 	str[i] = '\0';
 #ifdef debugprint
 	xSemaphoreTake(mutex, portMAX_DELAY);

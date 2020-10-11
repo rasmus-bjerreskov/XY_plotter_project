@@ -15,6 +15,7 @@ CPP_SRCS += \
 ../src/cr_startup_lpc15xx.cpp 
 
 C_SRCS += \
+../src/ITM_write.c \
 ../src/crp.c \
 ../src/heap_lock_monitor.c \
 ../src/sysinit.c 
@@ -22,6 +23,7 @@ C_SRCS += \
 OBJS += \
 ./src/FileHandler.o \
 ./src/GcodePipe.o \
+./src/ITM_write.o \
 ./src/MockPipe.o \
 ./src/Parser.o \
 ./src/PenServoCtrl.o \
@@ -45,6 +47,7 @@ CPP_DEPS += \
 ./src/cr_startup_lpc15xx.d 
 
 C_DEPS += \
+./src/ITM_write.d \
 ./src/crp.d \
 ./src/heap_lock_monitor.d \
 ./src/sysinit.d 

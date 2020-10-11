@@ -32,6 +32,7 @@
 #include "SimpleUARTWrapper.h"
 #include "Parser.h"
 #include "MockPipe.h"
+#include "ITM_write.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -40,8 +41,9 @@
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
-SemaphoreHandle_t mutex;
+SemaphoreHandle_t uartMutex;
 ParsedGdata_t data;
+
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -52,6 +54,8 @@ static void prvSetupHardware(void) {
 	Board_Init();
 	heap_monitor_setup();
 
+	ITM_init();
+
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
@@ -60,17 +64,60 @@ static void prvSetupHardware(void) {
 static void vParserTask(void *pvParameters) {
 	data.canvasLimits.Y = 380;
 	data.canvasLimits.X = 310;
+
+	// mock values for testing the mdraw communication:
+	data.limitSw[0] = 1;
+	data.limitSw[1] = 1;
+	data.limitSw[2] = 1;
+	data.limitSw[3] = 1;
+	data.Adir = 1;
+	data.Bdir = 1;
+
 	data.penServo = new PenServoController(160, 90);
 	data.speed = 80;
-	SimpleUART_Wrapper pipe(mutex);
+	SimpleUART_Wrapper pipe(uartMutex);
 	//MockPipe pipe;
 	Parser parser(&pipe);
 	char str[50];
 	int c;
+
 	while (1) {
-		if (pipe.getLine(str)){
-			Board_UARTPutSTR(str);
+		if (parser.parse(&data)){
+			switch(data.codeType) {
+				case GcodeType::G1:
+				case GcodeType::G28:
+				case GcodeType::M1:
+				case GcodeType::M2:
+				case GcodeType::M4:
+				case GcodeType::M5:
+					pipe.sendAck();
+					break;
+				case GcodeType::M10:
+					snprintf(str, 50, "M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\n",
+								data.canvasLimits.X,
+								data.canvasLimits.Y,
+								data.Adir,
+								data.Bdir,
+								data.speed,
+								data.penServo->up,
+								data.penServo->down);
+					pipe.sendAck();
+					break;
+				case GcodeType::M11:
+					snprintf(str, 50, "M11 %d %d %d %d\r\n",
+								data.limitSw[0],
+								data.limitSw[1],
+								data.limitSw[2],
+								data.limitSw[4]);
+					pipe.sendLine(str);
+					pipe.sendAck();
+					break;
+			}
 			pipe.sendAck();
+		}
+		else {
+			ITM_write("Problem occured\r\n");
+			//vTaskDelay(portMAX_DELAY);
 		}
 	}
 
@@ -95,10 +142,12 @@ void vConfigureTimerForRunTimeStats(void) {
 int main(void) {
 	prvSetupHardware();
 
-	mutex = xSemaphoreCreateMutex();
+	uartMutex = xSemaphoreCreateMutex();
+
 	xTaskCreate(vParserTask, "vParserTask",
 	configMINIMAL_STACK_SIZE + 256, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t*) NULL);
+
 	vTaskStartScheduler();
 
 	return 1;

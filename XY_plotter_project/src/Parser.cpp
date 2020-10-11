@@ -10,6 +10,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "Parser.h"
+#include "ITM_write.h"
 
 Parser::Parser(GcodePipe *_pipe) {
 	pipe = _pipe;
@@ -36,7 +37,11 @@ char *Parser::tokenize(){
 	tokens.currToken = codeLine;
 
 	char *currPos = codeLine;
+	if (*currPos == '\0')
+		return tokens.currToken;
 
+	tokens.numTokens = 1;
+	tokens.currTokenNum = 1;
 
 	while(*currPos != '\0') {
 		if(*currPos == tokenDelimChar) {
@@ -58,13 +63,17 @@ char *Parser::tokenize(){
  * @return pointer to the next token if there are more tokens, NULL otherwise.
  */
 char *Parser::nextToken(void) {
-	char *currToken = tokens.currToken;
+	tokens.currTokenNum++;
 
-	if (*currToken == tokens.numTokens-1) {
+	if (tokens.currTokenNum > tokens.numTokens) {
 		return NULL;
 	}
 	else {
+		char *currToken = tokens.currToken;
+
 		while(*(currToken++) != '\0') ;
+
+		tokens.currToken = currToken;
 
 		return currToken;
 	}
@@ -83,6 +92,7 @@ char *Parser::nextToken(void) {
  */
 bool Parser::parse(ParsedGdata_t *data) {
 	while (!pipe->getLine(codeLine)) ;
+	ITM_write(codeLine);
 
 	char *tokLine = tokenize();
 
@@ -102,14 +112,7 @@ bool Parser::parse(ParsedGdata_t *data) {
 			break;
 	}
 
-	if (success == true) {
-		pipe->sendAck();
-		return true;
-	}
-	else {
-		pipe->sendErr();
-		return false;
-	}
+	return success;
 }
 
 /**
@@ -187,7 +190,7 @@ bool Parser::gotoPositionParser(ParsedGdata_t *data, char *tokLine) {
 	if (!validateFloatStr(&tokLine[1], false))
 		return false;
 
-	data->PenXY.X = atof(tokLine+1);
+	data->PenXY.Y = atof(tokLine+1);
 
 	tokLine = nextToken();
 
@@ -244,8 +247,8 @@ bool Parser::comOpenParser(ParsedGdata_t *data, char *tokLine) {
 		data->codeType = GcodeType::M10;
 		return true;
 	}
-		else
-			return false;
+	else
+		return false;
 }
 
 /**
@@ -450,7 +453,7 @@ bool Parser::extractDirection(int *storage, char *dirStr, bool hasDelimChar, cha
  *  	   match the delimChar.
  *  @return true if the extraction succeeded, false otherwise
  */
-bool extractInt(int *storage, char *numStr, bool hasDelimChar = false, char delimChar = '\0') {
+bool Parser::extractInt(int *storage, char *numStr, bool hasDelimChar, char delimChar) {
 	long val;
 	char *rem;
 

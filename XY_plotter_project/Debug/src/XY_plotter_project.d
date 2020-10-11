@@ -64,7 +64,7 @@ src/XY_plotter_project.o src/XY_plotter_project.d: \
  C:\Koulu\3Vuosi\Embedded\ systems\ project\XY_plotter_project\FreeRTOS\src\include/task.h \
  ../src/heap_lock_monitor.h ../src/ParsedGdata.h ../src/PenServoCtrl.h \
  ../src/GcodePipe.h ../src/SimpleUARTWrapper.h ../src/Parser.h \
- ../src/MockPipe.h
+ ../src/MockPipe.h ../src/ITM_write.h
 
 C:\Koulu\3Vuosi\Embedded\ systems\ project\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\inc/board.h:
 
@@ -203,3 +203,5 @@ C:\Koulu\3Vuosi\Embedded\ systems\ project\XY_plotter_project\FreeRTOS\src\inclu
 ../src/Parser.h:
 
 ../src/MockPipe.h:
+
+../src/ITM_write.h:
