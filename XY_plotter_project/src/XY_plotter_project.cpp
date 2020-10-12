@@ -80,6 +80,7 @@ static void vParserTask(void *pvParameters) {
 	Parser parser(&pipe);
 	char str[50];
 	int c;
+
 	int i = 5;
 
 	while (1) {
