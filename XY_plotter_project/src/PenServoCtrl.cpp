@@ -7,19 +7,18 @@
 
 #include "PenServoCtrl.h"
 
-PenServoController::PenServoController(int _up, int _down) {
-	up = _up;
-	down = _down;
+PenServoController::PenServoController(ParsedGdata_t *_data) {
+	data = _data;
 
 	/*SCT setup
 	 * cf n refers to table in lpc15xx user manual
-	cf table 201 p 234 of user manual*/
-	Chip_SCT_Init (LPC_SCTLARGE0);
+	 cf table 201 p 234 of user manual*/
+	Chip_SCT_Init(LPC_SCTLARGE0);
 	LPC_SCTLARGE0->CONFIG |= SCT_CONFIG_AUTOLIMIT_L; // two 16-bit timers, auto limit - EVENT[0] will clear timer cf 202
 	LPC_SCTLARGE0->CTRL_L |= ((Chip_Clock_GetSystemClockRate() / 1000000 - 1)
 			<< 5); // set prescaler, SCTimer/PWM clock = 1 MHz cf 203 p 240
 	LPC_SCTLARGE0->MATCHREL[0].L = 20000 - 1; // match 0 @ 20000/1MHz = 20ms period
-	LPC_SCTLARGE0->MATCHREL[1].L = SERVO_MAX; //non-inverted. duty 1000 = 1ms etc
+	LPC_SCTLARGE0->MATCHREL[1].L = convertPos(data->penCur); //non-inverted. duty 1000 = 1ms etc
 	LPC_SCTLARGE0->EVENT[0].STATE = 0xFFFFFFFF; // event 0 happens in all states
 	LPC_SCTLARGE0->EVENT[0].CTRL = (1 << 12); // match 0 condition only
 	LPC_SCTLARGE0->EVENT[1].STATE = 0xFFFFFFFF; // event 1 happens in all states
@@ -33,17 +32,20 @@ PenServoController::PenServoController(int _up, int _down) {
 
 }
 
-void PenServoController::operator=(const int pos){
-	if (pos == down || pos == up){
-		//convert value 0-255 to 1000-2000 and check boundaries
-		uint16_t tmp = SERVO_MIN + ((float)pos / 255 * 1000);
-		tmp > SERVO_MAX ? curPos = SERVO_MAX : curPos = tmp;
-		LPC_SCTLARGE0->MATCHREL[1].L = curPos;
+void PenServoController::updatePos() {
+	if (data->penCur == data->penDown || data->penCur == data->penUp) {
+		LPC_SCTLARGE0->MATCHREL[1].L = convertPos(data->penCur);
 	}
 }
 
-int PenServoController::getCurPos(){
-	return curPos;
+//convert value 0-255 to 1000-2000
+uint16_t PenServoController::convertPos(int val) {
+
+	uint16_t tmp = SERVO_MIN + ((float) data->penCur / 255 * 1000);
+	uint16_t newVal;
+	tmp > SERVO_MAX ? newVal = SERVO_MAX : newVal = tmp;
+
+	return newVal;
 }
 
 PenServoController::~PenServoController() {

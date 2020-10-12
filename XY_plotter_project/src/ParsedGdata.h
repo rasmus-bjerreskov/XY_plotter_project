@@ -1,8 +1,6 @@
 #ifndef _ParsedGdata_h_
 #define _ParsedGdata_h_
 
-#include "PenServoCtrl.h"
-
 enum class GcodeType { M1, M2, M4, M5, M10, M11, G1, G28 };
 
 struct Coordinates_t
@@ -25,7 +23,9 @@ struct ParsedGdata_t
 	GcodeType codeType;
 	Coordinates_t PenXY;
 	CanvasSize_t canvasLimits;
-	PenServoController* penServo;
+	int penUp;
+	int penDown;
+	int penCur;
 	bool relativityMode;
 	int speed;
 	int Adir;
