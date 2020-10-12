@@ -7,7 +7,6 @@ CPP_SRCS += \
 ../src/FileHandler.cpp \
 ../src/GcodePipe.cpp \
 ../src/MockPipe.cpp \
-../src/Parser.cpp \
 ../src/PenServoCtrl.cpp \
 ../src/SimpleUARTWrapper.cpp \
 ../src/XY_plotter_project.cpp \
@@ -25,7 +24,6 @@ OBJS += \
 ./src/GcodePipe.o \
 ./src/ITM_write.o \
 ./src/MockPipe.o \
-./src/Parser.o \
 ./src/PenServoCtrl.o \
 ./src/SimpleUARTWrapper.o \
 ./src/XY_plotter_project.o \
@@ -39,7 +37,6 @@ CPP_DEPS += \
 ./src/FileHandler.d \
 ./src/GcodePipe.d \
 ./src/MockPipe.d \
-./src/Parser.d \
 ./src/PenServoCtrl.d \
 ./src/SimpleUARTWrapper.d \
 ./src/XY_plotter_project.d \

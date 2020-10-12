@@ -1,5 +1,5 @@
-PenServoCtrl.cpp:10:1:PenServoController::PenServoController(int, int)	24	static
-PenServoCtrl.cpp:36:6:void PenServoController::operator=(int)	24	static
-PenServoCtrl.cpp:45:5:int PenServoController::getCurPos()	16	static
-PenServoCtrl.cpp:49:1:PenServoController::~PenServoController()	16	static
-PenServoCtrl.cpp:49:1:virtual PenServoController::~PenServoController()	16	static
+PenServoCtrl.cpp:10:1:PenServoController::PenServoController(ParsedGdata_t*)	24	static
+PenServoCtrl.cpp:35:6:void PenServoController::updatePos()	24	static
+PenServoCtrl.cpp:42:10:uint16_t PenServoController::convertPos(int)	24	static
+PenServoCtrl.cpp:51:1:PenServoController::~PenServoController()	16	static
+PenServoCtrl.cpp:51:1:virtual PenServoController::~PenServoController()	16	static

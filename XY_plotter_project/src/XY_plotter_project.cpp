@@ -34,6 +34,8 @@
 #include "MockPipe.h"
 #include "ITM_write.h"
 
+#include "PenServoCtrl.h"
+
 /*****************************************************************************
  * Private types/enumerations/variables
  ****************************************************************************/
@@ -72,56 +74,75 @@ static void vParserTask(void *pvParameters) {
 	data.limitSw[3] = 1;
 	data.Adir = 1;
 	data.Bdir = 1;
+	data.penUp = 150;
+	data.penDown = 90;
+	data.penCur = 150;
 
-	data.penServo = new PenServoController(160, 90);
+	PenServoController *penServo = new PenServoController(&data);
 	data.speed = 80;
-	SimpleUART_Wrapper pipe(uartMutex);
-	//MockPipe pipe;
-	Parser parser(&pipe);
-	char str[50];
-	int c;
-
-	int i = 5;
-
+	//servo test code
 	while (1) {
-		if (parser.parse(&data)){
-			switch(data.codeType) {
-				case GcodeType::G1:
-				case GcodeType::G28:
-				case GcodeType::M1:
-				case GcodeType::M2:
-				case GcodeType::M4:
-				case GcodeType::M5:
-					pipe.sendAck();
-					break;
-				case GcodeType::M10:
-					snprintf(str, 50, "M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\n",
-								data.canvasLimits.X,
-								data.canvasLimits.Y,
-								data.Adir,
-								data.Bdir,
-								data.speed,
-								data.penServo->up,
-								data.penServo->down);
-					pipe.sendAck();
-					break;
-				case GcodeType::M11:
-					snprintf(str, 50, "M11 %d %d %d %d\r\n",
-								data.limitSw[0],
-								data.limitSw[1],
-								data.limitSw[2],
-								data.limitSw[4]);
-					pipe.sendLine(str);
-					pipe.sendAck();
-					break;
-			}
-			pipe.sendAck();
-		}
-		else {
-			ITM_write("Problem occured\r\n");
-			//vTaskDelay(portMAX_DELAY);
-		}
+		Board_LED_Set(1, true);
+		Board_LED_Set(0, false);
+		data.penCur = 150;
+		penServo->updatePos();
+		vTaskDelay(3000);
+		data.penCur = 90;
+		penServo->updatePos();
+		vTaskDelay(3000);
+		Board_LED_Set(1, false);
+		Board_LED_Set(0, true);
+		data.penCur = 140; //illegal value
+		penServo->updatePos();
+		vTaskDelay(3000);
 	}
+	/*SimpleUART_Wrapper pipe(uartMutex);
+	 //MockPipe pipe;
+	 Parser parser(&pipe);
+	 char str[50];
+	 int c;
+
+	 int i = 5;
+
+	 while (1) {
+	 if (parser.parse(&data)){
+	 switch(data.codeType) {
+	 case GcodeType::G1:
+	 case GcodeType::G28:
+	 case GcodeType::M1:
+	 case GcodeType::M2:
+	 case GcodeType::M4:
+	 case GcodeType::M5:
+	 pipe.sendAck();
+	 break;
+	 case GcodeType::M10:
+	 snprintf(str, 50, "M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\n",
+	 data.canvasLimits.X,
+	 data.canvasLimits.Y,
+	 data.Adir,
+	 data.Bdir,
+	 data.speed,
+	 data.penServo->up,
+	 data.penServo->down);
+	 pipe.sendAck();
+	 break;
+	 case GcodeType::M11:
+	 snprintf(str, 50, "M11 %d %d %d %d\r\n",
+	 data.limitSw[0],
+	 data.limitSw[1],
+	 data.limitSw[2],
+	 data.limitSw[4]);
+	 pipe.sendLine(str);
+	 pipe.sendAck();
+	 break;
+	 }
+	 pipe.sendAck();
+	 }
+	 else {
+	 ITM_write("Problem occured\r\n");
+	 //vTaskDelay(portMAX_DELAY);
+	 }
+	 }*/
 
 }
 
