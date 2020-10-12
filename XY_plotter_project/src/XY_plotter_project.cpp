@@ -82,7 +82,7 @@ static void vParserTask(void *pvParameters) {
 	data.speed = 80;
 	SimpleUART_Wrapper pipe(uartMutex);
 	//MockPipe pipe;
-	Parser parser(&pipe);
+	//Parser parser(&pipe);
 	char str[50];
 	int c;
 	//servo test code
