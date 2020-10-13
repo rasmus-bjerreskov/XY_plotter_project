@@ -95,11 +95,11 @@ void calibrateCanvas() {
 	// Record which limit switch was hit:
 	limSws[LEFT_LSW] = (!LSWPin1->read())?
 			 	 	 	 LSWPin1 :
-						 (!LSWPin2->read())?
-						   LSWPin2 :
-						   (!LSWPin3->read())?
-							 LSWPin3 :
-							 LSWPin4;
+						 ((!LSWPin2->read())?
+						    LSWPin2 :
+						    ((!LSWPin3->read())?
+							   LSWPin3 :
+							   LSWPin4));
 
 	// Drive to right one step:
 	RIT_start(0, 0, 1, 0, 2);
@@ -125,11 +125,11 @@ void calibrateCanvas() {
 	// Record which limit switch it was:
 	limSws[RIGHT_LSW] = (!LSWPin1->read())?
 						  LSWPin1 :
-						  (!LSWPin2->read())?
-						    LSWPin2 :
-							(!LSWPin3->read())?
-							  LSWPin3 :
-							  LSWPin4;
+						  ((!LSWPin2->read())?
+						     LSWPin2 :
+							 ((!LSWPin3->read())?
+							    LSWPin3 :
+							    LSWPin4));
 
 	// Drive to left until the right limit switch opens:
 	// Decrease XPos accordingly:
@@ -150,11 +150,11 @@ void calibrateCanvas() {
 	// Record which limit switch was hit:
 	limSws[DOWN_LSW] = (!LSWPin1->read())?
 						 LSWPin1 :
-						 (!LSWPin2->read())?
-						   LSWPin2 :
-						   (!LSWPin3->read())?
-						     LSWPin3 :
-							 LSWPin4;
+						 ((!LSWPin2->read())?
+						    LSWPin2 :
+						    ((!LSWPin3->read())?
+						       LSWPin3 :
+							   LSWPin4));
 
 	// Drive one step up:
 	RIT_start(0, 1, 0, 0, 2);
@@ -176,11 +176,11 @@ void calibrateCanvas() {
 	// Record which limit switch it was:
 	limSws[UP_LSW] = (!LSWPin1->read())?
 					   LSWPin1 :
-					   (!LSWPin2->read())?
-						 LSWPin2 :
-						 (!LSWPin3->read())?
-						   LSWPin3 :
-						   LSWPin4;
+					   ((!LSWPin2->read())?
+						  LSWPin2 :
+						  ((!LSWPin3->read())?
+						     LSWPin3 :
+						     LSWPin4));
 
 	// decrease step count by 1:
 	stepCount--;
