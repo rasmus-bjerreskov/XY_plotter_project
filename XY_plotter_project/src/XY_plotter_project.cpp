@@ -25,15 +25,19 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
+#include "queue.h"
+
+#include <cstring>
+
+#include "ITM_write.h"
 #include "heap_lock_monitor.h"
+#include "user_vcom.h"
 
 #include "ParsedGdata.h"
 #include "GcodePipe.h"
 #include "SimpleUARTWrapper.h"
 #include "Parser.h"
 #include "MockPipe.h"
-#include "ITM_write.h"
-
 #include "PenServoCtrl.h"
 
 /*****************************************************************************
@@ -43,8 +47,11 @@
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
-SemaphoreHandle_t uartMutex;
-ParsedGdata_t data;
+QueueHandle_t qCmd;
+SemaphoreHandle_t binAck;
+
+ParsedGdata_t *data;
+PenServoController *penServo;
 
 /*****************************************************************************
  * Private functions
@@ -63,92 +70,121 @@ static void prvSetupHardware(void) {
 }
 
 /* The parser task */
-static void vParserTask(void *pvParameters) {
-	data.canvasLimits.Y = 380;
-	data.canvasLimits.X = 310;
+static void parse_task(void *pvParameters) {
+	data = new ParsedGdata_t;
+	data->canvasLimits.Y = 380;
+	data->canvasLimits.X = 310;
 
 	// mock values for testing the mdraw communication:
-	data.limitSw[0] = 1;
-	data.limitSw[1] = 1;
-	data.limitSw[2] = 1;
-	data.limitSw[3] = 1;
-	data.Adir = 1;
-	data.Bdir = 1;
-	data.penUp = 150;
-	data.penDown = 90;
-	data.penCur = 150;
+	data->limitSw[0] = 1;
+	data->limitSw[1] = 1;
+	data->limitSw[2] = 1;
+	data->limitSw[3] = 1;
+	data->Adir = 1;
+	data->Bdir = 1;
+	data->penUp = 150;
+	data->penDown = 90;
+	data->penCur = 150;
+	data->speed = 80;
 
-	PenServoController *penServo = new PenServoController(&data);
-	data.speed = 80;
-	SimpleUART_Wrapper pipe(uartMutex);
-	//MockPipe pipe;
-	//Parser parser(&pipe);
-	char str[50];
-	int c;
-	//servo test code
+	qCmd = xQueueCreate(20, sizeof(PlotInstruct_t));
+	binAck = xSemaphoreCreateBinary();
+
+	penServo = new PenServoController(data);
+
+	const int MAX_LEN = 50;
+	char str[MAX_LEN + 1];
+	char *lf = 0;
+
 	while (1) {
-		Board_LED_Set(1, true);
-		Board_LED_Set(0, false);
-		data.penCur = 150;
-		penServo->updatePos();
-		vTaskDelay(3000);
-		data.penCur = 90;
-		penServo->updatePos();
-		vTaskDelay(3000);
-		Board_LED_Set(1, false);
-		Board_LED_Set(0, true);
-		data.penCur = 140; //illegal value
-		penServo->updatePos();
-		vTaskDelay(3000);
+		int len = 0;
+		char buf[MAX_LEN + 1];
+		char *curBufPos = buf;
+		//receive-append strings
+		do {
+			len = USB_receive((uint8_t*) str, MAX_LEN);
+			str[len] = 0;
+			lf = strchr(str, '\n');
+
+			memcpy(buf, str, len);
+			curBufPos += len;
+
+		} while (lf == NULL);
+
+		*curBufPos = 0;
+		ITM_write("Received: ");
+		ITM_write(buf);
+
+		PlotInstruct_t instruct { { data->PenXY.X, data->PenXY.Y },
+				data->codeType, data->penCur };
+		xQueueSend(qCmd, &instruct, portMAX_DELAY);
+
+		//USB_send((uint8_t*)"OK\r\n", 4);
+
 	}
-	/*SimpleUART_Wrapper pipe(uartMutex);
-	 //MockPipe pipe;
-	 Parser parser(&pipe);
-	 char str[50];
-	 int c;
+}
 
-	 int i = 5;
+void plotter_task(void *pvParameters) {
+	PlotInstruct_t instrBuf;
+	while (1) {
+		xQueuePeek(qCmd, &instrBuf, portMAX_DELAY); //get data and send it on to tx task
+		/*give semaphore here so that sending
+		 reply can happen concurrently with plotting*/
+		xSemaphoreGive(binAck);
 
-	 while (1) {
-	 if (parser.parse(&data)){
-	 switch(data.codeType) {
-	 case GcodeType::G1:
-	 case GcodeType::G28:
-	 case GcodeType::M1:
-	 case GcodeType::M2:
-	 case GcodeType::M4:
-	 case GcodeType::M5:
-	 pipe.sendAck();
-	 break;
-	 case GcodeType::M10:
-	 snprintf(str, 50, "M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\n",
-	 data.canvasLimits.X,
-	 data.canvasLimits.Y,
-	 data.Adir,
-	 data.Bdir,
-	 data.speed,
-	 data.penServo->up,
-	 data.penServo->down);
-	 pipe.sendAck();
-	 break;
-	 case GcodeType::M11:
-	 snprintf(str, 50, "M11 %d %d %d %d\r\n",
-	 data.limitSw[0],
-	 data.limitSw[1],
-	 data.limitSw[2],
-	 data.limitSw[4]);
-	 pipe.sendLine(str);
-	 pipe.sendAck();
-	 break;
-	 }
-	 pipe.sendAck();
-	 }
-	 else {
-	 ITM_write("Problem occured\r\n");
-	 //vTaskDelay(portMAX_DELAY);
-	 }
-	 }*/
+		switch (instrBuf.code) {
+		case GcodeType::M10:
+			//do init
+			break;
 
+		case GcodeType::M1:
+			penServo->updatePos();
+			break;
+
+		case GcodeType::G28:
+			//go to origin
+			break;
+
+		case GcodeType::G1:
+			//go to coords
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+
+void send_task(void *pvParameters) {
+	char str[80];
+	PlotInstruct_t instrBuf;
+
+	while (1) {
+		xSemaphoreTake(binAck, portMAX_DELAY);
+		xQueueReceive(qCmd, &instrBuf, portMAX_DELAY);
+
+		switch (instrBuf.code) {
+
+		case GcodeType::M10:
+			sprintf(str,
+					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
+					data->canvasLimits.X, data->canvasLimits.Y, data->Adir,
+					data->Bdir, data->speed, data->penUp, data->penDown);
+			break;
+
+		case GcodeType::M11:
+			sprintf(str, "M11 %d %d %d %d\r\nOK\r\n", data->limitSw[0],
+					data->limitSw[1], data->limitSw[2], data->limitSw[3]);
+			break;
+
+		default:
+			strcpy(str, "OK\r\n");
+
+			USB_send((uint8_t*)str, strlen(str));
+
+		}
+
+	}
 }
 
 /* the following is required if runtime statistics are to be collected */
@@ -170,10 +206,18 @@ void vConfigureTimerForRunTimeStats(void) {
 int main(void) {
 	prvSetupHardware();
 
-	uartMutex = xSemaphoreCreateMutex();
-
-	xTaskCreate(vParserTask, "vParserTask",
+	xTaskCreate(parse_task, "rx",
 	configMINIMAL_STACK_SIZE + 256, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t*) NULL);
+
+	xTaskCreate(plotter_task, "plot", configMINIMAL_STACK_SIZE, NULL,
+	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);
+
+	xTaskCreate(send_task, "tx", configMINIMAL_STACK_SIZE, NULL,
+	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);
+
+	xTaskCreate(cdc_task, "CDC",
+	configMINIMAL_STACK_SIZE * 3, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t*) NULL);
 
 	vTaskStartScheduler();

@@ -15,8 +15,11 @@ struct CanvasSize_t
 	int Y;
 };
 
-
-// Coordinates_t and CanvasSize could be merged into one union...
+struct PlotInstruct_t{
+	Coordinates_t newPos;
+	GcodeType code;
+	int penPos;
+};
 
 struct ParsedGdata_t
 {

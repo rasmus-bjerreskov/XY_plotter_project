@@ -62,9 +62,10 @@ src/XY_plotter_project.o src/XY_plotter_project.d: \
  C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\src\include/semphr.h \
  C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\src\include/queue.h \
  C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\src\include/task.h \
- ../src/heap_lock_monitor.h ../src/ParsedGdata.h ../src/GcodePipe.h \
- ../src/SimpleUARTWrapper.h ../src/Parser.h ../src/MockPipe.h \
- ../src/ITM_write.h ../src/PenServoCtrl.h
+ C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\src\include/queue.h \
+ ../src/ITM_write.h ../src/heap_lock_monitor.h ../src/user_vcom.h \
+ ../src/ParsedGdata.h ../src/GcodePipe.h ../src/SimpleUARTWrapper.h \
+ ../src/Parser.h ../src/MockPipe.h ../src/PenServoCtrl.h
 
 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\inc/board.h:
 
@@ -190,7 +191,13 @@ C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\
 
 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\src\include/task.h:
 
+C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\src\include/queue.h:
+
+../src/ITM_write.h:
+
 ../src/heap_lock_monitor.h:
+
+../src/user_vcom.h:
 
 ../src/ParsedGdata.h:
 
@@ -201,7 +208,5 @@ C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\
 ../src/Parser.h:
 
 ../src/MockPipe.h:
-
-../src/ITM_write.h:
 
 ../src/PenServoCtrl.h:

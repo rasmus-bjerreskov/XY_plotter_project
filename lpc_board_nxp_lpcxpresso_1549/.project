@@ -3,6 +3,7 @@
 	<name>lpc_board_nxp_lpcxpresso_1549</name>
 	<comment></comment>
 	<projects>
+		<project>FreeRTOS</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
