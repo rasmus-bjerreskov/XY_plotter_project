@@ -1,5 +1,0 @@
-gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
-XY_plotter_project.cpp:54:13:void prvSetupHardware()	8	static
-XY_plotter_project.cpp:66:13:void vParserTask(void*)	88	static
-XY_plotter_project.cpp:157:6:void vConfigureTimerForRunTimeStats()	8	static
-XY_plotter_project.cpp:170:5:int main()	16	static
