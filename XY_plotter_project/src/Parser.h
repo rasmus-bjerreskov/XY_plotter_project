@@ -19,10 +19,8 @@ typedef struct Tokens {
 
 class Parser {
 private:
-	#define MAX_CODE_LINE_LEN 100
-	char codeLine[MAX_CODE_LINE_LEN];
+	char codeLine[MAX_STR_LEN+1];
 	Tokens tokens;
-	GcodePipe *pipe;
 	static const char tokenDelimChar = ' ';
 	static const char lineEndChar = '\n';
 
@@ -47,10 +45,10 @@ private:
 	bool validateFloatStr(char *FloatStr, bool hasDelimChar = false, char delimChar = '\0');
 
 public:
-	Parser(GcodePipe *fetcher);
+	Parser();
 	virtual ~Parser();
 
-	bool parse(ParsedGdata_t *_data);
+	bool parse(ParsedGdata_t *_data, char *line);
 };
 
 #endif /* PARSER_H_ */

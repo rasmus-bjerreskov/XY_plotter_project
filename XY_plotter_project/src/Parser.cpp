@@ -12,12 +12,10 @@
 #include "Parser.h"
 #include "ITM_write.h"
 
-Parser::Parser(GcodePipe *_pipe) {
-	pipe = _pipe;
+Parser::Parser() {
 	tokens.currToken = NULL;
 	tokens.numTokens = 0;
 	tokens.currTokenNum = 0;
-
 }
 
 Parser::~Parser() {
@@ -90,10 +88,8 @@ char *Parser::nextToken(void) {
  * @param data Pointer to the parsed data
  * @return true if parsing was successful, false if not.
  */
-bool Parser::parse(ParsedGdata_t *data) {
-	while (!pipe->getLine(codeLine)) ;
-	ITM_write(codeLine);
-
+bool Parser::parse(ParsedGdata_t *data, char *line) {
+	strncpy(codeLine, line, MAX_STR_LEN);
 	char *tokLine = tokenize();
 
 	if (tokLine == NULL)
@@ -279,12 +275,8 @@ bool Parser::setPenPosParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokens.numTokens != 2)
 		return false;
 
-	int pos = 0;
-
-	if (!extract8BitUint(&pos, tokLine, true, lineEndChar))
+	if (!extract8BitUint(&(data->penCur), tokLine, true, lineEndChar))
 		return false;
-
-	*(data->penServo) = pos;
 
 	data->codeType = GcodeType::M1;
 	return true;
@@ -306,7 +298,7 @@ bool Parser::savePenUDPosParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine[0] != 'U')
 		return false;
 
-	if (!extract8BitUint(&(data->penServo->up), tokLine+1))
+	if (!extract8BitUint(&(data->penUp), tokLine+1))
 		return false;
 
 	tokLine = nextToken();
@@ -315,7 +307,7 @@ bool Parser::savePenUDPosParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine[0] != 'D')
 		return false;
 
-	if (!extract8BitUint(&(data->penServo->down), tokLine+1, true, lineEndChar))
+	if (!extract8BitUint(&(data->penDown), tokLine+1, true, lineEndChar))
 		return false;
 
 	data->codeType = GcodeType::M2;
