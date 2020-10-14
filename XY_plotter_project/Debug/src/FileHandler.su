@@ -1,0 +1,11 @@
+GcodePipe.h:3:7:constexpr GcodePipe::GcodePipe()	16	static
+FileHandler.cpp:10:1:FileHandler::FileHandler()	16	static
+FileHandler.cpp:14:1:FileHandler::FileHandler(const char*)	16	static
+FileHandler.cpp:18:6:bool FileHandler::init()	16	static
+FileHandler.cpp:26:6:virtual bool FileHandler::clean()	16	static
+FileHandler.cpp:33:6:virtual bool FileHandler::getLine(char*)	16	static
+FileHandler.cpp:45:6:virtual bool FileHandler::sendLine(const char*)	16	static
+FileHandler.cpp:50:6:virtual bool FileHandler::sendAck()	16	static
+FileHandler.cpp:55:6:virtual bool FileHandler::sendErr()	16	static
+FileHandler.cpp:60:1:FileHandler::~FileHandler()	16	static
+FileHandler.cpp:60:1:virtual FileHandler::~FileHandler()	16	static
