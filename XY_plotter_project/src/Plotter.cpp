@@ -11,6 +11,16 @@
 
 Plotter::Plotter() {
 	offturn = false;
+	LSWPin1 = new DigitalIoPin(1, 3, DigitalIoPin::pullup);
+	LSWPin2 = new DigitalIoPin(0, 0, DigitalIoPin::pullup);
+	LSWPin3 = new DigitalIoPin(0, 9, DigitalIoPin::pullup);
+	LSWPin4 = new DigitalIoPin(0, 29, DigitalIoPin::pullup);
+	Xstep = new DigitalIoPin(0,24,DigitalIoPin::output,true);
+	Ystep = new DigitalIoPin(0,27,DigitalIoPin::output,true);
+	Xdir = new DigitalIoPin(1,0,DigitalIoPin::output,true);
+	Ydir = new DigitalIoPin(0,28,DigitalIoPin::output,true);
+
+	sbRIT = xSemaphoreCreateBinary();
 
 }
 
@@ -90,7 +100,7 @@ void Plotter::calibrateCanvas() {
 	// calibrate XMotor:
 	// Drive X-motor to left until a limit switch is hit:
 	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(1, 0, 0, 0, 2);
+		Plotter::plotLine(1, 0, 0, 0, 2);
 	}
 
 	// Record which limit switch was hit:
@@ -103,17 +113,17 @@ void Plotter::calibrateCanvas() {
 							   LSWPin4));
 
 	// Drive to right one step:
-	RIT_start(0, 0, 1, 0, 2);
+	Plotter::plotLine(0, 0, 1, 0, 2);
 	// Drive to right until the left limit switch opens, count the steps:
 	while (!(limSws[LEFT_LSW]->read())) {
-		RIT_start(0, 0, 1, 0, 2);
+		Plotter::plotLine(0, 0, 1, 0, 2);
 		stepCount++;
 	}
 
 	// Drive the X-motor to the right until another limit Switch is hit:
 	// count all the steps while driving
 	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(0, 0, 1, 0, 2);
+		Plotter::plotLine(0, 0, 1, 0, 2);
 		stepCount++;
 	}
 
@@ -135,7 +145,7 @@ void Plotter::calibrateCanvas() {
 	// Drive to left until the right limit switch opens:
 	// Decrease XPos accordingly:
 	while (!(limSws[RIGHT_LSW]->read())) {
-		RIT_start(0, 0, 1, 0, 2);
+		Plotter::plotLine(0, 0, 1, 0, 2);
 		xPos--;
 	}
 
@@ -145,7 +155,7 @@ void Plotter::calibrateCanvas() {
 	// calibrate YMotor:
 	// Drive Y-motor to down until a limit switch is hit:
 	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(0, 0, 0, 1, 2);
+		Plotter::plotLine(0, 0, 0, 1, 2);
 	}
 
 	// Record which limit switch was hit:
@@ -158,19 +168,19 @@ void Plotter::calibrateCanvas() {
 							   LSWPin4));
 
 	// Drive one step up:
-	RIT_start(0, 1, 0, 0, 2);
+	Plotter::plotLine(0, 1, 0, 0, 2);
 
 	// Drive up until the down limit switch opens:
 	// count the steps:
 	while (!(limSws[LSWLables::DOWN_LSW]->read())) {
-		RIT_start(0, 1, 0, 0, 2);
+		Plotter::plotLine(0, 1, 0, 0, 2);
 		stepCount++;
 	}
 
 	// Drive the Y-motor upwards until another limit Switch is hit:
 	// count all the steps while driving
 	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(0, 1, 0, 0, 2);
+		Plotter::plotLine(0, 1, 0, 0, 2);
 		stepCount++;
 	}
 
@@ -193,10 +203,10 @@ void Plotter::calibrateCanvas() {
 	// Drive downwards until the upper limit switch opens:
 	// increase YPos accordingly:
 	while (!(limSws[UP_LSW]->read())) {
-		RIT_start(0, 0, 0, 1, 2);
+		Plotter::plotLine(0, 0, 0, 1, 2);
 		yPos++;
 	}
 
 	// drive to the center of the canvas:
-	RIT_start(xPos, yPos, xSteps/2, ySteps/2, 2);
+	Plotter::plotLine(xPos, yPos, xSteps/2, ySteps/2, 2);
 }

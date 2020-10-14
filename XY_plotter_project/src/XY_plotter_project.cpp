@@ -47,27 +47,8 @@
  * Public types/enumerations/variables
  ****************************************************************************/
 SemaphoreHandle_t uartMutex;
-SemaphoreHandle_t sbRIT;
 ParsedGdata_t data;
 
-//limit switch data:
-DigitalIoPin *LSWPin1;
-DigitalIoPin *LSWPin2;
-DigitalIoPin *LSWPin3;
-DigitalIoPin *LSWPin4;
-DigitalIoPin *Xstep;
-DigitalIoPin *Ystep;
-DigitalIoPin *Xdir;
-DigitalIoPin *Ydir;
-
-
-enum LSWLables {UP_LSW=0, RIGHT_LSW=1, DOWN_LSW=2, LEFT_LSW=3};
-DigitalIoPin *limSws[4];
-
-int x0, y0, y1, x1, dx, dy, D, i;
-int prim1, prim2, prim3;
-DigitalIoPin *primaryIo = NULL;
-DigitalIoPin *secondaryIo = NULL;
 
 Plotter *plotter = NULL;
 
@@ -86,14 +67,6 @@ static void prvSetupHardware(void) {
 
 
 	// Set up Limit Switch Pins:
-	LSWPin1 = new DigitalIoPin(1, 3, DigitalIoPin::pullup);
-	LSWPin2 = new DigitalIoPin(0, 0, DigitalIoPin::pullup);
-	LSWPin3 = new DigitalIoPin(0, 9, DigitalIoPin::pullup);
-	LSWPin4 = new DigitalIoPin(0, 29, DigitalIoPin::pullup);
-	Xstep = new DigitalIoPin(0,24,DigitalIoPin::output,true);
-	Ystep = new DigitalIoPin(0,27,DigitalIoPin::output,true);
-	Xdir = new DigitalIoPin(1,0,DigitalIoPin::output,true);
-	Ydir = new DigitalIoPin(0,28,DigitalIoPin::output,true);
 	plotter = new Plotter();
 
 	Chip_RIT_Init(LPC_RITIMER);
@@ -117,33 +90,33 @@ void RIT_IRQHandler(void)
 
  if(!plotter->getOffturn()) {
 
-    if(i <= prim1) {
+    if(plotter->i <= plotter->prim1) {
          plotter->switchOffturn();
 
-               primaryIo->write(1);
-                if (D > 0) {
-                        secondaryIo->write(1);
-                        D = D - 2* prim2;
+               plotter->primaryIo->write(1);
+                if (plotter->D > 0) {
+                        plotter->secondaryIo->write(1);
+                        plotter->D = plotter->D - 2* plotter->prim2;
                 }
-                D = D + 2* prim3;
+                plotter->D = plotter->D + 2* plotter->prim3;
 
-        ++i;
+                plotter->i = plotter->i + 1;
 
     }
          else {
          Chip_RIT_Disable(LPC_RITIMER); // disable timer
          // Give semaphore and set context switch flag if a higher priority task was woken up
-         i = 0;
-         Xstep->write(0); // ?
-         Ystep->write(0); // ?
-         xSemaphoreGiveFromISR(sbRIT, &xHigherPriorityWoken);
+         plotter->i = 0;
+         plotter->Xstep->write(0); // ?
+         plotter->Ystep->write(0); // ?
+         xSemaphoreGiveFromISR(plotter->sbRIT, &xHigherPriorityWoken);
          }
  }
 
  else {
 	 plotter->switchOffturn();
-     Xstep->write(0);
-     Ystep->write(0);
+	 plotter->Xstep->write(0);
+	 plotter->Ystep->write(0);
 
  }
 
@@ -261,7 +234,6 @@ int main(void) {
 	prvSetupHardware();
 
 	uartMutex = xSemaphoreCreateMutex();
-	sbRIT = xSemaphoreCreateBinary();
 
 	xTaskCreate(vParserTask, "vParserTask",
 	configMINIMAL_STACK_SIZE + 256, NULL, (tskIDLE_PRIORITY + 1UL),

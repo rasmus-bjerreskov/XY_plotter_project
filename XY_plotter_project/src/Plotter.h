@@ -15,7 +15,10 @@
 #include "board.h"
 #endif
 #endif
+#include "stdlib.h"
 #include "DigitalIoPin.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
 
 class Plotter {
 public:
@@ -29,8 +32,21 @@ public:
 
 	int x0, y0, y1, x1, dx, dy, D, i;
 	int prim1, prim2, prim3;
-	DigitalIoPin *primaryIo = NULL;
-	DigitalIoPin *secondaryIo = NULL;
+	DigitalIoPin *primaryIo;
+	DigitalIoPin *secondaryIo;
+	SemaphoreHandle_t sbRIT;
+
+	DigitalIoPin *LSWPin1;
+	DigitalIoPin *LSWPin2;
+	DigitalIoPin *LSWPin3;
+	DigitalIoPin *LSWPin4;
+	DigitalIoPin *Xstep;
+	DigitalIoPin *Ystep;
+	DigitalIoPin *Xdir;
+	DigitalIoPin *Ydir;
+
+	enum LSWLables {UP_LSW=0, RIGHT_LSW=1, DOWN_LSW=2, LEFT_LSW=3};
+	DigitalIoPin *limSws[4];
 
 private:
 	bool offturn;
