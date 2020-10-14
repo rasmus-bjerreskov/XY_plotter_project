@@ -38,9 +38,12 @@
 #include "FreeRTOS.h"
 #include "queue.h"
 #include "semphr.h"
+#include "event_groups.h"
 
 #include "ITM_write.h"
 #include "user_vcom.h"
+
+#include "EventGroup.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -237,6 +240,7 @@ void cdc_task(void *pvParameters)
 
 	ITM_write("Connected\r\n");
 
+	xEventGroupSync(eGrp, USB_CDC_b, TASK_BITS, portMAX_DELAY);
 
 	while (1) {
 		/* try allocate receive buffer if we have none */

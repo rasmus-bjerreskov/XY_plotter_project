@@ -26,6 +26,7 @@
 #include "task.h"
 #include "semphr.h"
 #include "queue.h"
+#include "event_groups.h"
 
 #include <cstring>
 
@@ -35,6 +36,7 @@
 #include "user_vcom.h"
 
 #include "ParsedGdata.h"
+#include "EventGroup.h"
 #include "GcodePipe.h"
 #include "SimpleUARTWrapper.h"
 #include "Parser.h"
@@ -48,8 +50,7 @@
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
-QueueHandle_t qCmd;
-SemaphoreHandle_t binAck;
+QueueHandle_t qCmd; //Holds commands to hardware functions
 
 ParsedGdata_t *data;
 PenServoController *penServo;
@@ -85,130 +86,10 @@ static void prvSetupHardware(void) {
 	Board_LED_Set(0, false);
 }
 
-void calibrateCanvas() {
-	// for remembering where we are at the canvas:
-	int xPos = 0;
-	int yPos = 0;
-	int stepCount = 0;
-	int xSteps = 0;
-	int ySteps = 0;
-
-	// calibrate XMotor:
-	// Drive X-motor to left until a limit switch is hit:
-	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(1, 0, 0, 0, 2);
-	}
-
-	// Record which limit switch was hit:
-	limSws[LEFT_LSW] = (!LSWPin1->read())?
-			 	 	 	 LSWPin1 :
-						 ((!LSWPin2->read())?
-						    LSWPin2 :
-						    ((!LSWPin3->read())?
-							   LSWPin3 :
-							   LSWPin4));
-
-	// Drive to right one step:
-	RIT_start(0, 0, 1, 0, 2);
-	// Drive to right until the left limit switch opens, count the steps:
-	while (!(limSws[LEFT_LSW]->read())) {
-		RIT_start(0, 0, 1, 0, 2);
-		stepCount++;
-	}
-
-	// Drive the X-motor to the right until another limit Switch is hit:
-	// count all the steps while driving
-	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(0, 0, 1, 0, 2);
-		stepCount++;
-	}
-
-	// decrease step count by 1:
-	stepCount--;
-	xSteps = stepCount;	// should this be stepCount+1 ?!
-	// set the current XPos:
-	xPos = stepCount;
-
-	// Record which limit switch it was:
-	limSws[RIGHT_LSW] = (!LSWPin1->read())?
-						  LSWPin1 :
-						  ((!LSWPin2->read())?
-						     LSWPin2 :
-							 ((!LSWPin3->read())?
-							    LSWPin3 :
-							    LSWPin4));
-
-	// Drive to left until the right limit switch opens:
-	// Decrease XPos accordingly:
-	while (!(limSws[RIGHT_LSW]->read())) {
-		RIT_start(0, 0, 1, 0, 2);
-		xPos--;
-	}
-
-	// Reset the step count:
-	stepCount = 0;
-
-	// calibrate YMotor:
-	// Drive Y-motor to down until a limit switch is hit:
-	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(0, 0, 0, 1, 2);
-	}
-
-	// Record which limit switch was hit:
-	limSws[DOWN_LSW] = (!LSWPin1->read())?
-						 LSWPin1 :
-						 ((!LSWPin2->read())?
-						    LSWPin2 :
-						    ((!LSWPin3->read())?
-						       LSWPin3 :
-							   LSWPin4));
-
-	// Drive one step up:
-	RIT_start(0, 1, 0, 0, 2);
-
-	// Drive up until the down limit switch opens:
-	// count the steps:
-	while (!(limSws[LSWLables::DOWN_LSW]->read())) {
-		RIT_start(0, 1, 0, 0, 2);
-		stepCount++;
-	}
-
-	// Drive the Y-motor upwards until another limit Switch is hit:
-	// count all the steps while driving
-	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(0, 1, 0, 0, 2);
-		stepCount++;
-	}
-
-	// Record which limit switch it was:
-	limSws[UP_LSW] = (!LSWPin1->read())?
-					   LSWPin1 :
-					   ((!LSWPin2->read())?
-						  LSWPin2 :
-						  ((!LSWPin3->read())?
-						     LSWPin3 :
-						     LSWPin4));
-
-	// decrease step count by 1:
-	stepCount--;
-	ySteps = stepCount;	// should this be stepCount+1 ?!
-	// set the current YPos:
-	yPos = 0;
 
 
-	// Drive downwards until the upper limit switch opens:
-	// increase YPos accordingly:
-	while (!(limSws[UP_LSW]->read())) {
-		RIT_start(0, 0, 0, 1, 2);
-		yPos++;
-	}
 
-	// drive to the center of the canvas:
-	RIT_start(xPos, yPos, xSteps/2, ySteps/2, 2);
-}
-
-
-/* The parser task */
+/*Receive G-code lines from mDraw, validate and parse code into hardware instructions*/
 static void parse_task(void *pvParameters) {
 	data = new ParsedGdata_t;
 	data->canvasLimits.Y = 380;
@@ -227,12 +108,12 @@ static void parse_task(void *pvParameters) {
 	data->speed = 80;
 
 	qCmd = xQueueCreate(20, sizeof(PlotInstruct_t));
-	binAck = xSemaphoreCreateBinary();
-
 	penServo = new PenServoController(data);
 
 	char str[MAX_STR_LEN + 1];
 	char *lf = 0;
+
+	xEventGroupSync(eGrp, RX_b, TASK_BITS, portMAX_DELAY);
 
 	while (1) {
 		int len = 0;
@@ -259,13 +140,16 @@ static void parse_task(void *pvParameters) {
 	}
 }
 
+/*Execute hardware instructions*/
 void plotter_task(void *pvParameters) {
 	PlotInstruct_t instrBuf;
+
+	xEventGroupSync(eGrp, PLOT_b, TASK_BITS, portMAX_DELAY);
 	while (1) {
 		xQueuePeek(qCmd, &instrBuf, portMAX_DELAY); //get data and send it on to tx task
-		/*give semaphore here so that sending
-		 reply can happen concurrently with plotting*/
-		xSemaphoreGive(binAck);
+		/*set flag here so that sending
+		 reply can happen concurrently with executing instructions*/
+		xEventGroupSetBits(eGrp, PLOT_b);
 
 		switch (instrBuf.code) {
 		case GcodeType::M10:
@@ -290,12 +174,14 @@ void plotter_task(void *pvParameters) {
 	}
 }
 
+/*Send OK and other required data to mDraw*/
 void send_task(void *pvParameters) {
 	char str[80];
 	PlotInstruct_t instrBuf;
 
+	xEventGroupSync(eGrp, TX_b, TASK_BITS, portMAX_DELAY);
 	while (1) {
-		xSemaphoreTake(binAck, portMAX_DELAY);
+		xEventGroupWaitBits(eGrp, PLOT_b, pdTRUE, pdTRUE, portMAX_DELAY);
 		xQueueReceive(qCmd, &instrBuf, portMAX_DELAY);
 
 		switch (instrBuf.code) {
@@ -354,6 +240,8 @@ int main(void) {
 	xTaskCreate(cdc_task, "CDC",
 	configMINIMAL_STACK_SIZE * 3, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t*) NULL);
+
+	eGrp = xEventGroupCreate();
 
 	vTaskStartScheduler();
 
