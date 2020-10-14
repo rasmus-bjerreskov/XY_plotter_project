@@ -6,6 +6,8 @@
  */
 
 #include "Plotter.h"
+#include <stdlib.h>
+
 
 Plotter::Plotter() {
 	offturn = false;
@@ -16,11 +18,11 @@ Plotter::~Plotter() {
 	// TODO Auto-generated destructor stub
 }
 
-void switchOffturn() {
+void Plotter::switchOffturn() {
 	offturn = !offturn;
 }
 
-bool getOffturn() {
+bool Plotter::getOffturn() {
 	return offturn;
 }
 
@@ -44,16 +46,16 @@ void Plotter::plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us)
          prim1 = x1;
          prim2 = dx;
          prim3 = dy;
-         //primaryIo = [Xstep];
-         //secondaryIo = [Ystep];
+         primaryIo = Xstep;
+         secondaryIo = Ystep;
          D = 2*dy - dx;
      }
      else {
          prim1 = y1;
          prim2 = dy;
          prim3 = dx;
-         //primaryIo = [Ystep];
-         //secondaryIo = [Xstep];
+         primaryIo = Ystep;
+         secondaryIo = Xstep;
          D = 2*dx - dy;
      }
 
@@ -75,4 +77,126 @@ void Plotter::plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us)
  else {
  // unexpected error
  }
+}
+
+void Plotter::calibrateCanvas() {
+	// for remembering where we are at the canvas:
+	int xPos = 0;
+	int yPos = 0;
+	int stepCount = 0;
+	int xSteps = 0;
+	int ySteps = 0;
+
+	// calibrate XMotor:
+	// Drive X-motor to left until a limit switch is hit:
+	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
+		RIT_start(1, 0, 0, 0, 2);
+	}
+
+	// Record which limit switch was hit:
+	limSws[LEFT_LSW] = (!LSWPin1->read())?
+			 	 	 	 LSWPin1 :
+						 ((!LSWPin2->read())?
+						    LSWPin2 :
+						    ((!LSWPin3->read())?
+							   LSWPin3 :
+							   LSWPin4));
+
+	// Drive to right one step:
+	RIT_start(0, 0, 1, 0, 2);
+	// Drive to right until the left limit switch opens, count the steps:
+	while (!(limSws[LEFT_LSW]->read())) {
+		RIT_start(0, 0, 1, 0, 2);
+		stepCount++;
+	}
+
+	// Drive the X-motor to the right until another limit Switch is hit:
+	// count all the steps while driving
+	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
+		RIT_start(0, 0, 1, 0, 2);
+		stepCount++;
+	}
+
+	// decrease step count by 1:
+	stepCount--;
+	xSteps = stepCount;	// should this be stepCount+1 ?!
+	// set the current XPos:
+	xPos = stepCount;
+
+	// Record which limit switch it was:
+	limSws[RIGHT_LSW] = (!LSWPin1->read())?
+						  LSWPin1 :
+						  ((!LSWPin2->read())?
+						     LSWPin2 :
+							 ((!LSWPin3->read())?
+							    LSWPin3 :
+							    LSWPin4));
+
+	// Drive to left until the right limit switch opens:
+	// Decrease XPos accordingly:
+	while (!(limSws[RIGHT_LSW]->read())) {
+		RIT_start(0, 0, 1, 0, 2);
+		xPos--;
+	}
+
+	// Reset the step count:
+	stepCount = 0;
+
+	// calibrate YMotor:
+	// Drive Y-motor to down until a limit switch is hit:
+	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
+		RIT_start(0, 0, 0, 1, 2);
+	}
+
+	// Record which limit switch was hit:
+	limSws[DOWN_LSW] = (!LSWPin1->read())?
+						 LSWPin1 :
+						 ((!LSWPin2->read())?
+						    LSWPin2 :
+						    ((!LSWPin3->read())?
+						       LSWPin3 :
+							   LSWPin4));
+
+	// Drive one step up:
+	RIT_start(0, 1, 0, 0, 2);
+
+	// Drive up until the down limit switch opens:
+	// count the steps:
+	while (!(limSws[LSWLables::DOWN_LSW]->read())) {
+		RIT_start(0, 1, 0, 0, 2);
+		stepCount++;
+	}
+
+	// Drive the Y-motor upwards until another limit Switch is hit:
+	// count all the steps while driving
+	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
+		RIT_start(0, 1, 0, 0, 2);
+		stepCount++;
+	}
+
+	// Record which limit switch it was:
+	limSws[UP_LSW] = (!LSWPin1->read())?
+					   LSWPin1 :
+					   ((!LSWPin2->read())?
+						  LSWPin2 :
+						  ((!LSWPin3->read())?
+						     LSWPin3 :
+						     LSWPin4));
+
+	// decrease step count by 1:
+	stepCount--;
+	ySteps = stepCount;	// should this be stepCount+1 ?!
+	// set the current YPos:
+	yPos = 0;
+
+
+	// Drive downwards until the upper limit switch opens:
+	// increase YPos accordingly:
+	while (!(limSws[UP_LSW]->read())) {
+		RIT_start(0, 0, 0, 1, 2);
+		yPos++;
+	}
+
+	// drive to the center of the canvas:
+	RIT_start(xPos, yPos, xSteps/2, ySteps/2, 2);
 }

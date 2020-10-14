@@ -37,6 +37,8 @@
 
 #include "PenServoCtrl.h"
 
+#include "Plotter.h"
+
 /*****************************************************************************
  * Private types/enumerations/variables
  ****************************************************************************/
@@ -45,6 +47,7 @@
  * Public types/enumerations/variables
  ****************************************************************************/
 SemaphoreHandle_t uartMutex;
+SemaphoreHandle_t sbRIT;
 ParsedGdata_t data;
 
 //limit switch data:
@@ -52,9 +55,21 @@ DigitalIoPin *LSWPin1;
 DigitalIoPin *LSWPin2;
 DigitalIoPin *LSWPin3;
 DigitalIoPin *LSWPin4;
+DigitalIoPin *Xstep;
+DigitalIoPin *Ystep;
+DigitalIoPin *Xdir;
+DigitalIoPin *Ydir;
+
 
 enum LSWLables {UP_LSW=0, RIGHT_LSW=1, DOWN_LSW=2, LEFT_LSW=3};
 DigitalIoPin *limSws[4];
+
+int x0, y0, y1, x1, dx, dy, D, i;
+int prim1, prim2, prim3;
+DigitalIoPin *primaryIo = NULL;
+DigitalIoPin *secondaryIo = NULL;
+
+Plotter *plotter = NULL;
 
 /*****************************************************************************
  * Private functions
@@ -68,138 +83,74 @@ static void prvSetupHardware(void) {
 
 	ITM_init();
 
+
+
 	// Set up Limit Switch Pins:
 	LSWPin1 = new DigitalIoPin(1, 3, DigitalIoPin::pullup);
 	LSWPin2 = new DigitalIoPin(0, 0, DigitalIoPin::pullup);
 	LSWPin3 = new DigitalIoPin(0, 9, DigitalIoPin::pullup);
 	LSWPin4 = new DigitalIoPin(0, 29, DigitalIoPin::pullup);
+	Xstep = new DigitalIoPin(0,24,DigitalIoPin::output,true);
+	Ystep = new DigitalIoPin(0,27,DigitalIoPin::output,true);
+	Xdir = new DigitalIoPin(1,0,DigitalIoPin::output,true);
+	Ydir = new DigitalIoPin(0,28,DigitalIoPin::output,true);
+	plotter = new Plotter();
+
+	Chip_RIT_Init(LPC_RITIMER);
+
+	NVIC_SetPriority( RITIMER_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY + 1 );
 
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
 
-void calibrateCanvas() {
-	// for remembering where we are at the canvas:
-	int xPos = 0;
-	int yPos = 0;
-	int stepCount = 0;
-	int xSteps = 0;
-	int ySteps = 0;
 
-	// calibrate XMotor:
-	// Drive X-motor to left until a limit switch is hit:
-	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(1, 0, 0, 0, 2);
-	}
+void RIT_IRQHandler(void)
+{
+ // This used to check if a context switch is required
+ portBASE_TYPE xHigherPriorityWoken = pdFALSE;
 
-	// Record which limit switch was hit:
-	limSws[LEFT_LSW] = (!LSWPin1->read())?
-			 	 	 	 LSWPin1 :
-						 ((!LSWPin2->read())?
-						    LSWPin2 :
-						    ((!LSWPin3->read())?
-							   LSWPin3 :
-							   LSWPin4));
-
-	// Drive to right one step:
-	RIT_start(0, 0, 1, 0, 2);
-	// Drive to right until the left limit switch opens, count the steps:
-	while (!(limSws[LEFT_LSW]->read())) {
-		RIT_start(0, 0, 1, 0, 2);
-		stepCount++;
-	}
-
-	// Drive the X-motor to the right until another limit Switch is hit:
-	// count all the steps while driving
-	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(0, 0, 1, 0, 2);
-		stepCount++;
-	}
-
-	// decrease step count by 1:
-	stepCount--;
-	xSteps = stepCount;	// should this be stepCount+1 ?!
-	// set the current XPos:
-	xPos = stepCount;
-
-	// Record which limit switch it was:
-	limSws[RIGHT_LSW] = (!LSWPin1->read())?
-						  LSWPin1 :
-						  ((!LSWPin2->read())?
-						     LSWPin2 :
-							 ((!LSWPin3->read())?
-							    LSWPin3 :
-							    LSWPin4));
-
-	// Drive to left until the right limit switch opens:
-	// Decrease XPos accordingly:
-	while (!(limSws[RIGHT_LSW]->read())) {
-		RIT_start(0, 0, 1, 0, 2);
-		xPos--;
-	}
-
-	// Reset the step count:
-	stepCount = 0;
-
-	// calibrate YMotor:
-	// Drive Y-motor to down until a limit switch is hit:
-	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(0, 0, 0, 1, 2);
-	}
-
-	// Record which limit switch was hit:
-	limSws[DOWN_LSW] = (!LSWPin1->read())?
-						 LSWPin1 :
-						 ((!LSWPin2->read())?
-						    LSWPin2 :
-						    ((!LSWPin3->read())?
-						       LSWPin3 :
-							   LSWPin4));
-
-	// Drive one step up:
-	RIT_start(0, 1, 0, 0, 2);
-
-	// Drive up until the down limit switch opens:
-	// count the steps:
-	while (!(limSws[LSWLables::DOWN_LSW]->read())) {
-		RIT_start(0, 1, 0, 0, 2);
-		stepCount++;
-	}
-
-	// Drive the Y-motor upwards until another limit Switch is hit:
-	// count all the steps while driving
-	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read() && LSWPin4->read()) {
-		RIT_start(0, 1, 0, 0, 2);
-		stepCount++;
-	}
-
-	// Record which limit switch it was:
-	limSws[UP_LSW] = (!LSWPin1->read())?
-					   LSWPin1 :
-					   ((!LSWPin2->read())?
-						  LSWPin2 :
-						  ((!LSWPin3->read())?
-						     LSWPin3 :
-						     LSWPin4));
-
-	// decrease step count by 1:
-	stepCount--;
-	ySteps = stepCount;	// should this be stepCount+1 ?!
-	// set the current YPos:
-	yPos = 0;
+ // Tell timer that we have processed the interrupt.
+ // Timer then removes the IRQ until next match occurs
+ Chip_RIT_ClearIntStatus(LPC_RITIMER); // clear IRQ flag
 
 
-	// Drive downwards until the upper limit switch opens:
-	// increase YPos accordingly:
-	while (!(limSws[UP_LSW]->read())) {
-		RIT_start(0, 0, 0, 1, 2);
-		yPos++;
-	}
+ if(!plotter->getOffturn()) {
 
-	// drive to the center of the canvas:
-	RIT_start(xPos, yPos, xSteps/2, ySteps/2, 2);
+    if(i <= prim1) {
+         plotter->switchOffturn();
+
+               primaryIo->write(1);
+                if (D > 0) {
+                        secondaryIo->write(1);
+                        D = D - 2* prim2;
+                }
+                D = D + 2* prim3;
+
+        ++i;
+
+    }
+         else {
+         Chip_RIT_Disable(LPC_RITIMER); // disable timer
+         // Give semaphore and set context switch flag if a higher priority task was woken up
+         i = 0;
+         Xstep->write(0); // ?
+         Ystep->write(0); // ?
+         xSemaphoreGiveFromISR(sbRIT, &xHigherPriorityWoken);
+         }
+ }
+
+ else {
+	 plotter->switchOffturn();
+     Xstep->write(0);
+     Ystep->write(0);
+
+ }
+
+  // End the ISR and (possibly) do a context switch
+         portEND_SWITCHING_ISR(xHigherPriorityWoken);
+
 }
-
 
 /* The parser task */
 static void vParserTask(void *pvParameters) {
@@ -310,6 +261,7 @@ int main(void) {
 	prvSetupHardware();
 
 	uartMutex = xSemaphoreCreateMutex();
+	sbRIT = xSemaphoreCreateBinary();
 
 	xTaskCreate(vParserTask, "vParserTask",
 	configMINIMAL_STACK_SIZE + 256, NULL, (tskIDLE_PRIORITY + 1UL),
