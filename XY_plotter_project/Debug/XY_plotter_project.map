@@ -270,6 +270,135 @@ __lock___sfp_recursive_mutex
 
 Discarded input sections
 
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .group         0x00000000        0xc ./src/DigitalIoPin.o
+ .text          0x00000000        0x0 ./src/DigitalIoPin.o
+ .data          0x00000000        0x0 ./src/DigitalIoPin.o
+ .bss           0x00000000        0x0 ./src/DigitalIoPin.o
+ .text.Chip_IOCON_PinMuxSet
+                0x00000000       0x2c ./src/DigitalIoPin.o
+ .text.Chip_GPIO_SetPinState
+                0x00000000       0x36 ./src/DigitalIoPin.o
+ .text.Chip_GPIO_GetPinState
+                0x00000000       0x34 ./src/DigitalIoPin.o
+ .text.Chip_GPIO_SetPinDIROutput
+                0x00000000       0x3c ./src/DigitalIoPin.o
+ .text.Chip_GPIO_SetPinDIRInput
+                0x00000000       0x3e ./src/DigitalIoPin.o
+ .text._ZN12DigitalIoPinC2EiiNS_7pinModeEb
+                0x00000000       0xc0 ./src/DigitalIoPin.o
+ .text._ZN12DigitalIoPinD2Ev
+                0x00000000       0x20 ./src/DigitalIoPin.o
+ .text._ZN12DigitalIoPinD0Ev
+                0x00000000       0x1e ./src/DigitalIoPin.o
+ .text._ZN12DigitalIoPin4readEv
+                0x00000000       0x28 ./src/DigitalIoPin.o
+ .text._ZN12DigitalIoPin5writeEb
+                0x00000000       0x2a ./src/DigitalIoPin.o
+ .rodata._ZTV12DigitalIoPin
+                0x00000000       0x14 ./src/DigitalIoPin.o
+ .debug_info    0x00000000      0x6f6 ./src/DigitalIoPin.o
+ .debug_abbrev  0x00000000      0x300 ./src/DigitalIoPin.o
+ .debug_aranges
+                0x00000000       0x68 ./src/DigitalIoPin.o
+ .debug_ranges  0x00000000       0x58 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0x26f ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0xb62 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x1c ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x22 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x56 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x51 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0xef ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x6a ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0x1df ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x16 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x7b ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x10 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x2d ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x3a ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x2d ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0xa7d ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0x1b4 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0xca ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x18 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0xb2 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x70 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x46 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0xd0 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x40 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0x233 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x16 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x88 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x34 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x6a ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x40 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x1c ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x16 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0x10c ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0x2a9 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x76 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x22 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0x152 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x82 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0xe6 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x3a ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x34 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x10 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x76 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x58 ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0x2ca ./src/DigitalIoPin.o
+ .debug_macro   0x00000000      0x22b ./src/DigitalIoPin.o
+ .debug_macro   0x00000000       0x2e ./src/DigitalIoPin.o
+ .debug_line    0x00000000      0x77d ./src/DigitalIoPin.o
+ .debug_str     0x00000000     0xf8b7 ./src/DigitalIoPin.o
+ .comment       0x00000000       0x7a ./src/DigitalIoPin.o
+ .debug_frame   0x00000000      0x190 ./src/DigitalIoPin.o
+ .ARM.attributes
+                0x00000000       0x2d ./src/DigitalIoPin.o
  .group         0x00000000        0xc ./src/FileHandler.o
  .group         0x00000000        0xc ./src/FileHandler.o
  .group         0x00000000        0xc ./src/FileHandler.o
@@ -634,12 +763,14 @@ Discarded input sections
  .debug_macro   0x00000000       0xef ./src/ITM_write.o
  .debug_macro   0x00000000       0x6a ./src/ITM_write.o
  .debug_macro   0x00000000      0x1df ./src/ITM_write.o
+ .debug_macro   0x00000000       0x7b ./src/ITM_write.o
  .debug_macro   0x00000000       0x10 ./src/ITM_write.o
  .debug_macro   0x00000000       0x2d ./src/ITM_write.o
  .debug_macro   0x00000000       0x3a ./src/ITM_write.o
  .debug_macro   0x00000000       0x2d ./src/ITM_write.o
  .debug_macro   0x00000000      0x1b4 ./src/ITM_write.o
  .debug_macro   0x00000000       0xca ./src/ITM_write.o
+ .debug_macro   0x00000000       0x18 ./src/ITM_write.o
  .debug_macro   0x00000000       0xb2 ./src/ITM_write.o
  .debug_macro   0x00000000       0x70 ./src/ITM_write.o
  .debug_macro   0x00000000       0x46 ./src/ITM_write.o
@@ -5853,6 +5984,7 @@ Ram2_4           0x02008000         0x00001000         xrw
 
 Linker script and memory map
 
+LOAD ./src/DigitalIoPin.o
 LOAD ./src/FileHandler.o
 LOAD ./src/Fmutex.o
 LOAD ./src/GcodePipe.o
@@ -7136,90 +7268,88 @@ OUTPUT(XY_plotter_project.axf elf32-littlearm)
  .debug_ranges  0x00000a90       0x10 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_sbrk.o)
  .debug_ranges  0x00000aa0       0x10 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libcr_newlib_nohost.a(_cr_check_heap.o)
 
-.debug_macro    0x00000000     0xa8aa
+.debug_macro    0x00000000     0xa817
  .debug_macro   0x00000000      0x2a0 ./src/ITM_write.o
  .debug_macro   0x000002a0      0xaba ./src/ITM_write.o
  .debug_macro   0x00000d5a       0x22 ./src/ITM_write.o
- .debug_macro   0x00000d7c       0x7b ./src/ITM_write.o
- .debug_macro   0x00000df7      0xa7d ./src/ITM_write.o
- .debug_macro   0x00001874       0x18 ./src/ITM_write.o
- .debug_macro   0x0000188c      0x38f ./src/PenServoCtrl.o
- .debug_macro   0x00001c1b      0x7f4 ./src/XY_plotter_project.o
- .debug_macro   0x0000240f       0x82 ./src/XY_plotter_project.o
- .debug_macro   0x00002491      0x12c ./src/XY_plotter_project.o
- .debug_macro   0x000025bd       0x8e ./src/XY_plotter_project.o
- .debug_macro   0x0000264b       0x10 ./src/XY_plotter_project.o
- .debug_macro   0x0000265b       0x1c ./src/XY_plotter_project.o
- .debug_macro   0x00002677       0x10 ./src/XY_plotter_project.o
- .debug_macro   0x00002687       0x22 ./src/XY_plotter_project.o
- .debug_macro   0x000026a9       0x2c ./src/XY_plotter_project.o
- .debug_macro   0x000026d5       0x10 ./src/XY_plotter_project.o
- .debug_macro   0x000026e5      0x11c ./src/cdc_desc.o
- .debug_macro   0x00002801      0x26c ./src/cdc_desc.o
- .debug_macro   0x00002a6d       0x58 ./src/cdc_desc.o
- .debug_macro   0x00002ac5       0x12 ./src/cdc_desc.o
- .debug_macro   0x00002ad7       0xfa ./src/cdc_desc.o
- .debug_macro   0x00002bd1       0xee ./src/cdc_desc.o
- .debug_macro   0x00002cbf      0x69a ./src/cdc_desc.o
- .debug_macro   0x00003359      0x272 ./src/cdc_desc.o
- .debug_macro   0x000035cb       0x10 ./src/cdc_desc.o
- .debug_macro   0x000035db      0x4eb ./src/cdc_main.o
- .debug_macro   0x00003ac6       0x34 ./src/cdc_main.o
- .debug_macro   0x00003afa       0x97 ./src/cdc_main.o
- .debug_macro   0x00003b91      0x339 ./src/cdc_main.o
- .debug_macro   0x00003eca       0xfd ./src/cdc_main.o
- .debug_macro   0x00003fc7       0x43 ./src/cdc_main.o
- .debug_macro   0x0000400a      0x129 ./src/cdc_main.o
- .debug_macro   0x00004133       0x35 ./src/cdc_main.o
- .debug_macro   0x00004168       0x2e ./src/cdc_main.o
- .debug_macro   0x00004196      0x436 ./src/cdc_vcom.o
- .debug_macro   0x000045cc      0x174 ./src/cdc_vcom.o
- .debug_macro   0x00004740       0x10 ./src/cdc_vcom.o
- .debug_macro   0x00004750      0x137 ./src/cr_cpp_config.o
- .debug_macro   0x00004887      0x10e ./src/cr_cpp_config.o
- .debug_macro   0x00004995       0x94 ./src/cr_cpp_config.o
- .debug_macro   0x00004a29       0x23 ./src/cr_startup_lpc15xx.o
- .debug_macro   0x00004a4c       0x1a ./src/crp.o
- .debug_macro   0x00004a66       0x34 ./src/crp.o
- .debug_macro   0x00004a9a      0x3ff ./src/heap_lock_monitor.o
- .debug_macro   0x00004e99      0x376 ./src/sysinit.o
- .debug_macro   0x0000520f      0x3f3 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x00005602      0xaae C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x000060b0       0x8e C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x0000613e       0x1c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x0000615a       0x52 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x000061ac       0x40 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x000061ec       0x10 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x000061fc       0x40 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x0000623c       0xd7 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x00006313       0x1c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x0000632f       0x3d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x0000636c      0x16f C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x000064db       0x12 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
- .debug_macro   0x000064ed      0x414 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board_sysinit.o)
- .debug_macro   0x00006901      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(chip_15xx.o)
- .debug_macro   0x00006b61      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(clock_15xx.o)
- .debug_macro   0x00006dc1      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(gpio_15xx.o)
- .debug_macro   0x00007021      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(iocon_15xx.o)
- .debug_macro   0x00007281      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sct_15xx.o)
- .debug_macro   0x000074e1      0x26c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(swm_15xx.o)
- .debug_macro   0x0000774d      0x278 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysctl_15xx.o)
- .debug_macro   0x000079c5      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysinit_15xx.o)
- .debug_macro   0x00007c25      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(uart_15xx.o)
- .debug_macro   0x00007e85      0x500 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
- .debug_macro   0x00008385      0xab4 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
- .debug_macro   0x00008e39      0x10e C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
- .debug_macro   0x00008f47       0x8d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
- .debug_macro   0x00008fd4       0x16 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
- .debug_macro   0x00008fea       0x29 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
- .debug_macro   0x00009013      0x56d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
- .debug_macro   0x00009580       0x91 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
- .debug_macro   0x00009611       0x10 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
- .debug_macro   0x00009621       0x16 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
- .debug_macro   0x00009637      0x491 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(heap_3.o)
- .debug_macro   0x00009ac8      0x4ff C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(port.o)
- .debug_macro   0x00009fc7      0x46d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(FreeRTOSCommonHooks.o)
- .debug_macro   0x0000a434      0x476 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(list.o)
+ .debug_macro   0x00000d7c      0xa7d ./src/ITM_write.o
+ .debug_macro   0x000017f9      0x38f ./src/PenServoCtrl.o
+ .debug_macro   0x00001b88      0x7f4 ./src/XY_plotter_project.o
+ .debug_macro   0x0000237c       0x82 ./src/XY_plotter_project.o
+ .debug_macro   0x000023fe      0x12c ./src/XY_plotter_project.o
+ .debug_macro   0x0000252a       0x8e ./src/XY_plotter_project.o
+ .debug_macro   0x000025b8       0x10 ./src/XY_plotter_project.o
+ .debug_macro   0x000025c8       0x1c ./src/XY_plotter_project.o
+ .debug_macro   0x000025e4       0x10 ./src/XY_plotter_project.o
+ .debug_macro   0x000025f4       0x22 ./src/XY_plotter_project.o
+ .debug_macro   0x00002616       0x2c ./src/XY_plotter_project.o
+ .debug_macro   0x00002642       0x10 ./src/XY_plotter_project.o
+ .debug_macro   0x00002652      0x11c ./src/cdc_desc.o
+ .debug_macro   0x0000276e      0x26c ./src/cdc_desc.o
+ .debug_macro   0x000029da       0x58 ./src/cdc_desc.o
+ .debug_macro   0x00002a32       0x12 ./src/cdc_desc.o
+ .debug_macro   0x00002a44       0xfa ./src/cdc_desc.o
+ .debug_macro   0x00002b3e       0xee ./src/cdc_desc.o
+ .debug_macro   0x00002c2c      0x69a ./src/cdc_desc.o
+ .debug_macro   0x000032c6      0x272 ./src/cdc_desc.o
+ .debug_macro   0x00003538       0x10 ./src/cdc_desc.o
+ .debug_macro   0x00003548      0x4eb ./src/cdc_main.o
+ .debug_macro   0x00003a33       0x34 ./src/cdc_main.o
+ .debug_macro   0x00003a67       0x97 ./src/cdc_main.o
+ .debug_macro   0x00003afe      0x339 ./src/cdc_main.o
+ .debug_macro   0x00003e37       0xfd ./src/cdc_main.o
+ .debug_macro   0x00003f34       0x43 ./src/cdc_main.o
+ .debug_macro   0x00003f77      0x129 ./src/cdc_main.o
+ .debug_macro   0x000040a0       0x35 ./src/cdc_main.o
+ .debug_macro   0x000040d5       0x2e ./src/cdc_main.o
+ .debug_macro   0x00004103      0x436 ./src/cdc_vcom.o
+ .debug_macro   0x00004539      0x174 ./src/cdc_vcom.o
+ .debug_macro   0x000046ad       0x10 ./src/cdc_vcom.o
+ .debug_macro   0x000046bd      0x137 ./src/cr_cpp_config.o
+ .debug_macro   0x000047f4      0x10e ./src/cr_cpp_config.o
+ .debug_macro   0x00004902       0x94 ./src/cr_cpp_config.o
+ .debug_macro   0x00004996       0x23 ./src/cr_startup_lpc15xx.o
+ .debug_macro   0x000049b9       0x1a ./src/crp.o
+ .debug_macro   0x000049d3       0x34 ./src/crp.o
+ .debug_macro   0x00004a07      0x3ff ./src/heap_lock_monitor.o
+ .debug_macro   0x00004e06      0x376 ./src/sysinit.o
+ .debug_macro   0x0000517c      0x3f3 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x0000556f      0xaae C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x0000601d       0x8e C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x000060ab       0x1c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x000060c7       0x52 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x00006119       0x40 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x00006159       0x10 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x00006169       0x40 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x000061a9       0xd7 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x00006280       0x1c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x0000629c       0x3d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x000062d9      0x16f C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x00006448       0x12 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board.o)
+ .debug_macro   0x0000645a      0x414 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_board_nxp_lpcxpresso_1549\Debug\liblpc_board_nxp_lpcxpresso_1549.a(board_sysinit.o)
+ .debug_macro   0x0000686e      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(chip_15xx.o)
+ .debug_macro   0x00006ace      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(clock_15xx.o)
+ .debug_macro   0x00006d2e      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(gpio_15xx.o)
+ .debug_macro   0x00006f8e      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(iocon_15xx.o)
+ .debug_macro   0x000071ee      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sct_15xx.o)
+ .debug_macro   0x0000744e      0x26c C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(swm_15xx.o)
+ .debug_macro   0x000076ba      0x278 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysctl_15xx.o)
+ .debug_macro   0x00007932      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(sysinit_15xx.o)
+ .debug_macro   0x00007b92      0x260 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\lpc_chip_15xx\Debug\liblpc_chip_15xx.a(uart_15xx.o)
+ .debug_macro   0x00007df2      0x500 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
+ .debug_macro   0x000082f2      0xab4 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
+ .debug_macro   0x00008da6      0x10e C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
+ .debug_macro   0x00008eb4       0x8d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
+ .debug_macro   0x00008f41       0x16 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
+ .debug_macro   0x00008f57       0x29 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(queue.o)
+ .debug_macro   0x00008f80      0x56d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
+ .debug_macro   0x000094ed       0x91 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
+ .debug_macro   0x0000957e       0x10 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
+ .debug_macro   0x0000958e       0x16 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(tasks.o)
+ .debug_macro   0x000095a4      0x491 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(heap_3.o)
+ .debug_macro   0x00009a35      0x4ff C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(port.o)
+ .debug_macro   0x00009f34      0x46d C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(FreeRTOSCommonHooks.o)
+ .debug_macro   0x0000a3a1      0x476 C:\Users\Rasmus\Documents\MCUXpressoIDE_11.2.0_4120\XY_plotter_project\FreeRTOS\Debug\libFreeRTOS.a(list.o)
 
 .debug_line     0x00000000    0x10da4
  .debug_line    0x00000000      0x690 ./src/ITM_write.o
@@ -7713,6 +7843,13 @@ Chip_USB_Init                                     C:\Users\Rasmus\Documents\MCUX
 DAC_IRQHandler                                    ./src/cr_startup_lpc15xx.o
 DMA_IRQHandler                                    ./src/cr_startup_lpc15xx.o
 DebugMon_Handler                                  ./src/cr_startup_lpc15xx.o
+DigitalIoPin::DigitalIoPin(int, int, DigitalIoPin::pinMode, bool) ./src/DigitalIoPin.o
+DigitalIoPin::DigitalIoPin(int, int, DigitalIoPin::pinMode, bool) ./src/DigitalIoPin.o
+DigitalIoPin::read()                              ./src/DigitalIoPin.o
+DigitalIoPin::write(bool)                         ./src/DigitalIoPin.o
+DigitalIoPin::~DigitalIoPin()                     ./src/DigitalIoPin.o
+DigitalIoPin::~DigitalIoPin()                     ./src/DigitalIoPin.o
+DigitalIoPin::~DigitalIoPin()                     ./src/DigitalIoPin.o
 EEPROM_IRQHandler                                 ./src/cr_startup_lpc15xx.o
 FMC_IRQHandler                                    ./src/cr_startup_lpc15xx.o
 FileHandler::FileHandler()                        ./src/FileHandler.o
@@ -7747,11 +7884,11 @@ GcodePipe::GcodePipe()                            ./src/FileHandler.o
                                                   ./src/SimpleUARTWrapper.o
                                                   ./src/MockPipe.o
 GcodePipe::~GcodePipe()                           ./src/GcodePipe.o
+GcodePipe::~GcodePipe()                           ./src/GcodePipe.o
+GcodePipe::~GcodePipe()                           ./src/GcodePipe.o
                                                   ./src/SimpleUARTWrapper.o
                                                   ./src/MockPipe.o
                                                   ./src/FileHandler.o
-GcodePipe::~GcodePipe()                           ./src/GcodePipe.o
-GcodePipe::~GcodePipe()                           ./src/GcodePipe.o
 HardFault_Handler                                 ./src/cr_startup_lpc15xx.o
 I2C0_IRQHandler                                   ./src/cr_startup_lpc15xx.o
 ITM_init                                          ./src/ITM_write.o
@@ -8616,6 +8753,7 @@ operator delete(void*)                            ./src/cr_cpp_config.o
                                                   ./src/GcodePipe.o
                                                   ./src/Fmutex.o
                                                   ./src/FileHandler.o
+                                                  ./src/DigitalIoPin.o
 operator delete(void*, unsigned int)              c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(del_ops.o)
                                                   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(class_type_info.o)
                                                   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(tinfo.o)
@@ -8653,8 +8791,8 @@ sprintf                                           c:/nxp/mcuxpressoide_11.2.0_41
 std::bad_exception::what() const                  c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 std::bad_exception::~bad_exception()              c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 std::bad_exception::~bad_exception()              c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
-std::bad_exception::~bad_exception()              c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
                                                   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_call.o)
+std::bad_exception::~bad_exception()              c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 std::exception::what() const                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 std::exception::~exception()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
 std::exception::~exception()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_exception.o)
@@ -8687,8 +8825,8 @@ std::type_info::operator==(std::type_info const&) const c:/nxp/mcuxpressoide_11.
                                                   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(si_class_type_info.o)
 std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(tinfo.o)
 std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(tinfo.o)
-std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(tinfo.o)
                                                   c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(class_type_info.o)
+std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(tinfo.o)
 std::uncaught_exception()                         c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_catch.o)
 std::uncaught_exceptions()                        c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_catch.o)
 std::unexpected()                                 c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libstdc++.a(eh_terminate.o)
@@ -8832,6 +8970,7 @@ vcom_write                                        ./src/cdc_vcom.o
                                                   ./src/cdc_main.o
 vfiprintf                                         c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc.a(lib_a-vfiprintf.o)
 vfprintf                                          c:/nxp/mcuxpressoide_11.2.0_4120/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.2.0.202001021529/tools/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc.a(lib_a-vfprintf.o)
+vtable for DigitalIoPin                           ./src/DigitalIoPin.o
 vtable for FileHandler                            ./src/FileHandler.o
 vtable for Fmutex                                 ./src/Fmutex.o
 vtable for GcodePipe                              ./src/FileHandler.o

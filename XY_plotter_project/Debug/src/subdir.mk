@@ -4,10 +4,12 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/DigitalIoPin.cpp \
 ../src/FileHandler.cpp \
 ../src/Fmutex.cpp \
 ../src/GcodePipe.cpp \
 ../src/MockPipe.cpp \
+../src/Parser.cpp \
 ../src/PenServoCtrl.cpp \
 ../src/SimpleUARTWrapper.cpp \
 ../src/XY_plotter_project.cpp \
@@ -24,11 +26,13 @@ C_SRCS += \
 ../src/sysinit.c 
 
 OBJS += \
+./src/DigitalIoPin.o \
 ./src/FileHandler.o \
 ./src/Fmutex.o \
 ./src/GcodePipe.o \
 ./src/ITM_write.o \
 ./src/MockPipe.o \
+./src/Parser.o \
 ./src/PenServoCtrl.o \
 ./src/SimpleUARTWrapper.o \
 ./src/XY_plotter_project.o \
@@ -42,10 +46,12 @@ OBJS += \
 ./src/sysinit.o 
 
 CPP_DEPS += \
+./src/DigitalIoPin.d \
 ./src/FileHandler.d \
 ./src/Fmutex.d \
 ./src/GcodePipe.d \
 ./src/MockPipe.d \
+./src/Parser.d \
 ./src/PenServoCtrl.d \
 ./src/SimpleUARTWrapper.d \
 ./src/XY_plotter_project.d \

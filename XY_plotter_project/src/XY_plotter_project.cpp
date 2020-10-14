@@ -231,17 +231,16 @@ static void parse_task(void *pvParameters) {
 
 	penServo = new PenServoController(data);
 
-	const int MAX_LEN = 50;
-	char str[MAX_LEN + 1];
+	char str[MAX_STR_LEN + 1];
 	char *lf = 0;
 
 	while (1) {
 		int len = 0;
-		char buf[MAX_LEN + 1];
+		char buf[MAX_STR_LEN + 1];
 		char *curBufPos = buf;
 		//receive-append strings
 		do {
-			len = USB_receive((uint8_t*) str, MAX_LEN);
+			len = USB_receive((uint8_t*) str, MAX_STR_LEN);
 			str[len] = 0;
 			lf = strchr(str, '\n');
 
@@ -257,9 +256,6 @@ static void parse_task(void *pvParameters) {
 		PlotInstruct_t instruct { { data->PenXY.X, data->PenXY.Y },
 				data->codeType, data->penCur };
 		xQueueSend(qCmd, &instruct, portMAX_DELAY);
-
-		//USB_send((uint8_t*)"OK\r\n", 4);
-
 	}
 }
 
