@@ -50,8 +50,6 @@ SemaphoreHandle_t uartMutex;
 ParsedGdata_t data;
 
 
-Plotter *plotter = NULL;
-
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -67,7 +65,6 @@ static void prvSetupHardware(void) {
 
 
 	// Set up Limit Switch Pins:
-	plotter = new Plotter();
 
 	Chip_RIT_Init(LPC_RITIMER);
 
@@ -77,53 +74,6 @@ static void prvSetupHardware(void) {
 	Board_LED_Set(0, false);
 }
 
-
-void RIT_IRQHandler(void)
-{
- // This used to check if a context switch is required
- portBASE_TYPE xHigherPriorityWoken = pdFALSE;
-
- // Tell timer that we have processed the interrupt.
- // Timer then removes the IRQ until next match occurs
- Chip_RIT_ClearIntStatus(LPC_RITIMER); // clear IRQ flag
-
-
- if(!plotter->getOffturn()) {
-
-    if(plotter->i <= plotter->prim1) {
-         plotter->switchOffturn();
-
-               plotter->primaryIo->write(1);
-                if (plotter->D > 0) {
-                        plotter->secondaryIo->write(1);
-                        plotter->D = plotter->D - 2* plotter->prim2;
-                }
-                plotter->D = plotter->D + 2* plotter->prim3;
-
-                plotter->i = plotter->i + 1;
-
-    }
-         else {
-         Chip_RIT_Disable(LPC_RITIMER); // disable timer
-         // Give semaphore and set context switch flag if a higher priority task was woken up
-         plotter->i = 0;
-         plotter->Xstep->write(0); // ?
-         plotter->Ystep->write(0); // ?
-         xSemaphoreGiveFromISR(plotter->sbRIT, &xHigherPriorityWoken);
-         }
- }
-
- else {
-	 plotter->switchOffturn();
-	 plotter->Xstep->write(0);
-	 plotter->Ystep->write(0);
-
- }
-
-  // End the ISR and (possibly) do a context switch
-         portEND_SWITCHING_ISR(xHigherPriorityWoken);
-
-}
 
 /* The parser task */
 static void vParserTask(void *pvParameters) {

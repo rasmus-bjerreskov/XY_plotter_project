@@ -8,9 +8,15 @@
 #include "Plotter.h"
 #include <stdlib.h>
 
+static Plotter *plotter; // used to hold the only plotter
 
+// in constructor the IO-pins and their settings are set, also some starting values
 Plotter::Plotter() {
+
+	plotter = this;
+
 	offturn = false;
+
 	LSWPin1 = new DigitalIoPin(1, 3, DigitalIoPin::pullup);
 	LSWPin2 = new DigitalIoPin(0, 0, DigitalIoPin::pullup);
 	LSWPin3 = new DigitalIoPin(0, 9, DigitalIoPin::pullup);
@@ -28,16 +34,20 @@ Plotter::~Plotter() {
 	// TODO Auto-generated destructor stub
 }
 
+// used to determine when to write 0 and when to write 1 to stepper motors
 void Plotter::switchOffturn() {
 	offturn = !offturn;
 }
 
+// used to determine which turn it is, to write 0 or write 1 to stepper motors
 bool Plotter::getOffturn() {
 	return offturn;
 }
 
+//used to plot the line with RIT_IRQHandlerer
 void Plotter::plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us)
 {
+ // used to determine the frequency of the steps
  uint64_t cmp_value;
  // Determine approximate compare value based on clock rate and passed interval
  cmp_value = (uint64_t) Chip_Clock_GetSystemClockRate() * (uint64_t) us / 1000000;
@@ -52,7 +62,7 @@ void Plotter::plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us)
  dx = abs(x1 - x0);
  dy = abs(y1 - y0);
 
-     if (dx > dy) {
+     if (dx > dy) { // when x is dominant axis
          prim1 = x1;
          prim2 = dx;
          prim3 = dy;
@@ -60,7 +70,7 @@ void Plotter::plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us)
          secondaryIo = Ystep;
          D = 2*dy - dx;
      }
-     else {
+     else {	// when y is dominant axis
          prim1 = y1;
          prim2 = dy;
          prim3 = dx;
@@ -89,6 +99,8 @@ void Plotter::plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us)
  }
 }
 
+
+// used to determen which limit switch is which and also the size of the canvas and length of step and go to starting position (0,0)
 void Plotter::calibrateCanvas() {
 	// for remembering where we are at the canvas:
 	int xPos = 0;
@@ -209,4 +221,58 @@ void Plotter::calibrateCanvas() {
 
 	// drive to the center of the canvas:
 	Plotter::plotLine(xPos, yPos, xSteps/2, ySteps/2, 2);
+}
+
+// using Bresenham's line algorithm to determine when to step with dominant axis only and when with both
+void Plotter::isr(portBASE_TYPE xHigherPriorityWoken){
+    if (!offturn) { // when to write 1 on steppers
+
+                if (i <= prim1) { // run as long as i = x0/y0 is smaller or equal to x1/y1
+                    offturn = !offturn;
+
+                    primaryIo->write(1);
+                    if (D > 0) {
+                        secondaryIo->write(1);
+                        D = D - 2 * prim2;
+                    }
+                    D = D + 2 * prim3;
+
+                    ++i;
+
+                } else {	// when i reaches x1/y1 disable the timer and reset i
+
+                    Chip_RIT_Disable(LPC_RITIMER); // disable timer
+                    i = 0;
+                    Xstep->write(0);
+                    Ystep->write(0);
+                    // Give semaphore and set context switch flag if a higher priority task was woken up
+                    xSemaphoreGiveFromISR(sbRIT, &xHigherPriorityWoken);
+                }
+            }
+
+    else { // when to write 0 on the steppers
+    	switchOffturn();
+        Xstep->write(0);
+        Ystep->write(0);
+
+    }
+}
+
+extern "C" {
+void RIT_IRQHandler(void) {
+    // This used to check if a context switch is required
+    portBASE_TYPE xHigherPriorityWoken = pdFALSE;
+
+    // Tell timer that we have processed the interrupt.
+    // Timer then removes the IRQ until next match occurs
+    Chip_RIT_ClearIntStatus(LPC_RITIMER); // clear IRQ flag
+    if (plotter != nullptr) {
+
+        plotter->isr(xHigherPriorityWoken); // plot with isr-function
+
+        // End the ISR and (possibly) do a context switch
+        portEND_SWITCHING_ISR(xHigherPriorityWoken);
+    }
+
+}
 }
