@@ -84,7 +84,7 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 	dy = abs(y1 - y0);
 
 	if (dx > dy) { // when x is dominant axis
-		i = dx;
+		i = x0;
 		prim1 = x1;
 		prim2 = dx;
 		prim3 = dy;
@@ -92,7 +92,7 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 		secondaryIo = Ystep;
 		D = 2 * dy - dx;
 	} else {	// when y is dominant axis
-		i = dy;
+		i = y0;
 		prim1 = y1;
 		prim2 = dy;
 		prim3 = dx;
@@ -248,14 +248,10 @@ void Plotter::isr(portBASE_TYPE xHigherPriorityWoken) {
 			}
 			D = D + 2 * prim3;
 
-			++i;
-
-		} else {	// when i reaches x1/y1 disable the timer and reset i
+		} else {	// when i reaches x1/y1 disable the timer
 
 			Chip_RIT_Disable(LPC_RITIMER); // disable timer
-			i = 0;
-			Xstep->write(0);
-			Ystep->write(0);
+
 			// Give semaphore and set context switch flag if a higher priority task was woken up
 			xSemaphoreGiveFromISR(sbRIT, &xHigherPriorityWoken);
 		}
@@ -265,6 +261,7 @@ void Plotter::isr(portBASE_TYPE xHigherPriorityWoken) {
 		switchOffturn();
 		Xstep->write(0);
 		Ystep->write(0);
+		++i;
 
 	}
 }

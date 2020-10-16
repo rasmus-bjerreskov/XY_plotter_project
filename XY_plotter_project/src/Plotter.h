@@ -37,13 +37,14 @@ public:
 	void switchOffturn();			// used to switch "offturn"-variable between true and false
 	bool getOffturn();				// used to get the value private "offturn"-variable
 
-	int y1;							// ending X-position in steps
-	int x1;							// ending Y-position in steps
 	int dx;							// difference between x1 and x0 =abs(x1-x0)
 	int dy;							// difference between y1 and y0 =abs(y1-y0)
 	int D;							// function f(x,y) = D = 2*dy - dx or 2*dx - dy; depending on dominant axis used to determine when to step only dominant axis and when both
-	int i;							// counter used to run right amount of steps
-	int prim1, prim2, prim3;		// used to hold certain values determined by dominant axis and keep track how to step
+	int i;							// counter used to run right amount of steps. When x is primary axis it starts from x0 and y0 when y is primary
+	int prim1;						// used in algorithm to plot. It is x1 when x is primary axis and y when y-axis is.
+	int prim2;						// used in algorithm to plot. It is dy when x is primary axis and dx when y-axis is.
+	int prim3;						// used in algorithm to plot. It is dx when x is primary axis and xy when y-axis is.
+
 	DigitalIoPin *primaryIo;		// used to save dominant axis
 	DigitalIoPin *secondaryIo;		// used to save non-dominant axis
 	SemaphoreHandle_t sbRIT;		// used to end rit-timer at right time
