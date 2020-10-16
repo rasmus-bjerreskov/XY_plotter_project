@@ -1,23 +1,13 @@
 #ifndef _ParsedGdata_h_
 #define _ParsedGdata_h_
 
+#include "CanvasCoordinates.h"
+
 enum class GcodeType { M1, M2, M4, M5, M10, M11, G1, G28 };
 #define MAX_STR_LEN 50
 
-struct Coordinates_t
-{
-	float X;
-	float Y;
-};
-
-struct CanvasSize_t
-{
-	int X;
-	int Y;
-};
-
 struct PlotInstruct_t{
-	Coordinates_t newPos;
+	CanvasCoordinates_t newPos;
 	GcodeType code;
 	int penPos;
 };
@@ -25,7 +15,7 @@ struct PlotInstruct_t{
 struct ParsedGdata_t
 {
 	GcodeType codeType;
-	Coordinates_t PenXY;
+	CanvasCoordinates_t PenXY;
 	CanvasSize_t canvasLimits;
 	int penUp;
 	int penDown;

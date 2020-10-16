@@ -19,15 +19,16 @@
 #include "DigitalIoPin.h"
 #include "FreeRTOS.h"
 #include "semphr.h"
+#include "CanvasCoordinates.h"
 
 class Plotter {
 public:
 	Plotter();
 	virtual ~Plotter();
 
-	// used to actually draw the line, x0_l is the starting x-position, y0_l is the starting y position,
+	// used to actually draw the line. it uses penXYPos as the origin of the pen position in the canvas.
 	// x1_l is the ending x position, y1_l is the ending y position , us is the speed of the plotter (1000000 / pps)
-	void plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us);
+	void plotLine(int x1_l, int y1_l, int us);
 
 	void calibrateCanvas();			// used to determen which limit switch is which and also the size of the canvas and length of step
 
@@ -36,8 +37,6 @@ public:
 	void switchOffturn();			// used to switch "offturn"-variable between true and false
 	bool getOffturn();				// used to get the value private "offturn"-variable
 
-	int x0;						 	// starting X-position in steps
-	int y0; 						// starting Y-position in steps
 	int y1;							// ending X-position in steps
 	int x1;							// ending Y-position in steps
 	int dx;							// difference between x1 and x0 =abs(x1-x0)
@@ -48,6 +47,8 @@ public:
 	DigitalIoPin *primaryIo;		// used to save dominant axis
 	DigitalIoPin *secondaryIo;		// used to save non-dominant axis
 	SemaphoreHandle_t sbRIT;		// used to end rit-timer at right time
+	CanvasSize_t canvasSize;		// used to contain the dimensions of the canvas in steps an in mms
+	CanvasCoordinates_t penXYPos;	// used to contain the current XY-position of the pen in the canvas.
 
 	DigitalIoPin *LSWPin1;			// used to hold IO-pins of limit switch 1
 	DigitalIoPin *LSWPin2;			// used to hold IO-pins of limit switch 2
@@ -63,6 +64,10 @@ public:
 
 private:
 	bool offturn;					//used in the IRQ to keep track when to write 1 and when to write 0 to stepper motors
+
+	// used to actually draw the line, x0_l is the starting x-position, y0_l is the starting y position,
+	// x1_l is the ending x position, y1_l is the ending y position , us is the speed of the plotter (1000000 / pps)
+	void plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us);
 };
 
 #endif /* PLOTTER_H_ */

@@ -45,7 +45,7 @@ bool Plotter::getOffturn() {
 }
 
 //used to plot the line with RIT_IRQHandlerer
-void Plotter::plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us)
+void Plotter::plotLine(int x1_l, int y1_l, int us)
 {
  // used to determine the frequency of the steps
  uint64_t cmp_value;
@@ -54,10 +54,59 @@ void Plotter::plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us)
  // disable timer during configuration
  Chip_RIT_Disable(LPC_RITIMER);
 
- x0 = x0_l;
  x1 = x1_l;
- y0 = y0_l;
  y1 = y1_l;
+ i = 0;
+ dx = abs(x1 - penXYPos.Xsteps);
+ dy = abs(y1 - penXYPos.Ysteps);
+
+     if (dx > dy) { // when x is dominant axis
+         prim1 = x1;
+         prim2 = dx;
+         prim3 = dy;
+         primaryIo = Xstep;
+         secondaryIo = Ystep;
+         D = 2*dy - dx;
+     }
+     else {	// when y is dominant axis
+         prim1 = y1;
+         prim2 = dy;
+         prim3 = dx;
+         primaryIo = Ystep;
+         secondaryIo = Xstep;
+         D = 2*dx - dy;
+     }
+
+ // enable automatic clear on when compare value==timer value
+ // this makes interrupts trigger periodically
+ Chip_RIT_EnableCompClear(LPC_RITIMER);
+ // reset the counter
+ Chip_RIT_SetCounter(LPC_RITIMER, 0);
+ Chip_RIT_SetCompareValue(LPC_RITIMER, cmp_value);
+ // start counting
+ Chip_RIT_Enable(LPC_RITIMER);
+ // Enable the interrupt signal in NVIC (the interrupt controller)
+ NVIC_EnableIRQ(RITIMER_IRQn);
+ // wait for ISR to tell that we're done
+ if(xSemaphoreTake(sbRIT, portMAX_DELAY) == pdTRUE) {
+ // Disable the interrupt signal in NVIC (the interrupt controller)
+ NVIC_DisableIRQ(RITIMER_IRQn);
+ }
+ else {
+ // unexpected error
+ }
+}
+
+
+//used to plot the line with RIT_IRQHandlerer
+void Plotter::plotLine(int x0, int y0, int x1, int y1, int us)
+{
+ // used to determine the frequency of the steps
+ uint64_t cmp_value;
+ // Determine approximate compare value based on clock rate and passed interval
+ cmp_value = (uint64_t) Chip_Clock_GetSystemClockRate() * (uint64_t) us / 1000000;
+ // disable timer during configuration
+ Chip_RIT_Disable(LPC_RITIMER);
  i = 0;
  dx = abs(x1 - x0);
  dy = abs(y1 - y0);
@@ -99,15 +148,9 @@ void Plotter::plotLine(int x0_l, int y0_l, int x1_l, int y1_l, int us)
  }
 }
 
-
 // used to determen which limit switch is which and also the size of the canvas and length of step and go to starting position (0,0)
 void Plotter::calibrateCanvas() {
-	// for remembering where we are at the canvas:
-	int xPos = 0;
-	int yPos = 0;
 	int stepCount = 0;
-	int xSteps = 0;
-	int ySteps = 0;
 
 	// calibrate XMotor:
 	// Drive X-motor to left until a limit switch is hit:
@@ -141,9 +184,9 @@ void Plotter::calibrateCanvas() {
 
 	// decrease step count by 1:
 	stepCount--;
-	xSteps = stepCount;	// should this be stepCount+1 ?!
+	canvasSize.Xsteps = stepCount;	// should this be stepCount+1 ?!
 	// set the current XPos:
-	xPos = stepCount;
+	penXYPos.Xsteps = stepCount;
 
 	// Record which limit switch it was:
 	limSws[RIGHT_LSW] = (!LSWPin1->read())?
@@ -158,7 +201,7 @@ void Plotter::calibrateCanvas() {
 	// Decrease XPos accordingly:
 	while (!(limSws[RIGHT_LSW]->read())) {
 		Plotter::plotLine(0, 0, 1, 0, 2);
-		xPos--;
+		penXYPos.Xsteps--;
 	}
 
 	// Reset the step count:
@@ -207,20 +250,20 @@ void Plotter::calibrateCanvas() {
 
 	// decrease step count by 1:
 	stepCount--;
-	ySteps = stepCount;	// should this be stepCount+1 ?!
+	canvasSize.Ysteps = stepCount;	// should this be stepCount+1 ?!
 	// set the current YPos:
-	yPos = 0;
+	penXYPos.Ysteps = 0;
 
 
 	// Drive downwards until the upper limit switch opens:
 	// increase YPos accordingly:
 	while (!(limSws[UP_LSW]->read())) {
 		Plotter::plotLine(0, 0, 0, 1, 2);
-		yPos++;
+		penXYPos.Ysteps++;
 	}
 
 	// drive to the center of the canvas:
-	Plotter::plotLine(xPos, yPos, xSteps/2, ySteps/2, 2);
+	Plotter::plotLine(canvasSize.Ysteps/2, canvasSize.Xsteps/2, 2);
 }
 
 // using Bresenham's line algorithm to determine when to step with dominant axis only and when with both
