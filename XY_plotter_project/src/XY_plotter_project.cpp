@@ -43,6 +43,8 @@
 #include "MockPipe.h"
 #include "PenServoCtrl.h"
 
+#include "Plotter.h"
+
 /*****************************************************************************
  * Private types/enumerations/variables
  ****************************************************************************/
@@ -55,14 +57,6 @@ QueueHandle_t qCmd; //Holds commands to hardware functions
 ParsedGdata_t *data;
 PenServoController *penServo;
 
-//limit switch data:
-DigitalIoPin *LSWPin1;
-DigitalIoPin *LSWPin2;
-DigitalIoPin *LSWPin3;
-DigitalIoPin *LSWPin4;
-
-enum LSWLables {UP_LSW=0, RIGHT_LSW=1, DOWN_LSW=2, LEFT_LSW=3};
-DigitalIoPin *limSws[4];
 
 /*****************************************************************************
  * Private functions
@@ -82,6 +76,10 @@ static void prvSetupHardware(void) {
 	LSWPin3 = new DigitalIoPin(0, 9, DigitalIoPin::pullup);
 	LSWPin4 = new DigitalIoPin(0, 29, DigitalIoPin::pullup);
 
+	Chip_RIT_Init(LPC_RITIMER);
+
+	NVIC_SetPriority( RITIMER_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY + 1 );
+	
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
