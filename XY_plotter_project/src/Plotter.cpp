@@ -186,7 +186,7 @@ void Plotter::calibrateCanvas() {
 	stepCount--;
 	canvasSize.Xsteps = stepCount;	// should this be stepCount+1 ?!
 	// set the current XPos:
-	penXYPos.Xsteps = stepCount;
+	penXYPos.Xsteps = 0; // The left side is the zero coordinate
 
 	// Record which limit switch it was:
 	limSws[RIGHT_LSW] = (!LSWPin1->read())?
@@ -198,10 +198,10 @@ void Plotter::calibrateCanvas() {
 							    LSWPin4));
 
 	// Drive to left until the right limit switch opens:
-	// Decrease XPos accordingly:
+	// Increase XPos accordingly:
 	while (!(limSws[RIGHT_LSW]->read())) {
 		Plotter::plotLine(0, 0, 1, 0, 2);
-		penXYPos.Xsteps--;
+		penXYPos.Xsteps++;
 	}
 
 	// Reset the step count:
@@ -263,7 +263,9 @@ void Plotter::calibrateCanvas() {
 	}
 
 	// drive to the center of the canvas:
-	Plotter::plotLine(canvasSize.Ysteps/2, canvasSize.Xsteps/2, 2);
+	Plotter::plotLine(canvasSize.Xsteps/2, canvasSize.Ysteps/2, 2);
+	penXYPos.Xsteps = canvasSize.Xsteps/2;
+	penXYPos.Ysteps = canvasSize.Ysteps/2;
 }
 
 // using Bresenham's line algorithm to determine when to step with dominant axis only and when with both

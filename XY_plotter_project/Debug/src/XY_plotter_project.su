@@ -1,8 +1,9 @@
 core_cm3.h:1405:22:void NVIC_SetPriority(IRQn_Type, uint32_t)	16	static
 gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
-XY_plotter_project.cpp:67:13:void prvSetupHardware()	16	static
-XY_plotter_project.cpp:88:13:void parse_task(void*)	168	static
-XY_plotter_project.cpp:139:6:void plotter_task(void*)	48	static
-XY_plotter_project.cpp:188:6:void send_task(void*)	160	static
-XY_plotter_project.cpp:227:6:void vConfigureTimerForRunTimeStats()	8	static
-XY_plotter_project.cpp:240:5:int main()	16	static
+XY_plotter_project.cpp:72:13:void prvSetupHardware()	16	static
+XY_plotter_project.cpp:90:6:void mmsToSteps(CanvasCoordinates_t*, RelModes)	16	static
+XY_plotter_project.cpp:108:13:void parse_task(void*)	168	static
+XY_plotter_project.cpp:159:6:void plotter_task(void*)	48	static
+XY_plotter_project.cpp:215:6:void send_task(void*)	160	static
+XY_plotter_project.cpp:254:6:void vConfigureTimerForRunTimeStats()	8	static
+XY_plotter_project.cpp:267:5:int main()	16	static

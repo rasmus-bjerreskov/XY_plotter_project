@@ -59,6 +59,11 @@ PenServoController *penServo;
 
 Plotter *plotter;
 
+enum class RelModes { REL, ABS };
+
+const int MM_SCALE_FACTOR = 100000;
+const int SCALED_MMS_PER_STEP = 2500;
+
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -82,6 +87,21 @@ static void prvSetupHardware(void) {
 }
 
 
+void mmsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
+	coords->Xsteps = (coords->Xmm * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
+	coords->Ysteps = (coords->Ymm * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
+
+	switch (mode) {
+		case RelModes::REL:
+			coords->Xsteps += plotter->penXYPos.Xsteps;
+			coords->Ysteps += plotter->penXYPos.Ysteps;
+			break;
+
+		case RelModes::ABS:
+			break;
+
+	}
+}
 
 
 /*Receive G-code lines from mDraw, validate and parse code into hardware instructions*/
@@ -170,11 +190,18 @@ void plotter_task(void *pvParameters) {
 				plotter->plotLine(0, 0, 1);
 				data->penCur = penCur;
 				penServo->updatePos();
+				plotter->penXYPos.Xsteps = 0;
+				plotter->penXYPos.Ysteps = 0;
 			}
 			break;
 
 		case (GcodeType::G1):
-			//go to coords
+			plotter->penXYPos.Xmm = data->PenXY.Xmm;
+			plotter->penXYPos.Ymm = data->PenXY.Ymm;
+			mmsToSteps(&(data->PenXY), data->relativityMode? RelModes::ABS : RelModes::REL);
+			plotter->plotLine(data->PenXY.Xsteps, data->PenXY.Ysteps, 1);
+			plotter->penXYPos.Xsteps = data->PenXY.Xsteps;
+			plotter->penXYPos.Ysteps = data->PenXY.Ysteps;
 			break;
 
 		default:
