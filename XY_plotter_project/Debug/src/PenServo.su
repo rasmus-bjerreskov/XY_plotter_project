@@ -1,5 +1,0 @@
-PenServo.cpp:10:1:PenServo::PenServo()	16	static
-PenServo.cpp:35:6:void PenServo::operator=(int)	24	static
-PenServo.cpp:44:5:int PenServo::getCurPos()	16	static
-PenServo.cpp:48:1:PenServo::~PenServo()	16	static
-PenServo.cpp:48:1:virtual PenServo::~PenServo()	16	static
