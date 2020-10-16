@@ -12,12 +12,10 @@
 #include "Parser.h"
 #include "ITM_write.h"
 
-Parser::Parser(GcodePipe *_pipe) {
-	pipe = _pipe;
+Parser::Parser() {
 	tokens.currToken = NULL;
 	tokens.numTokens = 0;
 	tokens.currTokenNum = 0;
-
 }
 
 Parser::~Parser() {
@@ -90,10 +88,8 @@ char *Parser::nextToken(void) {
  * @param data Pointer to the parsed data
  * @return true if parsing was successful, false if not.
  */
-bool Parser::parse(ParsedGdata_t *data) {
-	while (!pipe->getLine(codeLine)) ;
-	ITM_write(codeLine);
-
+bool Parser::parse(ParsedGdata_t *data, char *line) {
+	strncpy(codeLine, line, MAX_STR_LEN);
 	char *tokLine = tokenize();
 
 	if (tokLine == NULL)

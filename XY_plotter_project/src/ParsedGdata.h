@@ -2,6 +2,7 @@
 #define _ParsedGdata_h_
 
 enum class GcodeType { M1, M2, M4, M5, M10, M11, G1, G28 };
+#define MAX_STR_LEN 50
 
 struct Coordinates_t
 {
