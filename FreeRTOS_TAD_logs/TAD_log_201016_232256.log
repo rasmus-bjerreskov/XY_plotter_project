@@ -1,0 +1,24 @@
+"FreeRTOS Task Aware Debugger for GDB" version 11.2.0 (202001021529)
+(c) 2016-2018 NXP Semiconductors, Inc.
+==================================
+23:16:19.703 INFO: [TadModel] DSF session ID 22 has started.
+23:16:25.17 INFO: [TadState] TAD state changed:  DEBUG_STARTED -> DEBUG_INIT_0 (SUSPENDED, USER_REQUEST)
+23:16:26.702 INFO: [TadState] TAD state changed:  DEBUG_INIT_0 -> DEBUG_INIT_1 (RESUMED, USER_REQUEST)
+23:16:26.856 INFO: [TadState] TAD state changed:  DEBUG_INIT_1 -> DEBUG_SUSPENDED (SUSPENDED, BREAKPOINT)
+23:17:10.10 INFO: [TadState] TAD state changed:  DEBUG_SUSPENDED -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+23:17:19.621 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+23:17:20.269 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" has started.
+23:17:20.861 INFO: [TadModel] Heap type (memory allocation scheme) has been identified from FreeRTOSDebugConfig structure as Heap #3. 
+23:17:20.861 INFO: [TadModel] FreeRTOS version has been identified from FreeRTOSDebugConfig structure as 10.2.0.
+23:17:20.861 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" took 592 ms.
+23:17:20.862 INFO: [Benchmark] Loading data for "Task List" has started.
+23:17:26.17 INFO: [Benchmark] Loading data for "Task List" took 5156 ms.
+23:17:54.198 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+23:17:54.401 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+23:17:54.401 INFO: [Benchmark] Loading data for "Task List" has started.
+23:17:59.172 INFO: [Benchmark] Loading data for "Task List" took 4771 ms.
+23:17:59.561 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+23:18:04.927 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, SIGNAL)
+23:18:04.927 INFO: [Benchmark] Loading data for "Task List" has started.
+23:18:10.00 INFO: [Benchmark] Loading data for "Task List" took 5073 ms.
+23:22:56.834 INFO: [TadModel] DSF session ID 22 has ended.

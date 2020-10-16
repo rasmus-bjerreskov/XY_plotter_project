@@ -1,0 +1,16 @@
+core_cm3.h:1323:22:void NVIC_EnableIRQ(IRQn_Type)	16	static
+core_cm3.h:1335:22:void NVIC_DisableIRQ(IRQn_Type)	16	static
+ritimer_15xx.h:107:20:void Chip_RIT_Enable(LPC_RITIMER_T*)	16	static
+ritimer_15xx.h:117:20:void Chip_RIT_Disable(LPC_RITIMER_T*)	16	static
+ritimer_15xx.h:151:20:void Chip_RIT_EnableCompClear(LPC_RITIMER_T*)	16	static
+ritimer_15xx.h:181:20:void Chip_RIT_ClearIntStatus(LPC_RITIMER_T*)	16	static
+Plotter.cpp:17:1:Plotter::Plotter()	32	static
+Plotter.cpp:36:1:Plotter::~Plotter()	16	static
+Plotter.cpp:36:1:virtual Plotter::~Plotter()	16	static
+Plotter.cpp:41:6:void Plotter::switchOffturn()	16	static
+Plotter.cpp:46:6:bool Plotter::getOffturn()	16	static
+Plotter.cpp:51:6:void Plotter::plotLine(int, int)	32	static
+Plotter.cpp:56:6:void Plotter::plotLine(int, int, int, int)	40	static
+Plotter.cpp:124:6:void Plotter::calibrateCanvas()	88	static
+Plotter.cpp:237:6:void Plotter::isr(long int)	16	static
+Plotter.cpp:272:6:void RIT_IRQHandler()	16	static
