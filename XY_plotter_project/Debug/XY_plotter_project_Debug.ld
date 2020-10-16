@@ -6,7 +6,7 @@
  * Generated linker script file for LPC1549
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v11.2.0 [Build 4120] [2020-07-09] on 16.10.2020 16:37:21
+ * MCUXpresso IDE v11.2.0 [Build 4120] [2020-07-09] on 16.10.2020 16:44:22
  */
 
 INCLUDE "XY_plotter_project_Debug_library.ld"
