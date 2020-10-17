@@ -58,13 +58,12 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 	int pps;
 #ifdef DEBUG
 	if (calibrate)
-	pps = 2 * 1200;
+		pps = 2 * 1200;
 	else
-	pps = 2 * 400;
+		pps = 2 * 400;
 #else
 	pps = 2 * 400;
 #endif
-
 
 	// used to determine the frequency of the steps
 	uint64_t cmp_value;
@@ -84,16 +83,16 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 	dy = abs(y1 - y0);
 
 	if (dx > dy) { // when x is dominant axis
-		i = x0;
-		prim1 = x1;
+		i = (x0 < x1) ? x0 : x1;
+		prim1 = (x0 < x1) ? x1 : x0;
 		prim2 = dx;
 		prim3 = dy;
 		primaryIo = Xstep;
 		secondaryIo = Ystep;
 		D = 2 * dy - dx;
 	} else {	// when y is dominant axis
-		i = y0;
-		prim1 = y1;
+		i = (y0 < y1) ? y0 : y1;
+		prim1 = (y1 > y0) ? y1 : y0;
 		prim2 = dy;
 		prim3 = dx;
 		primaryIo = Ystep;
@@ -117,6 +116,38 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 		NVIC_DisableIRQ(RITIMER_IRQn);
 	} else {
 		// unexpected error
+	}
+}
+
+// using Bresenham's line algorithm to determine when to step with dominant axis only and when with both
+void Plotter::isr(portBASE_TYPE xHigherPriorityWoken) {
+	if (!offturn) { // when to write 1 on steppers
+
+		if (i <= prim1) { // run as long as i = x0/y0 is smaller or equal to x1/y1
+			offturn = !offturn;
+
+			primaryIo->write(1);
+			if (D > 0) {
+				secondaryIo->write(1);
+				D = D - 2 * prim2;
+			}
+			D = D + 2 * prim3;
+
+		} else {	// when i reaches x1/y1 disable the timer
+
+			Chip_RIT_Disable(LPC_RITIMER); // disable timer
+
+			// Give semaphore and set context switch flag if a higher priority task was woken up
+			xSemaphoreGiveFromISR(sbRIT, &xHigherPriorityWoken);
+		}
+	}
+
+	else { // when to write 0 on the steppers
+		switchOffturn();
+		Xstep->write(0);
+		Ystep->write(0);
+		++i;
+
 	}
 }
 
@@ -215,7 +246,7 @@ void Plotter::calibrateCanvas() {
 					((!LSWPin2->read()) ?
 							LSWPin2 : ((!LSWPin3->read()) ? LSWPin3 : LSWPin4));
 
-	// should this be stepCount+1 ?!
+
 	// set the current YPos:
 
 	// Drive downwards until the upper limit switch opens:
@@ -232,38 +263,6 @@ void Plotter::calibrateCanvas() {
 	penXYPos.Xsteps = canvasSize.Xsteps = 0; //TODO: This should be done in isr as steps are taken
 	penXYPos.Ysteps = canvasSize.Ysteps = 0;
 	calibrate = false;
-}
-
-// using Bresenham's line algorithm to determine when to step with dominant axis only and when with both
-void Plotter::isr(portBASE_TYPE xHigherPriorityWoken) {
-	if (!offturn) { // when to write 1 on steppers
-
-		if (i <= prim1) { // run as long as i = x0/y0 is smaller or equal to x1/y1
-			offturn = !offturn;
-
-			primaryIo->write(1);
-			if (D > 0) {
-				secondaryIo->write(1);
-				D = D - 2 * prim2;
-			}
-			D = D + 2 * prim3;
-
-		} else {	// when i reaches x1/y1 disable the timer
-
-			Chip_RIT_Disable(LPC_RITIMER); // disable timer
-
-			// Give semaphore and set context switch flag if a higher priority task was woken up
-			xSemaphoreGiveFromISR(sbRIT, &xHigherPriorityWoken);
-		}
-	}
-
-	else { // when to write 0 on the steppers
-		switchOffturn();
-		Xstep->write(0);
-		Ystep->write(0);
-		++i;
-
-	}
 }
 
 extern "C" {

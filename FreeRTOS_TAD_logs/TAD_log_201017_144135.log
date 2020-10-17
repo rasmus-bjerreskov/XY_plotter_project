@@ -1,0 +1,26 @@
+"FreeRTOS Task Aware Debugger for GDB" version 11.2.0 (202001021529)
+(c) 2016-2018 NXP Semiconductors, Inc.
+==================================
+14:40:38.661 INFO: [TadModel] DSF session ID 9 has started.
+14:40:42.880 INFO: [TadState] TAD state changed:  DEBUG_STARTED -> DEBUG_INIT_0 (SUSPENDED, USER_REQUEST)
+14:40:44.598 INFO: [TadState] TAD state changed:  DEBUG_INIT_0 -> DEBUG_INIT_1 (RESUMED, USER_REQUEST)
+14:40:44.758 INFO: [TadState] TAD state changed:  DEBUG_INIT_1 -> DEBUG_SUSPENDED (SUSPENDED, BREAKPOINT)
+14:40:56.192 INFO: [TadState] TAD state changed:  DEBUG_SUSPENDED -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:41:25.697 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, SIGNAL)
+14:41:26.250 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" has started.
+14:41:27.175 INFO: [TadModel] Heap type (memory allocation scheme) has been identified from FreeRTOSDebugConfig structure as Heap #3. 
+14:41:27.176 INFO: [TadModel] FreeRTOS version has been identified from FreeRTOSDebugConfig structure as 10.2.0.
+14:41:27.176 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" took 926 ms.
+14:41:27.176 INFO: [Benchmark] Loading data for "Task List" has started.
+14:41:31.117 ERROR: [VariableReader] Could not read variable expression: "(((struct xLIST_ITEM *) 0x2001edc)->pxNext)".
+14:41:31.118 ERROR: [TaskFactory] Cannot read information from "xSuspendedTaskList".
+14:41:32.685 INFO: [TadModel] DSF session ID 9 has ended.
+14:41:35.165 ERROR: [MemoryReader] Read bytes method timed out!
+14:41:35.165 EXCEPTION: [TadModel] NullPointerException while "Task List" data load.
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.readers.VariableReader.readVariable(VariableReader.java:214)
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.readers.VariableReader.getValueAtAddress(VariableReader.java:136)
+	com.nxp.mcuxpresso.freertos.gdb.tad.controller.TadFactory.readIntAtAddress(TadFactory.java:212)
+	com.nxp.mcuxpresso.freertos.gdb.tad.controller.tasklist.TaskFactory.readTasksFromList(TaskFactory.java:197)
+	com.nxp.mcuxpresso.freertos.gdb.tad.controller.tasklist.TaskFactory.getData(TaskFactory.java:142)
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.TadModel$2.execute(TadModel.java:218)
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.TadModel$3.run(TadModel.java:414)

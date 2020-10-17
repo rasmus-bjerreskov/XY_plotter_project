@@ -1,0 +1,57 @@
+"FreeRTOS Task Aware Debugger for GDB" version 11.2.0 (202001021529)
+(c) 2016-2018 NXP Semiconductors, Inc.
+==================================
+14:37:46.389 INFO: [TadModel] DSF session ID 8 has started.
+14:37:50.352 INFO: [TadState] TAD state changed:  DEBUG_STARTED -> DEBUG_INIT_0 (SUSPENDED, USER_REQUEST)
+14:37:51.385 INFO: [TadState] TAD state changed:  DEBUG_INIT_0 -> DEBUG_INIT_1 (RESUMED, USER_REQUEST)
+14:37:51.533 INFO: [TadState] TAD state changed:  DEBUG_INIT_1 -> DEBUG_SUSPENDED (SUSPENDED, BREAKPOINT)
+14:38:18.528 INFO: [TadState] TAD state changed:  DEBUG_SUSPENDED -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:38:50.669 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:38:51.425 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" has started.
+14:38:52.628 ERROR: [VariableReader] Could not read variable expression: "sizeof(struct TaskControlBlock_t)".
+14:38:52.677 ERROR: [VariableReader] Could not read variable expression: "&(((struct QueueDefinition *) 0)->pcTail)".
+14:38:52.677 INFO: [TadModel] FreeRTOS version has been identified from available FreeRTOS symbols as 10.11.
+14:38:52.677 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" took 1252 ms.
+14:38:52.678 INFO: [Benchmark] Loading data for "Task List" has started.
+14:38:57.442 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:38:58.444 INFO: [FreeRTOS] FreeRTOS macro "configUSE_TRACE_FACILITY" is disabled.
+14:38:59.445 ERROR: [TaskFactory] Cannot read information from "pxDelayedTaskList".
+14:39:00.446 ERROR: [TaskFactory] Cannot read information from "pxOverflowDelayedTaskList".
+14:39:00.446 INFO: [Benchmark] Loading data for "Task List" took 7769 ms.
+14:39:00.446 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:39:00.447 INFO: [Benchmark] Loading data for "Task List" has started.
+14:39:05.234 INFO: [Benchmark] Loading data for "Task List" took 4787 ms.
+14:39:05.672 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:39:05.884 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:39:05.885 INFO: [Benchmark] Loading data for "Task List" has started.
+14:39:10.337 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:39:11.338 ERROR: [TaskFactory] Cannot read information from "pxDelayedTaskList".
+14:39:12.340 ERROR: [TaskFactory] Cannot read information from "pxOverflowDelayedTaskList".
+14:39:12.341 INFO: [Benchmark] Loading data for "Task List" took 6456 ms.
+14:39:12.341 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:39:12.342 INFO: [Benchmark] Loading data for "Task List" has started.
+14:39:15.540 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:39:16.540 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[1]".
+14:39:17.541 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[2]".
+14:39:18.542 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[3]".
+14:39:19.544 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[4]".
+14:39:20.545 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[5]".
+14:39:21.546 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[6]".
+14:39:22.547 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[7]".
+14:39:23.549 ERROR: [TaskFactory] Cannot read information from "xSuspendedTaskList".
+14:39:24.551 ERROR: [TaskFactory] Cannot read information from "xPendingReadyList".
+14:39:25.552 ERROR: [TaskFactory] Cannot read information from "pxDelayedTaskList".
+14:39:26.554 ERROR: [TaskFactory] Cannot read information from "pxOverflowDelayedTaskList".
+14:39:26.554 INFO: [Benchmark] Loading data for "Task List" took 14213 ms.
+14:39:47.354 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, SIGNAL)
+14:39:47.355 INFO: [Benchmark] Loading data for "Task List" has started.
+14:39:49.504 INFO: [TadModel] DSF session ID 8 has ended.
+14:39:52.254 ERROR: [MemoryReader] Read bytes method timed out!
+14:39:52.254 EXCEPTION: [TadModel] NullPointerException while "Task List" data load.
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.readers.VariableReader.readVariable(VariableReader.java:214)
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.readers.VariableReader.getValueAtAddress(VariableReader.java:136)
+	com.nxp.mcuxpresso.freertos.gdb.tad.controller.TadFactory.readIntAtAddress(TadFactory.java:212)
+	com.nxp.mcuxpresso.freertos.gdb.tad.controller.tasklist.TaskFactory.readTasksFromList(TaskFactory.java:197)
+	com.nxp.mcuxpresso.freertos.gdb.tad.controller.tasklist.TaskFactory.getData(TaskFactory.java:142)
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.TadModel$2.execute(TadModel.java:218)
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.TadModel$3.run(TadModel.java:414)
