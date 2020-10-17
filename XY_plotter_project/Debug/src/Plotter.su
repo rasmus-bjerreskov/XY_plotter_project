@@ -11,6 +11,6 @@ Plotter.cpp:41:6:void Plotter::switchOffturn()	16	static
 Plotter.cpp:46:6:bool Plotter::getOffturn()	16	static
 Plotter.cpp:51:6:void Plotter::plotLine(int, int)	32	static
 Plotter.cpp:56:6:void Plotter::plotLine(int, int, int, int)	40	static
-Plotter.cpp:123:6:void Plotter::isr(long int)	16	static
-Plotter.cpp:155:6:void Plotter::calibrateCanvas()	88	static
-Plotter.cpp:269:6:void RIT_IRQHandler()	16	static
+Plotter.cpp:124:6:void Plotter::isr(long int)	16	static
+Plotter.cpp:156:6:void Plotter::calibrateCanvas()	88	static
+Plotter.cpp:273:6:void RIT_IRQHandler()	16	static

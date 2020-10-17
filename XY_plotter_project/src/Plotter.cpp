@@ -74,6 +74,7 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 
 	//set stepper directions - 0,0 is lower left corner
 	direction dir;
+
 	((x1 - x0) > 0) ? dir = right : dir = left;
 	Xdir->write(dir);
 	((y1 - y0) > 0) ? dir = up : dir = down;
@@ -83,18 +84,18 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 	dy = abs(y1 - y0);
 
 	if (dx > dy) { // when x is dominant axis
-		i = (x0 < x1) ? x0 : x1;
-		prim1 = (x0 < x1) ? x1 : x0;
-		prim2 = dx;
-		prim3 = dy;
+		start = (x0 < x1) ? x0 : x1;
+		dest = (x0 < x1) ? x1 : x0;
+		prim_delta = dx;
+		second_delta = dy;
 		primaryIo = Xstep;
 		secondaryIo = Ystep;
 		D = 2 * dy - dx;
 	} else {	// when y is dominant axis
-		i = (y0 < y1) ? y0 : y1;
-		prim1 = (y1 > y0) ? y1 : y0;
-		prim2 = dy;
-		prim3 = dx;
+		start = (y0 < y1) ? y0 : y1;
+		dest = (y1 > y0) ? y1 : y0;
+		prim_delta = dy;
+		second_delta = dx;
 		primaryIo = Ystep;
 		secondaryIo = Xstep;
 		D = 2 * dx - dy;
@@ -122,19 +123,19 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 // using Bresenham's line algorithm to determine when to step with dominant axis only and when with both
 void Plotter::isr(portBASE_TYPE xHigherPriorityWoken) {
 	if (!offturn) { // when to write 1 on steppers
-
-		if (i <= prim1) { // run as long as i = x0/y0 is smaller or equal to x1/y1
+		static int steps = 0;
+		if (start < dest) { // run as long as i = x0/y0 is smaller or equal to x1/y1
 			offturn = !offturn;
 
 			primaryIo->write(1);
 			if (D > 0) {
 				secondaryIo->write(1);
-				D = D - 2 * prim2;
+				D = D - 2 * prim_delta;
 			}
-			D = D + 2 * prim3;
+			D = D + 2 * second_delta;
+			steps++;
 
 		} else {	// when i reaches x1/y1 disable the timer
-
 			Chip_RIT_Disable(LPC_RITIMER); // disable timer
 
 			// Give semaphore and set context switch flag if a higher priority task was woken up
@@ -143,10 +144,10 @@ void Plotter::isr(portBASE_TYPE xHigherPriorityWoken) {
 	}
 
 	else { // when to write 0 on the steppers
-		switchOffturn();
+		offturn = !offturn;
 		Xstep->write(0);
 		Ystep->write(0);
-		++i;
+		++start;
 
 	}
 }
@@ -159,7 +160,11 @@ void Plotter::calibrateCanvas() {
 	// calibrate XMotor:
 	// Drive X-motor to left until a limit switch is hit:
 
-	//TODO: somewhere, we need to make sure we don't start calibrating until all limit switches are open
+	while (!LSWPin1->read() || !LSWPin2->read() || !LSWPin3->read()
+			|| !LSWPin4->read()){
+		vTaskDelay(2); //waiting for all limit switches to be opened
+	}
+
 	while (LSWPin1->read() && LSWPin2->read() && LSWPin3->read()
 			&& LSWPin4->read()) {
 		Plotter::plotLine(1, 0, 0, 0);
@@ -246,7 +251,6 @@ void Plotter::calibrateCanvas() {
 					((!LSWPin2->read()) ?
 							LSWPin2 : ((!LSWPin3->read()) ? LSWPin3 : LSWPin4));
 
-
 	// set the current YPos:
 
 	// Drive downwards until the upper limit switch opens:
@@ -260,8 +264,8 @@ void Plotter::calibrateCanvas() {
 
 	// drive to 0, 0
 	Plotter::plotLine(0, 0);
-	penXYPos.Xsteps = canvasSize.Xsteps = 0; //TODO: This should be done in isr as steps are taken
-	penXYPos.Ysteps = canvasSize.Ysteps = 0;
+	penXYPos.Xsteps = canvasSize.Xsteps; //TODO: This should be done in isr as steps are taken
+	penXYPos.Ysteps = canvasSize.Ysteps;
 	calibrate = false;
 }
 

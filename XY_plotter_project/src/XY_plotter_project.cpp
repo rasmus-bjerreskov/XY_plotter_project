@@ -192,7 +192,7 @@ void plotter_task(void *pvParameters) {
 			int penCur = data->penCur;
 			data->penCur = data->penUp;
 			penServo->updatePos();
-			//plotter->plotLine(0, 0, 1);
+			plotter->plotLine(0, 0);
 			data->penCur = penCur;
 			penServo->updatePos();
 			plotter->penXYPos.Xsteps = 0;

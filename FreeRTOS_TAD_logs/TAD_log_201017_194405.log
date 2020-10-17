@@ -1,0 +1,20 @@
+"FreeRTOS Task Aware Debugger for GDB" version 11.2.0 (202001021529)
+(c) 2016-2018 NXP Semiconductors, Inc.
+==================================
+19:38:01.991 INFO: [TadModel] DSF session ID 10 has started.
+19:38:05.822 INFO: [TadState] TAD state changed:  DEBUG_STARTED -> DEBUG_INIT_0 (SUSPENDED, USER_REQUEST)
+19:38:07.140 INFO: [TadState] TAD state changed:  DEBUG_INIT_0 -> DEBUG_INIT_1 (RESUMED, USER_REQUEST)
+19:38:07.221 INFO: [TadState] TAD state changed:  DEBUG_INIT_1 -> DEBUG_SUSPENDED (SUSPENDED, BREAKPOINT)
+19:38:34.225 INFO: [TadState] TAD state changed:  DEBUG_SUSPENDED -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+19:38:48.712 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+19:38:49.170 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" has started.
+19:38:49.765 INFO: [TadModel] Heap type (memory allocation scheme) has been identified from FreeRTOSDebugConfig structure as Heap #3. 
+19:38:49.765 INFO: [TadModel] FreeRTOS version has been identified from FreeRTOSDebugConfig structure as 10.2.0.
+19:38:49.766 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" took 596 ms.
+19:38:49.766 INFO: [Benchmark] Loading data for "Task List" has started.
+19:38:54.618 INFO: [Benchmark] Loading data for "Task List" took 4852 ms.
+19:38:55.542 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+19:42:43.365 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+19:42:43.365 INFO: [Benchmark] Loading data for "Task List" has started.
+19:42:48.78 INFO: [Benchmark] Loading data for "Task List" took 4713 ms.
+19:44:05.644 INFO: [TadModel] DSF session ID 10 has ended.

@@ -40,10 +40,12 @@ public:
 	int dx;							// difference between x1 and x0 =abs(x1-x0)
 	int dy;							// difference between y1 and y0 =abs(y1-y0)
 	int D;							// function f(x,y) = D = 2*dy - dx or 2*dx - dy; depending on dominant axis used to determine when to step only dominant axis and when both
-	int i;							// counter used to run right amount of steps. When x is primary axis it starts from x0 and y0 when y is primary
-	int prim1;						// used in algorithm to plot. It is x1 when x is primary axis and y when y-axis is.
-	int prim2;						// used in algorithm to plot. It is dy when x is primary axis and dx when y-axis is.
-	int prim3;						// used in algorithm to plot. It is dx when x is primary axis and xy when y-axis is.
+	int start;							// counter used to run right amount of steps. When x is primary axis it starts from x0 and y0 when y is primary
+	int dest;						// used in algorithm to plot. It is x1 when x is primary axis and y when y-axis is.
+	int prim_delta;						// used in algorithm to plot. It is dy when x is primary axis and dx when y-axis is.
+	int second_delta;						// used in algorithm to plot. It is dx when x is primary axis and xy when y-axis is.
+	int prim_cartes;				//primary cartesian direction
+	int second_cartes;				//secondary cartesian direction
 
 	DigitalIoPin *primaryIo;		// used to save dominant axis
 	DigitalIoPin *secondaryIo;		// used to save non-dominant axis
