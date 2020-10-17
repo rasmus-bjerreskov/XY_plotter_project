@@ -2,7 +2,7 @@
 #define EVENTGROUP_H_
 
 //Event group for task synchronisation
-static EventGroupHandle_t eGrp;
+extern EventGroupHandle_t eGrp;
 #define USB_CDC_b 	1 << 0
 #define RX_b 		1 << 1
 #define PLOT_b 		1 << 2

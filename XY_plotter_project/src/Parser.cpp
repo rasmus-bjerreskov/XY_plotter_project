@@ -175,7 +175,7 @@ bool Parser::gotoPositionParser(ParsedGdata_t *data, char *tokLine) {
 	if (!validateFloatStr(&tokLine[1], false))
 		return false;
 
-	data->PenXY.X = atof(tokLine+1);
+	data->PenXY.Xmm = atof(tokLine+1);
 
 	tokLine = nextToken();
 
@@ -186,7 +186,7 @@ bool Parser::gotoPositionParser(ParsedGdata_t *data, char *tokLine) {
 	if (!validateFloatStr(&tokLine[1], false))
 		return false;
 
-	data->PenXY.Y = atof(tokLine+1);
+	data->PenXY.Ymm = atof(tokLine+1);
 
 	tokLine = nextToken();
 
@@ -371,7 +371,7 @@ bool Parser::saveStepperInfoParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine[0] != 'H')
 		return false;
 
-	if (!extractInt(&data->canvasLimits.Y, tokLine+1))
+	if (!extractInt(&data->canvasLimits.Ymm, tokLine+1))
 		return false;
 
 	// Extract the width value:
@@ -380,7 +380,7 @@ bool Parser::saveStepperInfoParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine[0] != 'W')
 		return false;
 
-	if (!extractInt(&data->canvasLimits.X, tokLine+1))
+	if (!extractInt(&data->canvasLimits.Xmm, tokLine+1))
 		return false;
 
 	// Extract the speed value

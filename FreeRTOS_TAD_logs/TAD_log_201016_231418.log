@@ -1,0 +1,46 @@
+"FreeRTOS Task Aware Debugger for GDB" version 11.2.0 (202001021529)
+(c) 2016-2018 NXP Semiconductors, Inc.
+==================================
+23:12:04.622 INFO: [TadModel] DSF session ID 20 has started.
+23:12:10.874 INFO: [TadState] TAD state changed:  DEBUG_STARTED -> DEBUG_INIT_0 (SUSPENDED, USER_REQUEST)
+23:12:12.786 INFO: [TadState] TAD state changed:  DEBUG_INIT_0 -> DEBUG_INIT_1 (RESUMED, USER_REQUEST)
+23:12:12.965 INFO: [TadState] TAD state changed:  DEBUG_INIT_1 -> DEBUG_SUSPENDED (SUSPENDED, BREAKPOINT)
+23:12:26.51 INFO: [TadState] TAD state changed:  DEBUG_SUSPENDED -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+23:12:40.827 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+23:12:41.429 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" has started.
+23:12:42.84 INFO: [TadModel] Heap type (memory allocation scheme) has been identified from FreeRTOSDebugConfig structure as Heap #3. 
+23:12:42.86 INFO: [TadModel] FreeRTOS version has been identified from FreeRTOSDebugConfig structure as 10.2.0.
+23:12:42.86 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" took 657 ms.
+23:12:42.87 INFO: [Benchmark] Loading data for "Task List" has started.
+23:12:47.200 INFO: [Benchmark] Loading data for "Task List" took 5114 ms.
+23:12:55.541 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+23:13:27.616 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, SIGNAL)
+23:13:27.617 INFO: [Benchmark] Loading data for "Task List" has started.
+23:13:32.627 INFO: [Benchmark] Loading data for "Task List" took 5010 ms.
+23:13:34.911 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+23:14:16.386 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, SIGNAL)
+23:14:16.387 INFO: [Benchmark] Loading data for "Task List" has started.
+23:14:16.843 ERROR: [VariableReader] Could not read variable expression: "(((struct QueueDefinition *) 0x2004270)->u.xQueue.pcReadFrom)".
+23:14:16.843 ERROR: [TadFactory] Reading exception during: "readLongAtAddressSafely(0x02004270, QueueDefinition.u.xQueue.pcReadFrom)"
+23:14:16.867 ERROR: [VariableReader] Could not read variable expression: "(((struct QueueDefinition *) 0x2004270)->ucQueueType)".
+23:14:16.867 INFO: [FreeRTOS] FreeRTOS macro "configUSE_TRACE_FACILITY" is disabled.
+23:14:16.896 ERROR: [VariableReader] Could not read variable expression: "(((struct QueueDefinition *) 0x2004270)->xTasksWaitingToSend.uxNumberOfItems)".
+23:14:16.897 ERROR: [TadFactory] Reading exception during: "readIntAtAddressSafely(0x02004270, QueueDefinition.xTasksWaitingToSend.uxNumberOfItems)"
+23:14:16.926 ERROR: [VariableReader] Could not read variable expression: "(((struct QueueDefinition *) 0x2004270)->xTasksWaitingToReceive.uxNumberOfItems)".
+23:14:16.928 ERROR: [TadFactory] Reading exception during: "readIntAtAddressSafely(0x02004270, QueueDefinition.xTasksWaitingToReceive.uxNumberOfItems)"
+23:14:18.325 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[5]".
+23:14:18.404 ERROR: [VariableReader] Could not read variable expression: "pxReadyTasksLists[5].uxNumberOfItems".
+23:14:18.418 ERROR: [VariableReader] Could not read variable expression: "pxReadyTasksLists[6].uxNumberOfItems".
+23:14:18.418 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[6]".
+23:14:18.450 ERROR: [VariableReader] Could not read variable expression: "pxReadyTasksLists[7].uxNumberOfItems".
+23:14:18.451 ERROR: [TaskFactory] Cannot read information from "pxReadyTasksLists[7]".
+23:14:18.466 ERROR: [VariableReader] Could not read variable expression: "pxDelayedTaskList.uxNumberOfItems".
+23:14:18.466 ERROR: [TaskFactory] Cannot read information from "pxDelayedTaskList".
+23:14:18.488 ERROR: [VariableReader] Could not read variable expression: "pxOverflowDelayedTaskList.uxNumberOfItems".
+23:14:18.488 ERROR: [TaskFactory] Cannot read information from "pxOverflowDelayedTaskList".
+23:14:18.506 ERROR: [VariableReader] Could not read variable expression: "xPendingReadyList.uxNumberOfItems".
+23:14:18.506 ERROR: [TaskFactory] Cannot read information from "xPendingReadyList".
+23:14:18.522 ERROR: [VariableReader] Could not read variable expression: "xSuspendedTaskList.uxNumberOfItems".
+23:14:18.522 ERROR: [TaskFactory] Cannot read information from "xSuspendedTaskList".
+23:14:18.522 INFO: [Benchmark] Loading data for "Task List" took 2136 ms.
+23:14:18.574 INFO: [TadModel] DSF session ID 20 has ended.

@@ -238,9 +238,8 @@ void cdc_task(void *pvParameters)
 #endif
 	};
 
-	ITM_write("Connected\r\n");
-
 	xEventGroupSync(eGrp, USB_CDC_b, TASK_BITS, portMAX_DELAY);
+	ITM_write("Connected\r\n");
 
 	while (1) {
 		/* try allocate receive buffer if we have none */
