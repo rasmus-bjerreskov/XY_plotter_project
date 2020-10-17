@@ -1,0 +1,58 @@
+"FreeRTOS Task Aware Debugger for GDB" version 11.2.0 (202001021529)
+(c) 2016-2018 NXP Semiconductors, Inc.
+==================================
+21:26:59.463 INFO: [TadModel] DSF session ID 6 has started.
+21:27:03.647 INFO: [TadState] TAD state changed:  DEBUG_STARTED -> DEBUG_INIT_0 (SUSPENDED, USER_REQUEST)
+21:27:05.92 INFO: [TadState] TAD state changed:  DEBUG_INIT_0 -> DEBUG_INIT_1 (RESUMED, USER_REQUEST)
+21:27:05.198 INFO: [TadState] TAD state changed:  DEBUG_INIT_1 -> DEBUG_SUSPENDED (SUSPENDED, BREAKPOINT)
+21:27:12.616 INFO: [TadState] TAD state changed:  DEBUG_SUSPENDED -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+21:36:26.188 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, SIGNAL)
+21:36:26.638 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" has started.
+21:36:27.284 INFO: [TadModel] Heap type (memory allocation scheme) has been identified from FreeRTOSDebugConfig structure as Heap #3. 
+21:36:27.284 INFO: [TadModel] FreeRTOS version has been identified from FreeRTOSDebugConfig structure as 10.2.0.
+21:36:27.284 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" took 646 ms.
+21:36:27.284 INFO: [Benchmark] Loading data for "Task List" has started.
+21:36:28.774 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry[1])"
+21:36:28.774 ERROR: [QueueFactory] Cannot read information from "xQueueRegistry[1]".
+21:36:28.855 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry[2])".
+21:36:28.855 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry[2])"
+21:36:28.855 ERROR: [QueueFactory] Cannot read information from "xQueueRegistry[2]".
+21:36:28.887 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry[1])".
+21:36:28.928 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry[3])".
+21:36:28.929 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry[3])"
+21:36:28.929 ERROR: [QueueFactory] Cannot read information from "xQueueRegistry[3]".
+21:36:28.968 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry[4])".
+21:36:28.968 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry[4])"
+21:36:28.968 ERROR: [QueueFactory] Cannot read information from "xQueueRegistry[4]".
+21:36:29.17 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry[5])".
+21:36:29.18 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry[5])"
+21:36:29.18 ERROR: [QueueFactory] Cannot read information from "xQueueRegistry[5]".
+21:36:29.55 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry[6])".
+21:36:29.55 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry[6])"
+21:36:29.55 ERROR: [QueueFactory] Cannot read information from "xQueueRegistry[6]".
+21:36:29.85 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry[7])".
+21:36:29.85 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry[7])"
+21:36:29.85 ERROR: [QueueFactory] Cannot read information from "xQueueRegistry[7]".
+21:36:29.119 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry[8])".
+21:36:29.119 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry[8])"
+21:36:29.120 ERROR: [QueueFactory] Cannot read information from "xQueueRegistry[8]".
+21:36:29.151 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry[9])".
+21:36:29.151 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry[9])"
+21:36:29.151 ERROR: [QueueFactory] Cannot read information from "xQueueRegistry[9]".
+21:36:29.174 ERROR: [VariableReader] Could not read variable expression: "sizeof(pxReadyTasksLists)".
+21:36:29.174 ERROR: [TaskFactory] Could not get size of "pxReadyTasksLists"!
+21:36:29.175 ERROR: [TaskFactory] Cannot display tasks from ready task list!
+21:36:29.201 ERROR: [VariableReader] Could not read variable expression: "pxCurrentTCB".
+21:36:29.201 ERROR: [TadFactory] Reading exception during: "readLongVariableSafely(pxCurrentTCB)"
+21:36:29.223 ERROR: [VariableReader] Could not read variable expression: "ulTotalRunTime".
+21:36:29.223 ERROR: [TaskFactory] ulTotalRunTime not available
+21:36:29.248 ERROR: [VariableReader] Could not read variable expression: "pxDelayedTaskList.uxNumberOfItems".
+21:36:29.248 ERROR: [TaskFactory] Cannot read information from "pxDelayedTaskList".
+21:36:29.273 ERROR: [VariableReader] Could not read variable expression: "pxOverflowDelayedTaskList.uxNumberOfItems".
+21:36:29.273 ERROR: [TaskFactory] Cannot read information from "pxOverflowDelayedTaskList".
+21:36:29.316 ERROR: [VariableReader] Could not read variable expression: "xSuspendedTaskList.uxNumberOfItems".
+21:36:29.316 ERROR: [TaskFactory] Cannot read information from "xSuspendedTaskList".
+21:36:29.333 ERROR: [VariableReader] Could not read variable expression: "xPendingReadyList.uxNumberOfItems".
+21:36:29.333 ERROR: [TaskFactory] Cannot read information from "xPendingReadyList".
+21:36:29.333 INFO: [Benchmark] Loading data for "Task List" took 2049 ms.
+21:36:29.342 INFO: [TadModel] DSF session ID 6 has ended.

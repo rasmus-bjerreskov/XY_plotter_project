@@ -1,0 +1,41 @@
+"FreeRTOS Task Aware Debugger for GDB" version 11.2.0 (202001021529)
+(c) 2016-2018 NXP Semiconductors, Inc.
+==================================
+21:20:53.891 INFO: [TadModel] DSF session ID 4 has started.
+21:20:58.231 INFO: [TadState] TAD state changed:  DEBUG_STARTED -> DEBUG_INIT_0 (SUSPENDED, USER_REQUEST)
+21:20:59.722 INFO: [TadState] TAD state changed:  DEBUG_INIT_0 -> DEBUG_INIT_1 (RESUMED, USER_REQUEST)
+21:20:59.861 INFO: [TadState] TAD state changed:  DEBUG_INIT_1 -> DEBUG_SUSPENDED (SUSPENDED, BREAKPOINT)
+21:21:10.553 INFO: [TadState] TAD state changed:  DEBUG_SUSPENDED -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+21:21:11.410 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+21:21:11.962 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" has started.
+21:21:12.794 INFO: [TadModel] Heap type (memory allocation scheme) has been identified from FreeRTOSDebugConfig structure as Heap #3. 
+21:21:12.794 INFO: [TadModel] FreeRTOS version has been identified from FreeRTOSDebugConfig structure as 10.2.0.
+21:21:12.795 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" took 833 ms.
+21:21:12.795 INFO: [Benchmark] Loading data for "Task List" has started.
+21:21:17.495 INFO: [Benchmark] Loading data for "Task List" took 4700 ms.
+21:21:24.63 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+21:22:16.853 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+21:22:16.853 INFO: [Benchmark] Loading data for "Task List" has started.
+21:22:22.27 INFO: [Benchmark] Loading data for "Task List" took 5174 ms.
+21:22:24.390 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+21:22:24.557 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+21:22:24.557 INFO: [Benchmark] Loading data for "Task List" has started.
+21:22:28.556 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+21:22:29.555 INFO: [FreeRTOS] FreeRTOS macro "configUSE_MUTEXES" is disabled.
+21:22:30.557 ERROR: [TaskFactory] Cannot read information from "pxDelayedTaskList".
+21:22:31.558 ERROR: [TaskFactory] Cannot read information from "pxOverflowDelayedTaskList".
+21:22:32.559 ERROR: [TaskFactory] Cannot read information from "xSuspendedTaskList".
+21:22:33.561 ERROR: [TaskFactory] Cannot read information from "xPendingReadyList".
+21:22:33.562 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, SIGNAL)
+21:22:33.563 INFO: [Benchmark] Loading data for "Task List" took 9005 ms.
+21:22:33.566 INFO: [Benchmark] Loading data for "Task List" has started.
+21:22:35.235 INFO: [TadModel] DSF session ID 4 has ended.
+21:22:37.815 ERROR: [MemoryReader] Read bytes method timed out!
+21:22:37.816 EXCEPTION: [TadModel] NullPointerException while "Task List" data load.
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.readers.VariableReader.readVariable(VariableReader.java:214)
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.readers.VariableReader.getValueAtAddress(VariableReader.java:136)
+	com.nxp.mcuxpresso.freertos.gdb.tad.controller.TadFactory.readIntAtAddress(TadFactory.java:212)
+	com.nxp.mcuxpresso.freertos.gdb.tad.controller.tasklist.TaskFactory.readTasksFromList(TaskFactory.java:202)
+	com.nxp.mcuxpresso.freertos.gdb.tad.controller.tasklist.TaskFactory.getData(TaskFactory.java:142)
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.TadModel$2.execute(TadModel.java:218)
+	com.nxp.mcuxpresso.freertos.gdb.tad.model.TadModel$3.run(TadModel.java:414)

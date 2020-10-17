@@ -3,7 +3,7 @@ gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
 XY_plotter_project.cpp:75:13:void prvSetupHardware()	16	static
 XY_plotter_project.cpp:94:6:void mmsToSteps(CanvasCoordinates_t*, RelModes)	16	static
 XY_plotter_project.cpp:111:13:void parse_task(void*)	168	static
-XY_plotter_project.cpp:163:6:void plotter_task(void*)	48	static
-XY_plotter_project.cpp:221:6:void send_task(void*)	160	static
-XY_plotter_project.cpp:262:6:void vConfigureTimerForRunTimeStats()	8	static
-XY_plotter_project.cpp:275:5:int main()	16	static
+XY_plotter_project.cpp:165:6:void plotter_task(void*)	48	static
+XY_plotter_project.cpp:223:6:void send_task(void*)	160	static
+XY_plotter_project.cpp:265:6:void vConfigureTimerForRunTimeStats()	8	static
+XY_plotter_project.cpp:278:5:int main()	16	static

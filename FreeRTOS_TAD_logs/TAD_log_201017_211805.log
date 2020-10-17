@@ -1,0 +1,45 @@
+"FreeRTOS Task Aware Debugger for GDB" version 11.2.0 (202001021529)
+(c) 2016-2018 NXP Semiconductors, Inc.
+==================================
+21:11:10.925 INFO: [TadModel] DSF session ID 3 has started.
+21:11:15.03 INFO: [TadState] TAD state changed:  DEBUG_STARTED -> DEBUG_INIT_0 (SUSPENDED, USER_REQUEST)
+21:11:16.737 INFO: [TadState] TAD state changed:  DEBUG_INIT_0 -> DEBUG_INIT_1 (RESUMED, USER_REQUEST)
+21:11:16.924 INFO: [TadState] TAD state changed:  DEBUG_INIT_1 -> DEBUG_SUSPENDED (SUSPENDED, BREAKPOINT)
+21:12:27.596 INFO: [TadState] TAD state changed:  DEBUG_SUSPENDED -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+21:12:27.783 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+21:12:27.939 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" has started.
+21:12:28.712 INFO: [TadModel] Heap type (memory allocation scheme) has been identified from FreeRTOSDebugConfig structure as Heap #3. 
+21:12:28.712 INFO: [TadModel] FreeRTOS version has been identified from FreeRTOSDebugConfig structure as 10.2.0.
+21:12:28.712 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" took 773 ms.
+21:12:28.713 INFO: [Benchmark] Loading data for "Task List" has started.
+21:12:31.703 INFO: [Benchmark] Loading data for "Task List" took 2991 ms.
+21:12:38.171 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+21:12:46.516 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+21:12:46.517 INFO: [Benchmark] Loading data for "Task List" has started.
+21:12:51.908 INFO: [Benchmark] Loading data for "Task List" took 5391 ms.
+21:12:56.628 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+21:12:56.855 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+21:12:56.855 INFO: [Benchmark] Loading data for "Task List" has started.
+21:13:01.983 INFO: [Benchmark] Loading data for "Task List" took 5127 ms.
+21:13:02.738 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+21:18:03.820 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, SIGNAL)
+21:18:03.821 INFO: [Benchmark] Loading data for "Task List" has started.
+21:18:04.823 ERROR: [TadFactory] Reading exception during: "readAddressOfVariableSafely(xQueueRegistry)"
+21:18:04.975 ERROR: [VariableReader] Could not read variable expression: "&(xQueueRegistry)".
+21:18:05.00 ERROR: [VariableReader] Could not read variable expression: "sizeof(pxReadyTasksLists)".
+21:18:05.00 ERROR: [TaskFactory] Could not get size of "pxReadyTasksLists"!
+21:18:05.00 ERROR: [TaskFactory] Cannot display tasks from ready task list!
+21:18:05.33 ERROR: [VariableReader] Could not read variable expression: "pxCurrentTCB".
+21:18:05.33 ERROR: [TadFactory] Reading exception during: "readLongVariableSafely(pxCurrentTCB)"
+21:18:05.87 ERROR: [VariableReader] Could not read variable expression: "ulTotalRunTime".
+21:18:05.88 ERROR: [TaskFactory] ulTotalRunTime not available
+21:18:05.110 ERROR: [VariableReader] Could not read variable expression: "pxDelayedTaskList.uxNumberOfItems".
+21:18:05.110 ERROR: [TaskFactory] Cannot read information from "pxDelayedTaskList".
+21:18:05.141 ERROR: [VariableReader] Could not read variable expression: "pxOverflowDelayedTaskList.uxNumberOfItems".
+21:18:05.141 ERROR: [TaskFactory] Cannot read information from "pxOverflowDelayedTaskList".
+21:18:05.170 ERROR: [VariableReader] Could not read variable expression: "xSuspendedTaskList.uxNumberOfItems".
+21:18:05.171 ERROR: [TaskFactory] Cannot read information from "xSuspendedTaskList".
+21:18:05.204 ERROR: [VariableReader] Could not read variable expression: "xPendingReadyList.uxNumberOfItems".
+21:18:05.204 ERROR: [TaskFactory] Cannot read information from "xPendingReadyList".
+21:18:05.204 INFO: [Benchmark] Loading data for "Task List" took 1383 ms.
+21:18:05.235 INFO: [TadModel] DSF session ID 3 has ended.

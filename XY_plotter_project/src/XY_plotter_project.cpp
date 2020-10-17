@@ -118,12 +118,14 @@ static void parse_task(void *pvParameters) {
 	data->limitSw[1] = 1;
 	data->limitSw[2] = 1;
 	data->limitSw[3] = 1;
-	data->Adir = 1;
-	data->Bdir = 1;
-	data->penUp = 150;
+	data->Adir = 0;
+	data->Bdir = 0;
+	data->penUp = 160;
 	data->penDown = 90;
-	data->penCur = 150;
+	data->penCur = data->penUp;
 	data->speed = 80;
+	data->canvasLimits.Xmm = 150;
+	data->canvasLimits.Ymm = 100; //TODO sync these with plotter values
 
 	qCmd = xQueueCreate(20, sizeof(PlotInstruct_t));
 	penServo = new PenServoController(data);
@@ -232,7 +234,7 @@ void send_task(void *pvParameters) {
 		case (GcodeType::M10):
 			sprintf(str,
 					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
-					plotter->canvasSize.Xmm, plotter->canvasSize.Ymm,
+					data->canvasLimits.Xmm, data->canvasLimits.Ymm,
 					data->Adir, data->Bdir, data->speed, data->penUp,
 					data->penDown); // these need to be fixed too, like with M11 CDM,
 									// to use plotter instead of data
@@ -248,10 +250,11 @@ void send_task(void *pvParameters) {
 
 		default:
 			strcpy(str, "OK\r\n");
-
-			USB_send((uint8_t*) str, strlen(str));
-
+			break;
 		}
+		ITM_write("Reply: ");
+		ITM_write(str);
+		USB_send((uint8_t*) str, strlen(str));
 
 	}
 }
