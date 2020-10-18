@@ -64,9 +64,6 @@ enum class RelModes {
 	REL, ABS
 };
 
-const int MM_SCALE_FACTOR = 100000;
-const int SCALED_MMS_PER_STEP = 2500;
-
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -92,8 +89,8 @@ static void prvSetupHardware(void) {
 
 
 void mmsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
-	coords->Xsteps = (coords->Xmm * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
-	coords->Ysteps = (coords->Ymm * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
+	coords->Xsteps = (coords->Xum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
+	coords->Ysteps = (coords->Yum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
 
 	switch (mode) {
 	case RelModes::REL:
@@ -155,7 +152,7 @@ static void parse_task(void *pvParameters) {
 		ITM_write("Received: ");
 		ITM_write(buf);
 		parser->parse(data, buf);
-		PlotInstruct_t instruct { { data->PenXY.Xmm, data->PenXY.Ymm, 0, 0 },
+		PlotInstruct_t instruct { { data->PenXY.Xum, data->PenXY.Yum, 0, 0 },
 				data->codeType, data->penCur };
 		xQueueSend(qCmd, &instruct, portMAX_DELAY);
 	}
@@ -203,8 +200,8 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::G1):
-			plotter->penXYPos.Xmm = data->PenXY.Xmm;
-			plotter->penXYPos.Ymm = data->PenXY.Ymm;
+			plotter->penXYPos.Xum = data->PenXY.Xum;
+			plotter->penXYPos.Yum = data->PenXY.Yum;
 			mmsToSteps(&(data->PenXY),
 					data->relativityMode ? RelModes::ABS : RelModes::REL);
 			plotter->plotLine(data->PenXY.Xsteps, data->PenXY.Ysteps);
