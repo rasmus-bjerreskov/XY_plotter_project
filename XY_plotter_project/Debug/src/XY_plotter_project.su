@@ -1,9 +1,15 @@
 core_cm3.h:1405:22:void NVIC_SetPriority(IRQn_Type, uint32_t)	16	static
+sct_15xx.h:423:20:void Chip_SCT_SetControl(LPC_SCT_T*, uint32_t)	16	static
+sct_15xx.h:434:20:void Chip_SCT_ClearControl(LPC_SCT_T*, uint32_t)	16	static
+sct_pwm_15xx.h:129:20:void Chip_SCTPWM_Start(LPC_SCT_T*)	16	static
+sct_pwm_15xx.h:139:20:void Chip_SCTPWM_Stop(LPC_SCT_T*)	16	static
 gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
-XY_plotter_project.cpp:75:13:void prvSetupHardware()	16	static
-XY_plotter_project.cpp:94:6:void mmsToSteps(CanvasCoordinates_t*, RelModes)	16	static
-XY_plotter_project.cpp:111:13:void parse_task(void*)	168	static
-XY_plotter_project.cpp:165:6:void plotter_task(void*)	48	static
-XY_plotter_project.cpp:223:6:void send_task(void*)	160	static
-XY_plotter_project.cpp:265:6:void vConfigureTimerForRunTimeStats()	8	static
-XY_plotter_project.cpp:278:5:int main()	16	static
+XY_plotter_project.cpp:75:6:void laser_disable()	8	static
+XY_plotter_project.cpp:86:13:void prvSetupHardware()	16	static
+XY_plotter_project.cpp:104:6:void mmsToSteps(CanvasCoordinates_t*, RelModes)	16	static
+XY_plotter_project.cpp:121:13:void parse_task(void*)	168	static
+XY_plotter_project.cpp:176:6:void plotter_task(void*)	48	static
+XY_plotter_project.cpp:231:6:void pen_task(void*)	16	static
+XY_plotter_project.cpp:241:6:void send_task(void*)	160	static
+XY_plotter_project.cpp:281:6:void vConfigureTimerForRunTimeStats()	8	static
+XY_plotter_project.cpp:294:5:int main()	40	static

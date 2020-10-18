@@ -28,6 +28,7 @@ public:
 private:
 	uint16_t convertPos(int val);
 	ParsedGdata_t* data;
+	int curVal;
 	static const int SERVO_MIN = 1000;
 	static const int SERVO_MAX = 2000;
 };

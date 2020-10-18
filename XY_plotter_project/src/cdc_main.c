@@ -29,6 +29,7 @@
  * this code.
  */
 
+#include <global_semphrs.h>
 #include "board.h"
 #include <stdio.h>
 #include <string.h>
@@ -43,7 +44,6 @@
 #include "ITM_write.h"
 #include "user_vcom.h"
 
-#include "EventGroup.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables

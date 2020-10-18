@@ -15,11 +15,16 @@
 #include "board.h"
 #endif
 #endif
+
 #include "stdlib.h"
+
 #include "DigitalIoPin.h"
+
 #include "FreeRTOS.h"
 #include "semphr.h"
+
 #include "CanvasCoordinates.h"
+#include "global_semphrs.h"
 
 class Plotter {
 public:
@@ -34,18 +39,19 @@ public:
 
 	void isr(portBASE_TYPE xHigherPriorityWoken); // used to make managing the IRQHandlerer bit easier
 
-	void switchOffturn();			// used to switch "offturn"-variable between true and false
-	bool getOffturn();				// used to get the value private "offturn"-variable
-
 	int dx;							// difference between x1 and x0 =abs(x1-x0)
 	int dy;							// difference between y1 and y0 =abs(y1-y0)
 	int D;							// function f(x,y) = D = 2*dy - dx or 2*dx - dy; depending on dominant axis used to determine when to step only dominant axis and when both
 	int start;							// counter used to run right amount of steps. When x is primary axis it starts from x0 and y0 when y is primary
 	int dest;						// used in algorithm to plot. It is x1 when x is primary axis and y when y-axis is.
 	int prim_delta;						// used in algorithm to plot. It is dy when x is primary axis and dx when y-axis is.
-	int second_delta;						// used in algorithm to plot. It is dx when x is primary axis and xy when y-axis is.
-	int prim_cartes;				//primary cartesian direction
-	int second_cartes;				//secondary cartesian direction
+	int sec_delta;						// used in algorithm to plot. It is dx when x is primary axis and xy when y-axis is.
+	int prim_cart;					//primary cartesian direction
+	int sec_cart;					//secondary cartesian direction
+	int *prim_loc;					//primary axis coordinate
+	int *sec_loc;					//secondary axis coordinate
+	int prim_lim;				//primary canvas limit
+	int sec_lim;				//secondary canvas limit
 
 	DigitalIoPin *primaryIo;		// used to save dominant axis
 	DigitalIoPin *secondaryIo;		// used to save non-dominant axis
@@ -59,11 +65,13 @@ public:
 	DigitalIoPin *LSWPin4;			// used to hold IO-pins of limit switch 4
 	DigitalIoPin *Xstep;			// used to hold IO-pins of stepper motor of that goes in X-axis
 	DigitalIoPin *Ystep;			// used to hold IO-pins of stepper motor of that goes in Y-axis
-	DigitalIoPin *Xdir;				// used to hold IO-pins of direction of the X-axis stepper motor
-	DigitalIoPin *Ydir;				// used to hold IO-pins of direction of the X-axis stepper motor
+	DigitalIoPin *XdirCtrl;				// used to hold IO-pins of direction of the X-axis stepper motor
+	DigitalIoPin *YdirCtrl;				// used to hold IO-pins of direction of the Y-axis stepper motor
 
 	enum LSWLables {UP_LSW=0, RIGHT_LSW=1, DOWN_LSW=2, LEFT_LSW=3};	// used in calibrateCanvas to keep track which limit switch is on which side
 	DigitalIoPin *limSws[4];										// used to hold those limit switches
+	DigitalIoPin *prim_limsw;
+	DigitalIoPin *sec_limsw;
 
 private:
 	enum direction {left = 0, right = 1, down = 0, up = 1};
