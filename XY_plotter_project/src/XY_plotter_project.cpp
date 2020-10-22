@@ -36,7 +36,7 @@
 #include "user_vcom.h"
 
 #include "ParsedGdata.h"
-#include "EventGroup.h"
+#include <global_semphrs.h>
 #include "GcodePipe.h"
 #include "SimpleUARTWrapper.h"
 #include "Parser.h"
@@ -54,6 +54,7 @@
  ****************************************************************************/
 QueueHandle_t qCmd; //Holds commands to hardware functions
 EventGroupHandle_t eGrp;
+SemaphoreHandle_t binPen;
 
 ParsedGdata_t *data;
 PenServoController *penServo;
@@ -67,6 +68,16 @@ enum class RelModes {
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
+
+void laser_disable() {
+	Chip_SCT_Init(LPC_SCT1);
+	Chip_SCTPWM_Stop(LPC_SCT1);
+
+	LPC_SCT1->OUT[1].SET = 0; // event 2 has no effect on  SCTx_OUT1 --> laser is always off
+	LPC_SCT1->MATCHREL[1].H = 1;
+	Chip_SWM_MovablePinAssign(SWM_SCT1_OUT0_O, 12);
+	Chip_SCTPWM_Start(LPC_SCT1);
+}
 
 /* Sets up system hardware */
 static void prvSetupHardware(void) {
@@ -86,7 +97,6 @@ static void prvSetupHardware(void) {
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
-
 
 void mmsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
 	coords->Xsteps = (coords->Xum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
@@ -110,7 +120,7 @@ static void parse_task(void *pvParameters) {
 	data->canvasLimits.Ymm = 380;
 	data->canvasLimits.Xmm = 310;
 
-	// mock values for testing the mdraw communication:
+// mock values for testing the mdraw communication:
 	data->limitSw[0] = 1;
 	data->limitSw[1] = 1;
 	data->limitSw[2] = 1;
@@ -124,7 +134,8 @@ static void parse_task(void *pvParameters) {
 	data->canvasLimits.Xmm = 150;
 	data->canvasLimits.Ymm = 100; //TODO sync these with plotter values
 
-	qCmd = xQueueCreate(20, sizeof(PlotInstruct_t));
+	binPen = xSemaphoreCreateBinary();
+	qCmd = xQueueCreate(1, sizeof(PlotInstruct_t));
 	penServo = new PenServoController(data);
 	parser = new Parser();
 
@@ -151,10 +162,13 @@ static void parse_task(void *pvParameters) {
 		*curBufPos = 0;
 		ITM_write("Received: ");
 		ITM_write(buf);
-		parser->parse(data, buf);
-		PlotInstruct_t instruct { { data->PenXY.Xum, data->PenXY.Yum, 0, 0 },
-				data->codeType, data->penCur };
-		xQueueSend(qCmd, &instruct, portMAX_DELAY);
+		//if command was recognised and parsed, put it on queue
+		if (parser->parse(data, buf)) {
+			PlotInstruct_t instruct {
+					{ data->PenXY.Xmm, data->PenXY.Ymm, 0, 0 }, data->codeType,
+					data->penCur };
+			xQueueSend(qCmd, &instruct, portMAX_DELAY);
+		}
 	}
 }
 
@@ -171,8 +185,8 @@ void plotter_task(void *pvParameters) {
 
 		switch (instrBuf.code) {
 		case (GcodeType::M10):
+			data->penCur = data->penUp;
 			penServo->updatePos();
-			plotter->calibrateCanvas();
 			break;
 
 		case (GcodeType::M1):
@@ -184,35 +198,38 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::M5):
-			// broken right now
+			plotter->setCanvasSize(data->canvasLimits.Xmm, data->canvasLimits.Ymm);
 			break;
 
 		case (GcodeType::G28): {
 			int penCur = data->penCur;
 			data->penCur = data->penUp;
-			penServo->updatePos();
+			xSemaphoreGive(binPen);
 			plotter->plotLine(0, 0);
 			data->penCur = penCur;
-			penServo->updatePos();
-			plotter->penXYPos.Xsteps = 0;
-			plotter->penXYPos.Ysteps = 0;
+			xSemaphoreGive(binPen);
 		}
 			break;
 
 		case (GcodeType::G1):
-			plotter->penXYPos.Xum = data->PenXY.Xum;
-			plotter->penXYPos.Yum = data->PenXY.Yum;
 			mmsToSteps(&(data->PenXY),
-					data->relativityMode ? RelModes::ABS : RelModes::REL);
+					data->relativityMode ? RelModes::REL : RelModes::ABS);
 			plotter->plotLine(data->PenXY.Xsteps, data->PenXY.Ysteps);
-			plotter->penXYPos.Xsteps = data->PenXY.Xsteps;
-			plotter->penXYPos.Ysteps = data->PenXY.Ysteps;
 			break;
 
 		default:
 			// No laser (M4) implemented...
 			break;
 		}
+	}
+}
+
+void pen_task(void *param) {
+	xEventGroupSync(eGrp, PEN_b, TASK_BITS, portMAX_DELAY);
+
+	while (1) {
+		xSemaphoreTake(binPen, portMAX_DELAY);
+		penServo->updatePos();
 	}
 }
 
@@ -231,12 +248,11 @@ void send_task(void *pvParameters) {
 		case (GcodeType::M10):
 			sprintf(str,
 					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
-					data->canvasLimits.Xmm, data->canvasLimits.Ymm,
-					data->Adir, data->Bdir, data->speed, data->penUp,
-					data->penDown); // these need to be fixed too, like with M11 CDM,
-									// to use plotter instead of data
-									// M2 and M5, which are currently broken,
-									// should affect which info is sent out
+					data->canvasLimits.Xmm, data->canvasLimits.Ymm, data->Adir,
+					data->Bdir, data->speed, data->penUp, data->penDown); // these need to be fixed too, like with M11 CDM,
+																		  // to use plotter instead of data
+																		  // M2 and M5, which are currently broken,
+																		  // should affect which info is sent out
 			break;
 
 		case (GcodeType::M11):
@@ -275,12 +291,19 @@ void vConfigureTimerForRunTimeStats(void) {
 int main(void) {
 	prvSetupHardware();
 
+//laser_disable(); //firmware does not support laser operation
+	DigitalIoPin laser(0, 12, DigitalIoPin::output, true);
+	laser.write(false);
+
 	xTaskCreate(parse_task, "rx",
 	configMINIMAL_STACK_SIZE * 2, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t*) NULL);
 
 	xTaskCreate(plotter_task, "plot", configMINIMAL_STACK_SIZE * 3, NULL,
 	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);
+
+	xTaskCreate(pen_task, "pen", configMINIMAL_STACK_SIZE, NULL,
+	tskIDLE_PRIORITY + 2, NULL);
 
 	xTaskCreate(send_task, "tx", configMINIMAL_STACK_SIZE, NULL,
 	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);

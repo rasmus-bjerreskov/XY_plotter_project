@@ -18,6 +18,9 @@ Plotter::Plotter() {
 
 	plotter = this;
 
+	canvasSize.Xmm = 150;
+	canvasSize.Ymm = 100;
+
 	offturn = false;
 
 	LSWPin1 = new DigitalIoPin(1, 3, DigitalIoPin::pullup);
@@ -26,29 +29,28 @@ Plotter::Plotter() {
 	LSWPin4 = new DigitalIoPin(0, 29, DigitalIoPin::pullup);
 	Xstep = new DigitalIoPin(0, 24, DigitalIoPin::output, true);
 	Ystep = new DigitalIoPin(0, 27, DigitalIoPin::output, true);
-	Xdir = new DigitalIoPin(1, 0, DigitalIoPin::output, true);
-	Ydir = new DigitalIoPin(0, 28, DigitalIoPin::output, true);
+	XdirCtrl = new DigitalIoPin(1, 0, DigitalIoPin::output, true);
+	YdirCtrl = new DigitalIoPin(0, 28, DigitalIoPin::output, true);
 
 	sbRIT = xSemaphoreCreateBinary();
-
 }
 
 Plotter::~Plotter() {
 	// TODO Auto-generated destructor stub
 }
 
-// used to determine when to write 0 and when to write 1 to stepper motors
-void Plotter::switchOffturn() {
-	offturn = !offturn;
-}
-
-// used to determine which turn it is, to write 0 or write 1 to stepper motors
-bool Plotter::getOffturn() {
-	return offturn;
+void Plotter::setCanvasSize(int new_x, int new_y){
+	if (new_x != canvasSize.Xmm || new_y != canvasSize.Ymm){
+		canvasSize.Xmm = new_x;
+		canvasSize.Ymm = new_y;
+		calibrate = true;
+	}
 }
 
 //move plotter head to relative coordinates
 void Plotter::plotLine(int x1_l, int y1_l) {
+	if (calibrate)
+		calibrateCanvas();
 	plotLine(penXYPos.Xsteps, penXYPos.Ysteps, x1_l, y1_l);
 }
 
@@ -58,13 +60,17 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 	int pps;
 #ifdef DEBUG
 	if (calibrate)
-		pps = 2 * 1200;
+		pps = 2 * 2000;
 	else
-		pps = 2 * 400;
+		pps = 2 * 800;
 #else
-	pps = 2 * 400;
+	pps = 2 * 800;
 #endif
 
+	if (calibrate) { //we don't know our exact position during calibration
+		penXYPos.Xsteps = 1;
+		penXYPos.Ysteps = 1;
+	}
 	// used to determine the frequency of the steps
 	uint64_t cmp_value;
 	// Determine approximate compare value based on clock rate and passed interval
@@ -72,33 +78,75 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 	// disable timer during configuration
 	Chip_RIT_Disable(LPC_RITIMER);
 
-	//set stepper directions - 0,0 is lower left corner
-	direction dir;
+	//set stepper directions and limit switches to monitor - 0,0 is lower left corner
+	int x_dir; 	//plotter direction for the axes
+	int y_dir;
+	DigitalIoPin *x_lsw;
+	DigitalIoPin *y_lsw;
+	if (x1 > x0) {
+		XdirCtrl->write(right);
+		x_dir = 1;
+		x_lsw = limSws[RIGHT_LSW];
+	} else {
+		XdirCtrl->write(left);
+		x_dir = -1;
+		x_lsw = limSws[LEFT_LSW];
+	}
 
-	((x1 - x0) > 0) ? dir = right : dir = left;
-	Xdir->write(dir);
-	((y1 - y0) > 0) ? dir = up : dir = down;
-	Ydir->write(dir);
+	if (y1 > y0) {
+		YdirCtrl->write(up);
+		y_dir = 1;
+		y_lsw = limSws[UP_LSW];
+	} else {
+		YdirCtrl->write(down);
+		y_dir = -1;
+		y_lsw = limSws[DOWN_LSW];
+	}
 
 	dx = abs(x1 - x0);
 	dy = abs(y1 - y0);
 
+	//selecting correct octant, choosing whether x or y is the primary axis
 	if (dx > dy) { // when x is dominant axis
-		start = (x0 < x1) ? x0 : x1;
-		dest = (x0 < x1) ? x1 : x0;
+		prim_cart = x_dir;
+		sec_cart = y_dir;
+		prim_loc = &penXYPos.Xsteps;
+		sec_loc = &penXYPos.Ysteps;
+		prim_lim = canvasSize.Xsteps;
+		sec_lim = canvasSize.Ysteps;
+		start = x0;
+		dest = x1;
 		prim_delta = dx;
-		second_delta = dy;
+		sec_delta = dy;
 		primaryIo = Xstep;
 		secondaryIo = Ystep;
+		prim_limsw = x_lsw;
+		sec_limsw = y_lsw;
+
 		D = 2 * dy - dx;
 	} else {	// when y is dominant axis
-		start = (y0 < y1) ? y0 : y1;
-		dest = (y1 > y0) ? y1 : y0;
+		prim_cart = y_dir;
+		sec_cart = x_dir;
+		prim_loc = &penXYPos.Ysteps;
+		sec_loc = &penXYPos.Xsteps;
+		prim_lim = canvasSize.Ysteps;
+		sec_lim = canvasSize.Xsteps;
+		start = y0;
+		dest = y1;
 		prim_delta = dy;
-		second_delta = dx;
+		sec_delta = dx;
 		primaryIo = Ystep;
 		secondaryIo = Xstep;
+		prim_limsw = y_lsw;
+		sec_limsw = x_lsw;
+
 		D = 2 * dx - dy;
+	}
+
+	if (!calibrate) {
+		char str[40];
+		sprintf(str, "from x%d y%d to x%d y%d\n", x0, y0, x1, y1);
+		ITM_write(str);
 	}
 
 	// enable automatic clear on when compare value==timer value
@@ -123,18 +171,34 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 // using Bresenham's line algorithm to determine when to step with dominant axis only and when with both
 void Plotter::isr(portBASE_TYPE xHigherPriorityWoken) {
 	if (!offturn) { // when to write 1 on steppers
-		static int steps = 0;
-		if (start < dest) { // run as long as i = x0/y0 is smaller or equal to x1/y1
+		if (start != dest) { // run as long as i = x0/y0 is smaller or equal to x1/y1
 			offturn = !offturn;
+			if (!calibrate) { //during calibration, limits are still undefined and have to be ignored
 
-			primaryIo->write(1);
-			if (D > 0) {
-				secondaryIo->write(1);
-				D = D - 2 * prim_delta;
+				*prim_loc += prim_cart; //this should still be updated to keep track of the intended location out of bounds
+				if (*prim_loc <= prim_lim && *prim_loc >= 0
+						&& prim_limsw->read()) {
+					primaryIo->write(1);
+				} else {
+					xSemaphoreGiveFromISR(binPen, &xHigherPriorityWoken); //raise pen
+				}
+
+				//Bresenham's
+				if (D > 0) {
+					*sec_loc += sec_cart;
+					if (*sec_loc <= sec_lim && *sec_loc >= 0
+							&& sec_limsw->read()) {
+						secondaryIo->write(1);
+					} else {
+						xSemaphoreGiveFromISR(binPen, &xHigherPriorityWoken); //raise pen
+					}
+					D = D + 2 * (sec_delta - prim_delta);
+				} else {
+					D = D + 2 * sec_delta;
+				}
+			} else {
+				primaryIo->write(1);
 			}
-			D = D + 2 * second_delta;
-			steps++;
-
 		} else {	// when i reaches x1/y1 disable the timer
 			Chip_RIT_Disable(LPC_RITIMER); // disable timer
 
@@ -147,7 +211,7 @@ void Plotter::isr(portBASE_TYPE xHigherPriorityWoken) {
 		offturn = !offturn;
 		Xstep->write(0);
 		Ystep->write(0);
-		++start;
+		start += prim_cart;
 
 	}
 }
@@ -161,7 +225,7 @@ void Plotter::calibrateCanvas() {
 	// Drive X-motor to left until a limit switch is hit:
 
 	while (!LSWPin1->read() || !LSWPin2->read() || !LSWPin3->read()
-			|| !LSWPin4->read()){
+			|| !LSWPin4->read()) {
 		vTaskDelay(2); //waiting for all limit switches to be opened
 	}
 
@@ -181,7 +245,7 @@ void Plotter::calibrateCanvas() {
 	sprintf(str, "limits: %d %d %d %d\n", LSWPin1->read(), LSWPin2->read(),
 			LSWPin3->read(), LSWPin4->read());
 	ITM_write(str);
-	sprintf(str, "current limit: %d\n", limSws[LEFT_LSW]);
+	sprintf(str, "current limit: %d\n", limSws[LEFT_LSW]->read());
 	ITM_write(str);
 #endif
 	// Drive to right until the left limit switch opens
@@ -210,9 +274,9 @@ void Plotter::calibrateCanvas() {
 		stepCount--;
 	}
 
-	canvasSize.Xsteps = stepCount;
+	canvasSize.Xsteps = stepCount + 1; //"size" is beyond legal boundary, so it should be one larger
 	// set the current XPos:
-	penXYPos.Xsteps = stepCount; // The left side is the zero coordinate
+	penXYPos.Xsteps = canvasSize.Xsteps; // The left side is the zero coordinate
 
 	// Reset the step count:
 	stepCount = 0;
@@ -259,14 +323,13 @@ void Plotter::calibrateCanvas() {
 		Plotter::plotLine(0, 1, 0, 0);
 		stepCount--;
 	}
-	canvasSize.Ysteps = stepCount;
+	canvasSize.Ysteps = stepCount + 1;
 	penXYPos.Ysteps = stepCount;
-
+	penXYPos.Xsteps = canvasSize.Xsteps - 1; // The left side is the zero coordinate
+	calibrate = false;
+	ITM_write("Calibration done\n");
 	// drive to 0, 0
 	Plotter::plotLine(0, 0);
-	penXYPos.Xsteps = canvasSize.Xsteps; //TODO: This should be done in isr as steps are taken
-	penXYPos.Ysteps = canvasSize.Ysteps;
-	calibrate = false;
 }
 
 extern "C" {
