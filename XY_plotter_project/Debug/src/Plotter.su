@@ -5,10 +5,11 @@ ritimer_15xx.h:117:20:void Chip_RIT_Disable(LPC_RITIMER_T*)	16	static
 ritimer_15xx.h:151:20:void Chip_RIT_EnableCompClear(LPC_RITIMER_T*)	16	static
 ritimer_15xx.h:181:20:void Chip_RIT_ClearIntStatus(LPC_RITIMER_T*)	16	static
 Plotter.cpp:17:1:Plotter::Plotter()	32	static
-Plotter.cpp:36:1:Plotter::~Plotter()	16	static
-Plotter.cpp:36:1:virtual Plotter::~Plotter()	16	static
-Plotter.cpp:41:6:void Plotter::plotLine(int, int)	32	static
-Plotter.cpp:46:6:void Plotter::plotLine(int, int, int, int)	104	static
-Plotter.cpp:160:6:void Plotter::isr(long int)	16	static
-Plotter.cpp:208:6:void Plotter::calibrateCanvas()	88	static
-Plotter.cpp:324:6:void RIT_IRQHandler()	16	static
+Plotter.cpp:38:1:Plotter::~Plotter()	16	static
+Plotter.cpp:38:1:virtual Plotter::~Plotter()	16	static
+Plotter.cpp:42:6:void Plotter::setCanvasSize(int, int)	24	static
+Plotter.cpp:51:6:void Plotter::plotLine(int, int)	32	static
+Plotter.cpp:58:6:void Plotter::plotLine(int, int, int, int)	104	static
+Plotter.cpp:172:6:void Plotter::isr(long int)	16	static
+Plotter.cpp:220:6:void Plotter::calibrateCanvas()	88	static
+Plotter.cpp:336:6:void RIT_IRQHandler()	16	static

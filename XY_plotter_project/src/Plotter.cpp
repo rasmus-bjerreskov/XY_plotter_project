@@ -18,6 +18,9 @@ Plotter::Plotter() {
 
 	plotter = this;
 
+	canvasSize.Xmm = 150;
+	canvasSize.Ymm = 100;
+
 	offturn = false;
 
 	LSWPin1 = new DigitalIoPin(1, 3, DigitalIoPin::pullup);
@@ -30,15 +33,24 @@ Plotter::Plotter() {
 	YdirCtrl = new DigitalIoPin(0, 28, DigitalIoPin::output, true);
 
 	sbRIT = xSemaphoreCreateBinary();
-
 }
 
 Plotter::~Plotter() {
 	// TODO Auto-generated destructor stub
 }
 
+void Plotter::setCanvasSize(int new_x, int new_y){
+	if (new_x != canvasSize.Xmm || new_y != canvasSize.Ymm){
+		canvasSize.Xmm = new_x;
+		canvasSize.Ymm = new_y;
+		calibrate = true;
+	}
+}
+
 //move plotter head to relative coordinates
 void Plotter::plotLine(int x1_l, int y1_l) {
+	if (calibrate)
+		calibrateCanvas();
 	plotLine(penXYPos.Xsteps, penXYPos.Ysteps, x1_l, y1_l);
 }
 
