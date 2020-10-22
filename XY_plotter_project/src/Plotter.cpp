@@ -39,6 +39,7 @@ Plotter::~Plotter() {
 	// TODO Auto-generated destructor stub
 }
 
+/*set new area. mm dimensions are used solely to detect whether a new calibration is necessary*/
 void Plotter::setCanvasSize(int new_x, int new_y){
 	if (new_x != canvasSize.Xmm || new_y != canvasSize.Ymm){
 		canvasSize.Xmm = new_x;

@@ -35,7 +35,6 @@ public:
 	// x1_l is the ending x position, y1_l is the ending y position , us is the speed of the plotter (1000000 / pps)
 	void plotLine(int x1_l, int y1_l);
 
-	/*set new area. mm dimensions are used solely to detect whether a new calibration is necessary*/
 	void setCanvasSize(int new_x, int new_y);
 	void calibrateCanvas();	// determine which limit switch is which and also the size of the canvas in steps
 
