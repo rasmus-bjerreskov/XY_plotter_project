@@ -9,6 +9,6 @@ Plotter.cpp:36:1:Plotter::~Plotter()	16	static
 Plotter.cpp:36:1:virtual Plotter::~Plotter()	16	static
 Plotter.cpp:41:6:void Plotter::plotLine(int, int)	32	static
 Plotter.cpp:46:6:void Plotter::plotLine(int, int, int, int)	104	static
-Plotter.cpp:160:6:void Plotter::isr(long int)	24	static
-Plotter.cpp:207:6:void Plotter::calibrateCanvas()	88	static
-Plotter.cpp:323:6:void RIT_IRQHandler()	16	static
+Plotter.cpp:160:6:void Plotter::isr(long int)	16	static
+Plotter.cpp:208:6:void Plotter::calibrateCanvas()	88	static
+Plotter.cpp:324:6:void RIT_IRQHandler()	16	static

@@ -133,7 +133,7 @@ void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 
 	if (!calibrate) {
 		char str[40];
-		sprintf(str, "to x%d y%d from x%d y%d\n", x1, y1, x0, y0);
+		sprintf(str, "from x%d y%d to x%d y%d\n", x0, y0, x1, y1);
 		ITM_write(str);
 	}
 
@@ -162,23 +162,24 @@ void Plotter::isr(portBASE_TYPE xHigherPriorityWoken) {
 		if (start != dest) { // run as long as i = x0/y0 is smaller or equal to x1/y1
 			offturn = !offturn;
 			if (!calibrate) { //during calibration, limits are still undefined and have to be ignored
-				int i = prim_limsw->read();
-				if (*prim_loc < prim_lim && *prim_loc > 0
+
+				*prim_loc += prim_cart; //this should still be updated to keep track of the intended location out of bounds
+				if (*prim_loc <= prim_lim && *prim_loc >= 0
 						&& prim_limsw->read()) {
 					primaryIo->write(1);
 				} else {
 					xSemaphoreGiveFromISR(binPen, &xHigherPriorityWoken); //raise pen
 				}
-				*prim_loc += prim_cart; //this should still be updated to keep track of the intended location out of bounds
+
 				//Bresenham's
 				if (D > 0) {
-					if (*sec_loc < prim_lim && *sec_loc > 0
+					*sec_loc += sec_cart;
+					if (*sec_loc <= sec_lim && *sec_loc >= 0
 							&& sec_limsw->read()) {
 						secondaryIo->write(1);
 					} else {
 						xSemaphoreGiveFromISR(binPen, &xHigherPriorityWoken); //raise pen
 					}
-					*sec_loc += sec_cart;
 					D = D + 2 * (sec_delta - prim_delta);
 				} else {
 					D = D + 2 * sec_delta;

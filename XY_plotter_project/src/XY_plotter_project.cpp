@@ -138,7 +138,7 @@ data->canvasLimits.Xmm = 150;
 data->canvasLimits.Ymm = 100; //TODO sync these with plotter values
 
 binPen = xSemaphoreCreateBinary();
-qCmd = xQueueCreate(20, sizeof(PlotInstruct_t));
+qCmd = xQueueCreate(1, sizeof(PlotInstruct_t));
 penServo = new PenServoController(data);
 parser = new Parser();
 
@@ -296,7 +296,7 @@ prvSetupHardware();
 
 
 //laser_disable(); //firmware does not support laser operation
-DigitalIoPin laser(0, 12, DigitalIoPin::pullup, true);
+DigitalIoPin laser(0, 12, DigitalIoPin::output, true);
 laser.write(false);
 
 xTaskCreate(parse_task, "rx",
