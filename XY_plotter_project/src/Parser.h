@@ -44,6 +44,8 @@ private:
 
 	bool validateFloatStr(char *FloatStr, bool hasDelimChar = false, char delimChar = '\0');
 
+	int mmStr_to_umInt(char *mmStr);
+
 public:
 	Parser();
 	virtual ~Parser();

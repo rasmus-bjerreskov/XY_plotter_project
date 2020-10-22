@@ -175,7 +175,7 @@ bool Parser::gotoPositionParser(ParsedGdata_t *data, char *tokLine) {
 	if (!validateFloatStr(&tokLine[1], false))
 		return false;
 
-	data->PenXY.Xmm = atof(tokLine+1);
+	data->PenXY.Xum = mmStr_to_umInt(tokLine+1) ;
 
 	tokLine = nextToken();
 
@@ -186,7 +186,7 @@ bool Parser::gotoPositionParser(ParsedGdata_t *data, char *tokLine) {
 	if (!validateFloatStr(&tokLine[1], false))
 		return false;
 
-	data->PenXY.Ymm = atof(tokLine+1);
+	data->PenXY.Yum = mmStr_to_umInt(tokLine+1);
 
 	tokLine = nextToken();
 
@@ -549,4 +549,31 @@ bool Parser::validateFloatStr(char *floatStr, bool hasDelimChar, char delimChar)
 	else {
 		return true;
 	}
+}
+
+/**
+ * extracts a millimeter length 123.456 into a micrometer integer: 123456
+ *
+ * @param mmStr the millimeter float representation in a string format
+ * @return the integer value representing the length in micrometers
+ */
+int Parser::mmStr_to_umInt(char *mmStr) {
+	int res = 0;
+	char next = 0;
+	bool minus = (*mmStr) == '-'? true : false;
+
+	if (minus)
+		mmStr++;
+
+	while((next = *(mmStr++)) != '.') {
+		res *= 10;
+	    res += next - '0';
+	}
+
+	res *= 1000;
+
+	res += atoi(mmStr);
+
+	return minus? -res: res;
+
 }

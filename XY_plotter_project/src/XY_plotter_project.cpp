@@ -65,9 +65,6 @@ enum class RelModes {
 	REL, ABS
 };
 
-const int MM_SCALE_FACTOR = 100000;
-const int SCALED_MMS_PER_STEP = 2500;
-
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -102,8 +99,8 @@ static void prvSetupHardware(void) {
 }
 
 void mmsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
-	coords->Xsteps = (coords->Xmm * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
-	coords->Ysteps = (coords->Ymm * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
+	coords->Xsteps = (coords->Xum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
+	coords->Ysteps = (coords->Yum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
 
 	switch (mode) {
 	case RelModes::REL:
@@ -215,7 +212,6 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::G1):
-
 			mmsToSteps(&(data->PenXY),
 					data->relativityMode ? RelModes::REL : RelModes::ABS);
 			plotter->plotLine(data->PenXY.Xsteps, data->PenXY.Ysteps);
