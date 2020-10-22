@@ -98,7 +98,7 @@ static void prvSetupHardware(void) {
 	Board_LED_Set(0, false);
 }
 
-void mmsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
+void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
 	coords->Xsteps = (coords->Xum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
 	coords->Ysteps = (coords->Yum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
 
@@ -212,7 +212,7 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::G1):
-			mmsToSteps(&(data->PenXY),
+			umsToSteps(&(data->PenXY),
 					data->relativityMode ? RelModes::REL : RelModes::ABS);
 			plotter->plotLine(data->PenXY.Xsteps, data->PenXY.Ysteps);
 			break;

@@ -16,7 +16,7 @@ struct ParsedGdata_t
 {
 	GcodeType codeType;
 	CanvasCoordinates_t PenXY;
-	CanvasSize_t canvasLimits;
+	CanvasCoordinates_t canvasLimits;
 	int penUp;
 	int penDown;
 	int penCur;

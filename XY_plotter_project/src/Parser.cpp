@@ -371,7 +371,7 @@ bool Parser::saveStepperInfoParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine[0] != 'H')
 		return false;
 
-	if (!extractInt(&data->canvasLimits.Ymm, tokLine+1))
+	if (!extractInt(&data->canvasLimits.Yum, tokLine+1))
 		return false;
 
 	// Extract the width value:
@@ -380,7 +380,7 @@ bool Parser::saveStepperInfoParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine[0] != 'W')
 		return false;
 
-	if (!extractInt(&data->canvasLimits.Xmm, tokLine+1))
+	if (!extractInt(&data->canvasLimits.Xum, tokLine+1))
 		return false;
 
 	// Extract the speed value
