@@ -32,10 +32,10 @@ PenServoController::PenServoController(ParsedGdata_t *_data) {
 
 }
 
-void PenServoController::updatePos() {
-	if ((data->penCur == data->penDown || data->penCur == data->penUp) && data->penCur != curVal) {
-		LPC_SCTLARGE0->MATCHREL[1].L = convertPos(data->penCur);
-		curVal = data->penCur;
+void PenServoController::updatePos(int newVal) {
+	if ((newVal == data->penDown || newVal == data->penUp) && newVal != curVal) {
+		LPC_SCTLARGE0->MATCHREL[1].L = convertPos(newVal);
+		curVal = newVal;
 	}
 }
 

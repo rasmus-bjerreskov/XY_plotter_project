@@ -21,7 +21,7 @@
 class PenServoController {
 public:
 	PenServoController(ParsedGdata_t *_data);
-	void updatePos();
+	void updatePos(int newVal);
 
 	virtual ~PenServoController();
 

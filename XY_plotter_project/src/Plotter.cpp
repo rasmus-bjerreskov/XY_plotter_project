@@ -20,7 +20,7 @@ Plotter::Plotter() {
 
 	canvasSize.Xmm = 150;
 	canvasSize.Ymm = 100;
-
+	calibrate = true;
 	offturn = false;
 
 	LSWPin1 = new DigitalIoPin(1, 3, DigitalIoPin::pullup);

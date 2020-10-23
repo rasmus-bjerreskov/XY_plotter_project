@@ -117,9 +117,6 @@ void mmsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
 /*Receive G-code lines from mDraw, validate and parse code into hardware instructions*/
 static void parse_task(void *pvParameters) {
 	data = new ParsedGdata_t;
-	data->canvasLimits.Ymm = 380;
-	data->canvasLimits.Xmm = 310;
-
 // mock values for testing the mdraw communication:
 	data->limitSw[0] = 1;
 	data->limitSw[1] = 1;
@@ -165,7 +162,7 @@ static void parse_task(void *pvParameters) {
 		//if command was recognised and parsed, put it on queue
 		if (parser->parse(data, buf)) {
 			PlotInstruct_t instruct {
-					{ data->PenXY.Xmm, data->PenXY.Ymm, 0, 0 }, data->codeType,
+					{ data->PenXY.Xum, data->PenXY.Yum, 0, 0 }, data->codeType,
 					data->penCur };
 			xQueueSend(qCmd, &instruct, portMAX_DELAY);
 		}
@@ -178,6 +175,7 @@ void plotter_task(void *pvParameters) {
 
 	xEventGroupSync(eGrp, PLOT_b, TASK_BITS, portMAX_DELAY);
 	while (1) {
+		//TODO a flag should be set to avoid the same command being command being read more than once
 		xQueuePeek(qCmd, &instrBuf, portMAX_DELAY); //get data and send it on to tx task
 		/*set flag here so that sending
 		 reply can happen concurrently with executing instructions*/
@@ -185,16 +183,15 @@ void plotter_task(void *pvParameters) {
 
 		switch (instrBuf.code) {
 		case (GcodeType::M10):
-			data->penCur = data->penUp;
-			penServo->updatePos();
+			penServo->updatePos(data->penUp);
 			break;
 
 		case (GcodeType::M1):
-			penServo->updatePos();
+			penServo->updatePos(instrBuf.penPos);
 			break;
 
 		case (GcodeType::M2):
-			// broken right now
+			//TODO no action needed here, possibly...
 			break;
 
 		case (GcodeType::M5):
@@ -202,7 +199,7 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::G28): {
-			int penCur = data->penCur;
+			int penCur = instrBuf.penPos;
 			data->penCur = data->penUp;
 			xSemaphoreGive(binPen);
 			plotter->plotLine(0, 0);
@@ -212,8 +209,7 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::G1):
-			mmsToSteps(&(data->PenXY),
-					data->relativityMode ? RelModes::REL : RelModes::ABS);
+			mmsToSteps(&(data->PenXY), data->relativityMode ? RelModes::REL : RelModes::ABS);
 			plotter->plotLine(data->PenXY.Xsteps, data->PenXY.Ysteps);
 			break;
 
@@ -229,7 +225,7 @@ void pen_task(void *param) {
 
 	while (1) {
 		xSemaphoreTake(binPen, portMAX_DELAY);
-		penServo->updatePos();
+		penServo->updatePos(data->penCur); //TODO change semaphore to queue holding pen value
 	}
 }
 

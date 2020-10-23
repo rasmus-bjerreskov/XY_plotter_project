@@ -1,5 +1,5 @@
 PenServoCtrl.cpp:10:1:PenServoController::PenServoController(ParsedGdata_t*)	24	static
-PenServoCtrl.cpp:35:6:void PenServoController::updatePos()	24	static
+PenServoCtrl.cpp:35:6:void PenServoController::updatePos(int)	24	static
 PenServoCtrl.cpp:43:10:uint16_t PenServoController::convertPos(int)	24	static
 PenServoCtrl.cpp:52:1:PenServoController::~PenServoController()	16	static
 PenServoCtrl.cpp:52:1:virtual PenServoController::~PenServoController()	16	static
