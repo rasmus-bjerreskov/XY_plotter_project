@@ -196,10 +196,10 @@ bool Parser::gotoPositionParser(ParsedGdata_t *data, char *tokLine) {
 
 	switch (tokLine[1]) {
 		case '0':
-			data->relativityMode = false;
+			data->relativityMode = RelModes::ABS;
 			break;
 		case '1':
-			data->relativityMode = true;
+			data->relativityMode = RelModes::REL;
 			break;
 		default:
 			return false;

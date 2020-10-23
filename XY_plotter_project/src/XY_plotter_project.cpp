@@ -61,10 +61,6 @@ PenServoController *penServo;
 Plotter *plotter;
 Parser *parser;
 
-enum class RelModes {
-	REL, ABS
-};
-
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -213,8 +209,7 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::G1):
-			umsToSteps(&(parsedData->PenXY),
-					parsedData->relativityMode ? RelModes::ABS : RelModes::REL);
+			umsToSteps(&(parsedData->PenXY), parsedData->relativityMode);
 			plotter->plotLine(parsedData->PenXY.Xsteps, parsedData->PenXY.Ysteps);
 			break;
 
