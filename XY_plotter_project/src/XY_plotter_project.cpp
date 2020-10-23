@@ -213,7 +213,7 @@ void plotter_task(void *pvParameters) {
 
 		case (GcodeType::M1):
 			penServo->updatePos(instrBuf.penPos);
-			systemData->penCur = instrBuf.penPos;
+			systemData->penCur =  penServo->getCurVal();
 			break;
 
 		case (GcodeType::M5):
@@ -223,7 +223,7 @@ void plotter_task(void *pvParameters) {
 
 		case (GcodeType::G28): {
 
-			int penCur = systemData->penCur;
+			int penCur = penServo->getCurVal();
 			systemData->penCur = systemData->penUp;
 
 			xSemaphoreGive(binPen);
