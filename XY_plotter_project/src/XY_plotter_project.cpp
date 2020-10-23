@@ -273,10 +273,7 @@ void send_task(void *pvParameters) {
 					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
 					systemData->canvasLimits.Xmm, systemData->canvasLimits.Ymm,
 					systemData->Adir, systemData->Bdir, systemData->speed,
-					systemData->penUp, systemData->penDown); // these need to be fixed too, like with M11 CDM,
-			// to use plotter instead of data
-			// M2 and M5, which are currently broken,
-			// should affect which info is sent out
+					systemData->penUp, systemData->penDown);
 			break;
 
 		case (GcodeType::M11):
