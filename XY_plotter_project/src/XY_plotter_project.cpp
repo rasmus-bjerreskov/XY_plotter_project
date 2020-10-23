@@ -95,19 +95,19 @@ static void prvSetupHardware(void) {
 }
 
 void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
-    coords->Xsteps = coords->Xum / UMS_PER_STEP;
-    coords->Ysteps = coords->Yum / UMS_PER_STEP;
+	coords->Xsteps = coords->Xum / UMS_PER_STEP;
+	coords->Ysteps = coords->Yum / UMS_PER_STEP;
 
-    switch (mode) {
-    case RelModes::REL:
-        coords->Xsteps += plotter->penXYPos.Xsteps;
-        coords->Ysteps += plotter->penXYPos.Ysteps;
-        break;
+	switch (mode) {
+	case RelModes::REL:
+		coords->Xsteps += plotter->penXYPos.Xsteps;
+		coords->Ysteps += plotter->penXYPos.Ysteps;
+		break;
 
-    case RelModes::ABS:
-        break;
+	case RelModes::ABS:
+		break;
 
-    }
+	}
 }
 
 /*Receive G-code lines from mDraw, validate and parse code into hardware instructions*/
@@ -135,7 +135,7 @@ static void parse_task(void *pvParameters) {
 
 	char str[MAX_STR_LEN + 1];
 	char *lf = 0;
-
+	uint32_t instructCnt = 0;
 	xEventGroupSync(eGrp, RX_b, TASK_BITS, portMAX_DELAY);
 
 	while (1) {
@@ -154,15 +154,16 @@ static void parse_task(void *pvParameters) {
 		} while (lf == NULL);
 
 		*curBufPos = 0;
-		ITM_write("Received: ");
+		ITM_write("\nReceived: ");
 		ITM_write(buf);
 		//if command was recognised and parsed, put it on queue
 		if (parser->parse(parsedData, buf)) {
-			PlotInstruct_t instruct {
-
-					{ parsedData->PenXY.Xmm, parsedData->PenXY.Ymm, 0, 0 }, parsedData->codeType,
-					parsedData->penCur };
+			instructCnt++;
+			PlotInstruct_t instruct { { parsedData->PenXY.Xmm,
+					parsedData->PenXY.Ymm, 0, 0 }, parsedData->codeType,
+					parsedData->penCur, instructCnt };
 			xQueueSend(qCmd, &instruct, portMAX_DELAY);
+			xEventGroupSetBits(eGrp, TX_b);
 		}
 	}
 }
@@ -170,11 +171,17 @@ static void parse_task(void *pvParameters) {
 /*Execute hardware instructions*/
 void plotter_task(void *pvParameters) {
 	PlotInstruct_t instrBuf;
+	char str[40];
 
 	xEventGroupSync(eGrp, PLOT_b, TASK_BITS, portMAX_DELAY);
 	while (1) {
-		//TODO a flag should be set to avoid the same command being command being read more than once
+		//Wait for message that new item is on queue. Without this, same instruction may be read multiple times
+		xEventGroupWaitBits(eGrp, TX_b, pdTRUE, pdTRUE, portMAX_DELAY);
 		xQueuePeek(qCmd, &instrBuf, portMAX_DELAY); //get data and send it on to tx task
+
+		sprintf(str, "Instr #%d\n", instrBuf.cnt);
+		ITM_write(str);
+
 		/*set flag here so that sending
 		 reply can happen concurrently with executing instructions*/
 		xEventGroupSetBits(eGrp, PLOT_b);
@@ -193,7 +200,8 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::M5):
-			plotter->setCanvasSize(parsedData->canvasLimits.Xmm, parsedData->canvasLimits.Ymm);
+			plotter->setCanvasSize(parsedData->canvasLimits.Xmm,
+					parsedData->canvasLimits.Ymm);
 			break;
 
 		case (GcodeType::G28): {
@@ -244,11 +252,12 @@ void send_task(void *pvParameters) {
 		case (GcodeType::M10):
 			sprintf(str,
 					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
-					parsedData->canvasLimits.Xmm, parsedData->canvasLimits.Ymm, parsedData->Adir,
-					parsedData->Bdir, parsedData->speed, parsedData->penUp, parsedData->penDown); // these need to be fixed too, like with M11 CDM,
-																		  // to use plotter instead of data
-																		  // M2 and M5, which are currently broken,
-																		  // should affect which info is sent out
+					parsedData->canvasLimits.Xmm, parsedData->canvasLimits.Ymm,
+					parsedData->Adir, parsedData->Bdir, parsedData->speed,
+					parsedData->penUp, parsedData->penDown); // these need to be fixed too, like with M11 CDM,
+			// to use plotter instead of data
+			// M2 and M5, which are currently broken,
+			// should affect which info is sent out
 			break;
 
 		case (GcodeType::M11):
