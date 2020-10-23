@@ -3,6 +3,14 @@
 
 #include "CanvasCoordinates.h"
 
+#if defined (__USE_LPCOPEN)
+#if defined(NO_BOARD_LIB)
+#include "chip.h"
+#else
+#include "board.h"
+#endif
+#endif
+
 enum class GcodeType { M1, M2, M4, M5, M10, M11, G1, G28 };
 #define MAX_STR_LEN 50
 
@@ -10,6 +18,7 @@ struct PlotInstruct_t{
 	CanvasCoordinates_t newPos;
 	GcodeType code;
 	int penPos;
+	uint32_t cnt;
 };
 
 struct ParsedGdata_t
