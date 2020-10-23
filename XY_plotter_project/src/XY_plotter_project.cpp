@@ -99,19 +99,19 @@ static void prvSetupHardware(void) {
 }
 
 void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
-	coords->Xsteps = (coords->Xum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
-	coords->Ysteps = (coords->Yum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
+    coords->Xsteps = coords->Xum / UMS_PER_STEP;
+    coords->Ysteps = coords->Yum / UMS_PER_STEP;
 
-	switch (mode) {
-	case RelModes::REL:
-		coords->Xsteps += plotter->penXYPos.Xsteps;
-		coords->Ysteps += plotter->penXYPos.Ysteps;
-		break;
+    switch (mode) {
+    case RelModes::REL:
+        coords->Xsteps += plotter->penXYPos.Xsteps;
+        coords->Ysteps += plotter->penXYPos.Ysteps;
+        break;
 
-	case RelModes::ABS:
-		break;
+    case RelModes::ABS:
+        break;
 
-	}
+    }
 }
 
 /*Receive G-code lines from mDraw, validate and parse code into hardware instructions*/
@@ -209,7 +209,6 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::G1):
-			mmsToSteps(&(data->PenXY), data->relativityMode ? RelModes::REL : RelModes::ABS);
 			umsToSteps(&(data->PenXY),
 					data->relativityMode ? RelModes::REL : RelModes::ABS);
 			plotter->plotLine(data->PenXY.Xsteps, data->PenXY.Ysteps);

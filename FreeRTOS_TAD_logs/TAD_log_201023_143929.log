@@ -1,0 +1,36 @@
+"FreeRTOS Task Aware Debugger for GDB" version 11.2.0 (202001021529)
+(c) 2016-2018 NXP Semiconductors, Inc.
+==================================
+14:31:53.972 INFO: [TadModel] DSF session ID 2 has started.
+14:31:58.333 INFO: [TadState] TAD state changed:  DEBUG_STARTED -> DEBUG_INIT_0 (SUSPENDED, USER_REQUEST)
+14:32:00.170 INFO: [TadState] TAD state changed:  DEBUG_INIT_0 -> DEBUG_INIT_1 (RESUMED, USER_REQUEST)
+14:32:00.304 INFO: [TadState] TAD state changed:  DEBUG_INIT_1 -> DEBUG_SUSPENDED (SUSPENDED, BREAKPOINT)
+14:32:21.501 INFO: [TadState] TAD state changed:  DEBUG_SUSPENDED -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:32:32.851 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:32:33.691 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" has started.
+14:32:34.405 INFO: [TadModel] Heap type (memory allocation scheme) has been identified from FreeRTOSDebugConfig structure as Heap #3. 
+14:32:34.406 INFO: [TadModel] FreeRTOS version has been identified from FreeRTOSDebugConfig structure as 10.2.0.
+14:32:34.406 INFO: [Benchmark] Loading data for "Determine FreeRTOS version" took 715 ms.
+14:32:34.406 INFO: [Benchmark] Loading data for "Task List" has started.
+14:32:39.742 INFO: [Benchmark] Loading data for "Task List" took 5335 ms.
+14:33:26.98 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:34:44.141 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:34:44.142 INFO: [Benchmark] Loading data for "Task List" has started.
+14:34:49.364 INFO: [Benchmark] Loading data for "Task List" took 5221 ms.
+14:35:28.777 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:36:10.182 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:36:10.182 INFO: [Benchmark] Loading data for "Task List" has started.
+14:36:15.308 INFO: [Benchmark] Loading data for "Task List" took 5126 ms.
+14:36:28.117 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:36:28.303 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:36:28.303 INFO: [Benchmark] Loading data for "Task List" has started.
+14:36:33.625 INFO: [Benchmark] Loading data for "Task List" took 5322 ms.
+14:36:37.434 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:36:37.604 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:36:37.605 INFO: [Benchmark] Loading data for "Task List" has started.
+14:36:42.882 INFO: [Benchmark] Loading data for "Task List" took 5277 ms.
+14:36:50.12 INFO: [TadState] TAD state changed:  READY -> DEBUG_RESUMED (RESUMED, USER_REQUEST)
+14:37:02.50 INFO: [TadState] TAD state changed:  DEBUG_RESUMED -> READY (SUSPENDED, BREAKPOINT)
+14:37:02.51 INFO: [Benchmark] Loading data for "Task List" has started.
+14:37:07.785 INFO: [Benchmark] Loading data for "Task List" took 5734 ms.
+14:39:29.761 INFO: [TadModel] DSF session ID 2 has ended.

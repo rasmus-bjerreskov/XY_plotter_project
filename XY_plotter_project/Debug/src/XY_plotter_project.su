@@ -6,10 +6,10 @@ sct_pwm_15xx.h:139:20:void Chip_SCTPWM_Stop(LPC_SCT_T*)	16	static
 gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
 XY_plotter_project.cpp:72:6:void laser_disable()	8	static
 XY_plotter_project.cpp:83:13:void prvSetupHardware()	16	static
-XY_plotter_project.cpp:101:6:void mmsToSteps(CanvasCoordinates_t*, RelModes)	16	static
+XY_plotter_project.cpp:101:6:void umsToSteps(CanvasCoordinates_t*, RelModes)	16	static
 XY_plotter_project.cpp:118:13:void parse_task(void*)	168	static
 XY_plotter_project.cpp:173:6:void plotter_task(void*)	48	static
-XY_plotter_project.cpp:223:6:void pen_task(void*)	16	static
-XY_plotter_project.cpp:233:6:void send_task(void*)	160	static
-XY_plotter_project.cpp:274:6:void vConfigureTimerForRunTimeStats()	8	static
-XY_plotter_project.cpp:287:5:int main()	40	static
+XY_plotter_project.cpp:224:6:void pen_task(void*)	16	static
+XY_plotter_project.cpp:234:6:void send_task(void*)	160	static
+XY_plotter_project.cpp:275:6:void vConfigureTimerForRunTimeStats()	8	static
+XY_plotter_project.cpp:288:5:int main()	40	static
