@@ -57,8 +57,8 @@ public:
 	DigitalIoPin *primaryIo;		// used to save dominant axis
 	DigitalIoPin *secondaryIo;		// used to save non-dominant axis
 	SemaphoreHandle_t sbRIT;		// used to end rit-timer at right time
-	CanvasSize_t canvasSize;// used to contain the dimensions of the canvas in steps an in mms
-	CanvasSize_t penXYPos;// used to contain the current XY-position of the pen in the canvas.
+	CanvasCoordinates_t canvasSize;// used to contain the dimensions of the canvas in steps an in mms
+	CanvasCoordinates_t penXYPos;// used to contain the current XY-position of the pen in the canvas.
 
 	DigitalIoPin *LSWPin1;			// used to hold IO-pins of limit switch 1
 	DigitalIoPin *LSWPin2;			// used to hold IO-pins of limit switch 2

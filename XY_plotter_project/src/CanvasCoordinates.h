@@ -6,20 +6,18 @@ const int SCALED_MMS_PER_STEP = 2500;
 
 struct CanvasCoordinates_t
 {
-	int Xum;		// the X coordinate position in micrometers
-	int Yum;		// the Y coordinate position in micrometers
+	union {
+		int Xum;	// the X coordinate position in micrometers
+		int Xmm;	// the X coordinate position in millimeters
+	};
+
+	union {
+		int Yum;	// the Y coordinate position in micrometers
+		int Ymm;	// the Y coordinate position in millimeters
+	};
 
 	int Xsteps;		// the X coordinate position in steps
 	int Ysteps;		// the Y coordinate position in steps
-};
-
-struct CanvasSize_t
-{
-	int Xmm;
-	int Ymm;
-
-	int Xsteps;
-	int Ysteps;
 };
 
 #endif /* CANVASCOORDINATES_H_ */
