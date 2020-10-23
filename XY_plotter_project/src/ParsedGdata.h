@@ -20,7 +20,6 @@ struct PlotInstruct_t{
 	CanvasCoordinates_t newPos;
 	GcodeType code;
 	int penPos;
-	CanvasCoordinates_t PenXY;
 	RelModes relMode;
 	uint32_t cnt;
 };

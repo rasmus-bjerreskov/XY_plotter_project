@@ -7,9 +7,9 @@ gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
 XY_plotter_project.cpp:68:6:void laser_disable()	8	static
 XY_plotter_project.cpp:79:13:void prvSetupHardware()	16	static
 XY_plotter_project.cpp:112:6:void umsToSteps(CanvasCoordinates_t*, RelModes)	16	static
-XY_plotter_project.cpp:129:13:void parse_task(void*)	280	static
-XY_plotter_project.cpp:192:6:void plotter_task(void*)	120	static
+XY_plotter_project.cpp:129:13:void parse_task(void*)	264	static
+XY_plotter_project.cpp:192:6:void plotter_task(void*)	104	static
 XY_plotter_project.cpp:249:6:void pen_task(void*)	16	static
-XY_plotter_project.cpp:259:6:void send_task(void*)	184	static
+XY_plotter_project.cpp:259:6:void send_task(void*)	168	static
 XY_plotter_project.cpp:301:6:void vConfigureTimerForRunTimeStats()	8	static
 XY_plotter_project.cpp:314:5:int main()	40	static

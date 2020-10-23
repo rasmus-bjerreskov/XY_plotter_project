@@ -181,7 +181,7 @@ static void parse_task(void *pvParameters) {
 
 			PlotInstruct_t instruct { { parsedData.PenXY.Xum,
 					parsedData.PenXY.Yum, 0, 0 }, parsedData.codeType,
-					parsedData.penCur, parsedData.PenXY, parsedData.relativityMode, instructCnt };
+					parsedData.penCur, parsedData.relativityMode, instructCnt };
 			xQueueSend(qCmd, &instruct, portMAX_DELAY);
 			xEventGroupSetBits(eGrp, TX_b);
 		}
@@ -218,7 +218,7 @@ void plotter_task(void *pvParameters) {
 
 		case (GcodeType::M5):
 			plotter->setCanvasSize(systemData->canvasLimits.Xmm,
-					systemData->canvasLimits.Ymm);
+					               systemData->canvasLimits.Ymm);
 			break;
 
 		case (GcodeType::G28): {
@@ -234,8 +234,8 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::G1):
-			umsToSteps(&(instrBuf.PenXY), instrBuf.relMode);
-			plotter->plotLine(instrBuf.PenXY.Xsteps, instrBuf.PenXY.Ysteps);
+			umsToSteps(&(instrBuf.newPos), instrBuf.relMode);
+			plotter->plotLine(instrBuf.newPos.Xsteps, instrBuf.newPos.Ysteps);
 			break;
 
 		default:
