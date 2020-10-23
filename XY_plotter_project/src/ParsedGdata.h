@@ -11,6 +11,8 @@
 #endif
 #endif
 
+enum class RelModes { ABS, REL };
+
 enum class GcodeType { M1, M2, M4, M5, M10, M11, G1, G28 };
 #define MAX_STR_LEN 50
 
@@ -18,6 +20,8 @@ struct PlotInstruct_t{
 	CanvasCoordinates_t newPos;
 	GcodeType code;
 	int penPos;
+	CanvasCoordinates_t PenXY;
+	RelModes relMode;
 	uint32_t cnt;
 };
 

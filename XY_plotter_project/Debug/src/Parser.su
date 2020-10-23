@@ -18,4 +18,4 @@ Parser.cpp:415:6:bool Parser::extractDirection(int*, char*, bool, char)	24	stati
 Parser.cpp:448:6:bool Parser::extractInt(int*, char*, bool, char)	32	static
 Parser.cpp:480:6:bool Parser::extract8BitUint(int*, char*, bool, char)	32	static
 Parser.cpp:511:6:bool Parser::validateFloatStr(char*, bool, char)	32	static
-Parser.cpp:560:5:int Parser::mmStr_to_umInt(char*)	24	static
+Parser.cpp:560:5:int Parser::mmStr_to_umInt(char*)	32	static
