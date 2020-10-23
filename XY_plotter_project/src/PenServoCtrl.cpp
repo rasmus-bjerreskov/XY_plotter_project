@@ -42,7 +42,7 @@ void PenServoController::updatePos(int newVal) {
 //convert value 0-255 to 1000-2000
 uint16_t PenServoController::convertPos(int val) {
 
-	uint16_t tmp = SERVO_MIN + ((float) data->penCur / 255 * 1000);
+	uint16_t tmp = SERVO_MIN + (float) val / 255 * 1000;
 	uint16_t newVal;
 	tmp > SERVO_MAX ? newVal = SERVO_MAX : newVal = tmp;
 
