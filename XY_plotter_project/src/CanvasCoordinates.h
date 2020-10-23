@@ -1,8 +1,7 @@
 #ifndef CANVASCOORDINATES_H_
 #define CANVASCOORDINATES_H_
 
-const int MM_SCALE_FACTOR = 100000;
-const int SCALED_MMS_PER_STEP = 2500;
+const int UMS_PER_STEP = 25;
 
 struct CanvasCoordinates_t
 {

@@ -56,7 +56,7 @@ QueueHandle_t qCmd; //Holds commands to hardware functions
 EventGroupHandle_t eGrp;
 SemaphoreHandle_t binPen;
 
-ParsedGdata_t *data;
+ParsedGdata_t *parsedData;
 PenServoController *penServo;
 Plotter *plotter;
 Parser *parser;
@@ -99,8 +99,8 @@ static void prvSetupHardware(void) {
 }
 
 void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
-	coords->Xsteps = (coords->Xum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
-	coords->Ysteps = (coords->Yum * MM_SCALE_FACTOR) / SCALED_MMS_PER_STEP;
+	coords->Xsteps = coords->Xum / UMS_PER_STEP;
+	coords->Ysteps = coords->Yum / UMS_PER_STEP;
 
 	switch (mode) {
 	case RelModes::REL:
@@ -116,27 +116,27 @@ void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
 
 /*Receive G-code lines from mDraw, validate and parse code into hardware instructions*/
 static void parse_task(void *pvParameters) {
-	data = new ParsedGdata_t;
-	data->canvasLimits.Ymm = 380;
-	data->canvasLimits.Xmm = 310;
+	parsedData = new ParsedGdata_t;
+	parsedData->canvasLimits.Ymm = 380;
+	parsedData->canvasLimits.Xmm = 310;
 
 // mock values for testing the mdraw communication:
-	data->limitSw[0] = 1;
-	data->limitSw[1] = 1;
-	data->limitSw[2] = 1;
-	data->limitSw[3] = 1;
-	data->Adir = 0;
-	data->Bdir = 0;
-	data->penUp = 160;
-	data->penDown = 90;
-	data->penCur = data->penUp;
-	data->speed = 80;
-	data->canvasLimits.Xmm = 150;
-	data->canvasLimits.Ymm = 100; //TODO sync these with plotter values
+	parsedData->limitSw[0] = 1;
+	parsedData->limitSw[1] = 1;
+	parsedData->limitSw[2] = 1;
+	parsedData->limitSw[3] = 1;
+	parsedData->Adir = 0;
+	parsedData->Bdir = 0;
+	parsedData->penUp = 160;
+	parsedData->penDown = 90;
+	parsedData->penCur = parsedData->penUp;
+	parsedData->speed = 80;
+	parsedData->canvasLimits.Xmm = 150;
+	parsedData->canvasLimits.Ymm = 100; //TODO sync these with plotter values
 
 	binPen = xSemaphoreCreateBinary();
 	qCmd = xQueueCreate(1, sizeof(PlotInstruct_t));
-	penServo = new PenServoController(data);
+	penServo = new PenServoController(parsedData);
 	parser = new Parser();
 
 	char str[MAX_STR_LEN + 1];
@@ -163,10 +163,10 @@ static void parse_task(void *pvParameters) {
 		ITM_write("Received: ");
 		ITM_write(buf);
 		//if command was recognised and parsed, put it on queue
-		if (parser->parse(data, buf)) {
+		if (parser->parse(parsedData, buf)) {
 			PlotInstruct_t instruct {
-					{ data->PenXY.Xmm, data->PenXY.Ymm, 0, 0 }, data->codeType,
-					data->penCur };
+					{ parsedData->PenXY.Xmm, parsedData->PenXY.Ymm, 0, 0 }, parsedData->codeType,
+					parsedData->penCur };
 			xQueueSend(qCmd, &instruct, portMAX_DELAY);
 		}
 	}
@@ -185,7 +185,7 @@ void plotter_task(void *pvParameters) {
 
 		switch (instrBuf.code) {
 		case (GcodeType::M10):
-			data->penCur = data->penUp;
+			parsedData->penCur = parsedData->penUp;
 			penServo->updatePos();
 			break;
 
@@ -198,23 +198,23 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::M5):
-			plotter->setCanvasSize(data->canvasLimits.Xmm, data->canvasLimits.Ymm);
+			plotter->setCanvasSize(parsedData->canvasLimits.Xmm, parsedData->canvasLimits.Ymm);
 			break;
 
 		case (GcodeType::G28): {
-			int penCur = data->penCur;
-			data->penCur = data->penUp;
+			int penCur = parsedData->penCur;
+			parsedData->penCur = parsedData->penUp;
 			xSemaphoreGive(binPen);
 			plotter->plotLine(0, 0);
-			data->penCur = penCur;
+			parsedData->penCur = penCur;
 			xSemaphoreGive(binPen);
 		}
 			break;
 
 		case (GcodeType::G1):
-			umsToSteps(&(data->PenXY),
-					data->relativityMode ? RelModes::REL : RelModes::ABS);
-			plotter->plotLine(data->PenXY.Xsteps, data->PenXY.Ysteps);
+			umsToSteps(&(parsedData->PenXY),
+					parsedData->relativityMode ? RelModes::REL : RelModes::ABS);
+			plotter->plotLine(parsedData->PenXY.Xsteps, parsedData->PenXY.Ysteps);
 			break;
 
 		default:
@@ -248,8 +248,8 @@ void send_task(void *pvParameters) {
 		case (GcodeType::M10):
 			sprintf(str,
 					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
-					data->canvasLimits.Xmm, data->canvasLimits.Ymm, data->Adir,
-					data->Bdir, data->speed, data->penUp, data->penDown); // these need to be fixed too, like with M11 CDM,
+					parsedData->canvasLimits.Xmm, parsedData->canvasLimits.Ymm, parsedData->Adir,
+					parsedData->Bdir, parsedData->speed, parsedData->penUp, parsedData->penDown); // these need to be fixed too, like with M11 CDM,
 																		  // to use plotter instead of data
 																		  // M2 and M5, which are currently broken,
 																		  // should affect which info is sent out
