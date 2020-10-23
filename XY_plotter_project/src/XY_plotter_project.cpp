@@ -185,7 +185,7 @@ void plotter_task(void *pvParameters) {
 
 		switch (instrBuf.code) {
 		case (GcodeType::M10):
-			penServo->updatePos(data->penUp);
+			penServo->updatePos(parsedData->penUp);
 			break;
 
 		case (GcodeType::M1):
@@ -203,7 +203,7 @@ void plotter_task(void *pvParameters) {
 		case (GcodeType::G28): {
 
 			int penCur = instrBuf.penPos;
-			data->penCur = parsedData->penUp;
+			parsedData->penCur = parsedData->penUp;
 
 			xSemaphoreGive(binPen);
 			plotter->plotLine(0, 0);
@@ -230,7 +230,7 @@ void pen_task(void *param) {
 
 	while (1) {
 		xSemaphoreTake(binPen, portMAX_DELAY);
-		penServo->updatePos(data->penCur); //TODO change semaphore to queue holding pen value
+		penServo->updatePos(parsedData->penCur); //TODO change semaphore to queue holding pen value
 	}
 }
 

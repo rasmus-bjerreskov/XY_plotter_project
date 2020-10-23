@@ -8,8 +8,8 @@ XY_plotter_project.cpp:72:6:void laser_disable()	8	static
 XY_plotter_project.cpp:83:13:void prvSetupHardware()	16	static
 XY_plotter_project.cpp:101:6:void umsToSteps(CanvasCoordinates_t*, RelModes)	16	static
 XY_plotter_project.cpp:118:13:void parse_task(void*)	168	static
-XY_plotter_project.cpp:173:6:void plotter_task(void*)	48	static
-XY_plotter_project.cpp:224:6:void pen_task(void*)	16	static
-XY_plotter_project.cpp:234:6:void send_task(void*)	160	static
-XY_plotter_project.cpp:275:6:void vConfigureTimerForRunTimeStats()	8	static
-XY_plotter_project.cpp:288:5:int main()	40	static
+XY_plotter_project.cpp:175:6:void plotter_task(void*)	48	static
+XY_plotter_project.cpp:228:6:void pen_task(void*)	16	static
+XY_plotter_project.cpp:238:6:void send_task(void*)	160	static
+XY_plotter_project.cpp:279:6:void vConfigureTimerForRunTimeStats()	8	static
+XY_plotter_project.cpp:292:5:int main()	40	static
