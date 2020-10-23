@@ -212,7 +212,7 @@ void plotter_task(void *pvParameters) {
 			break;
 
 		case (GcodeType::M1):
-			systemData->penCur =  penServo->getCurVal();
+			systemData->penCur =  instrBuf.penPos;
 			penServo->updatePos(instrBuf.penPos);
 			break;
 
