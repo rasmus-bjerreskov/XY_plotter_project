@@ -214,7 +214,7 @@ void plotter_task(void *pvParameters) {
 
 		case (GcodeType::G1):
 			umsToSteps(&(parsedData->PenXY),
-					parsedData->relativityMode ? RelModes::REL : RelModes::ABS);
+					parsedData->relativityMode ? RelModes::ABS : RelModes::REL);
 			plotter->plotLine(parsedData->PenXY.Xsteps, parsedData->PenXY.Ysteps);
 			break;
 
