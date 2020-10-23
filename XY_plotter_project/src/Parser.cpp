@@ -572,7 +572,20 @@ int Parser::mmStr_to_umInt(char *mmStr) {
 
 	res *= 1000;
 
-	res += atoi(mmStr);
+	int decs = 0;
+	int pos = 3;
+
+	while ((next = *(mmStr++)) != '\0') {
+		decs *=10;
+		decs += next - '0';
+		pos--;
+	}
+
+	while (pos-- > 0) {
+		decs *= 10;
+	}
+
+	res += decs;
 
 	return minus? -res: res;
 
