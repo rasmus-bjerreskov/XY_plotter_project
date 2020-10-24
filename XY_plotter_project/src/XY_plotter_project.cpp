@@ -88,23 +88,6 @@ static void prvSetupHardware(void) {
 	NVIC_SetPriority(RITIMER_IRQn,
 	configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY + 1);
 
-	plotter = new Plotter();
-
-	systemData = new ParsedGdata_t;
-
-	systemData->limitSw[0] = 1;
-	systemData->limitSw[1] = 1;
-	systemData->limitSw[2] = 1;
-	systemData->limitSw[3] = 1;
-	systemData->Adir = 0;
-	systemData->Bdir = 0;
-	systemData->penUp = 160;
-	systemData->penDown = 90;
-	systemData->penCur = systemData->penUp;
-	systemData->speed = 80;
-	systemData->canvasLimits.Xmm = 150;
-	systemData->canvasLimits.Ymm = 100; //TODO sync these with plotter values
-
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
@@ -129,9 +112,25 @@ void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
 static void parse_task(void *pvParameters) {
 	ParsedGdata_t parsedData;
 
+	plotter = new Plotter();
+
+	systemData = new ParsedGdata_t;
+	systemData->limitSw[0] = 1;
+	systemData->limitSw[1] = 1;
+	systemData->limitSw[2] = 1;
+	systemData->limitSw[3] = 1;
+	systemData->Adir = 0;
+	systemData->Bdir = 0;
+	systemData->penUp = 160;
+	systemData->penDown = 90;
+	systemData->penCur = systemData->penUp;
+	systemData->speed = 80;
+	systemData->canvasLimits.Xmm = 150;
+	systemData->canvasLimits.Ymm = 100;
+
 	binPen = xSemaphoreCreateBinary();
 	qCmd = xQueueCreate(1, sizeof(PlotInstruct_t));
-	penServo = new PenServoController(systemData);
+	penServo = new PenServoController(systemData->penDown, systemData->penUp, systemData->penCur);
 	parser = new Parser();
 
 	char str[MAX_STR_LEN + 1];
@@ -162,21 +161,21 @@ static void parse_task(void *pvParameters) {
 			instructCnt++;
 
 			switch (parsedData.codeType) {
-				case (GcodeType::M2):
-					systemData->penUp = parsedData.penUp;
-					systemData->penDown = parsedData.penDown;
-					break;
+			case (GcodeType::M2):
+				systemData->penUp = parsedData.penUp;
+				systemData->penDown = parsedData.penDown;
+				break;
 
-				case (GcodeType::M5):
-					systemData->Adir = parsedData.Adir;
-					systemData->Bdir = parsedData.Bdir;
-					systemData->canvasLimits.Xmm = parsedData.canvasLimits.Xmm;
-					systemData->canvasLimits.Ymm = parsedData.canvasLimits.Ymm;
-					systemData->speed = parsedData.speed;
-					break;
+			case (GcodeType::M5):
+				systemData->Adir = parsedData.Adir;
+				systemData->Bdir = parsedData.Bdir;
+				systemData->canvasLimits.Xmm = parsedData.canvasLimits.Xmm;
+				systemData->canvasLimits.Ymm = parsedData.canvasLimits.Ymm;
+				systemData->speed = parsedData.speed;
+				break;
 
-				default:
-					break;
+			default:
+				break;
 			}
 
 			PlotInstruct_t instruct { { parsedData.PenXY.Xum,
@@ -219,7 +218,7 @@ void plotter_task(void *pvParameters) {
 
 		case (GcodeType::M5):
 			plotter->setCanvasSize(systemData->canvasLimits.Xmm,
-					               systemData->canvasLimits.Ymm);
+					systemData->canvasLimits.Ymm);
 			break;
 
 		case (GcodeType::G28): {
