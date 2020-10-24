@@ -35,7 +35,7 @@ PenServoController::PenServoController(int _downPos, int _upPos, int _curVal) {
 }
 
 void PenServoController::updatePos(int newVal) {
-	if (newVal != curVal && (newVal == upPos || newVal == upPos)) {
+	if (newVal != curVal && (newVal == downPos || newVal == upPos)) {
 		LPC_SCTLARGE0->MATCHREL[1].L = convertPos(newVal);
 		curVal = newVal;
 	}
