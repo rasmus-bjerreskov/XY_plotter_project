@@ -12,5 +12,5 @@ XY_plotter_project.cpp:112:13:void parse_task(void*)	264	static
 XY_plotter_project.cpp:191:6:void plotter_task(void*)	112	static
 XY_plotter_project.cpp:249:6:void pen_task(void*)	16	static
 XY_plotter_project.cpp:259:6:void send_task(void*)	168	static
-XY_plotter_project.cpp:301:6:void vConfigureTimerForRunTimeStats()	8	static
-XY_plotter_project.cpp:314:5:int main()	40	static
+XY_plotter_project.cpp:298:6:void vConfigureTimerForRunTimeStats()	8	static
+XY_plotter_project.cpp:311:5:int main()	40	static
