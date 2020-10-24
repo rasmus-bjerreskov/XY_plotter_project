@@ -449,11 +449,11 @@ bool Parser::extractInt(int *storage, char *numStr, bool hasDelimChar, char deli
 	long val;
 	char *rem;
 
-	if (!isdigit(numStr[0]) || !(numStr[0] == '-' && isdigit(numStr[1])) )
+	if (!isdigit(numStr[0]) && !(numStr[0] == '-' && isdigit(numStr[1])) )
 		return false;
 
-	// probable bug: if the given numLine is long enough ("1111111111..." etc.)
-	// could strtol interpret it as a wrong value?
+	// a possible bug: if the given numLine is long enough ("1111111111..." etc.)
+	// strtol interprets it as garbage
 	val = strtol(numStr, &rem, 10);
 
 	// probable bug in the type conversion:
