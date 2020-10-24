@@ -8,8 +8,6 @@
 #ifndef PENSERVO_H_
 #define PENSERVO_H_
 
-#include "ParsedGdata.h"
-
 #if defined (__USE_LPCOPEN)
 #if defined(NO_BOARD_LIB)
 #include "chip.h"
@@ -20,15 +18,18 @@
 
 class PenServoController {
 public:
-	PenServoController(ParsedGdata_t *_data);
+	PenServoController(int _downValue, int _upValue, int _curVal);
 	void updatePos(int newVal);
+	void setPosVals(int down, int up);
+	int getCurVal() { return curVal; }
 
 	virtual ~PenServoController();
 
 private:
 	uint16_t convertPos(int val);
-	ParsedGdata_t* data;
 	int curVal;
+	int upPos;
+	int downPos;
 	static const int SERVO_MIN = 1000;
 	static const int SERVO_MAX = 2000;
 };

@@ -56,14 +56,10 @@ QueueHandle_t qCmd; //Holds commands to hardware functions
 EventGroupHandle_t eGrp;
 SemaphoreHandle_t binPen;
 
-ParsedGdata_t *parsedData;
+ParsedGdata_t *systemData;
 PenServoController *penServo;
 Plotter *plotter;
 Parser *parser;
-
-enum class RelModes {
-	REL, ABS
-};
 
 /*****************************************************************************
  * Private functions
@@ -92,8 +88,6 @@ static void prvSetupHardware(void) {
 	NVIC_SetPriority(RITIMER_IRQn,
 	configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY + 1);
 
-	plotter = new Plotter();
-
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
@@ -116,25 +110,27 @@ void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
 
 /*Receive G-code lines from mDraw, validate and parse code into hardware instructions*/
 static void parse_task(void *pvParameters) {
-	parsedData = new ParsedGdata_t;
+	ParsedGdata_t parsedData;
 
-// mock values for testing the mdraw communication:
-	parsedData->limitSw[0] = 1;
-	parsedData->limitSw[1] = 1;
-	parsedData->limitSw[2] = 1;
-	parsedData->limitSw[3] = 1;
-	parsedData->Adir = 0;
-	parsedData->Bdir = 0;
-	parsedData->penUp = 160;
-	parsedData->penDown = 90;
-	parsedData->penCur = parsedData->penUp;
-	parsedData->speed = 80;
-	parsedData->canvasLimits.Xmm = 150;
-	parsedData->canvasLimits.Ymm = 100; //TODO sync these with plotter values
+	plotter = new Plotter();
+
+	systemData = new ParsedGdata_t;
+	systemData->limitSw[0] = 1;
+	systemData->limitSw[1] = 1;
+	systemData->limitSw[2] = 1;
+	systemData->limitSw[3] = 1;
+	systemData->Adir = 0;
+	systemData->Bdir = 0;
+	systemData->penUp = 160;
+	systemData->penDown = 90;
+	systemData->penCur = systemData->penUp;
+	systemData->speed = 80;
+	systemData->canvasLimits.Xmm = 150;
+	systemData->canvasLimits.Ymm = 100;
 
 	binPen = xSemaphoreCreateBinary();
 	qCmd = xQueueCreate(1, sizeof(PlotInstruct_t));
-	penServo = new PenServoController(parsedData);
+	penServo = new PenServoController(systemData->penDown, systemData->penUp, systemData->penCur);
 	parser = new Parser();
 
 	char str[MAX_STR_LEN + 1];
@@ -161,11 +157,30 @@ static void parse_task(void *pvParameters) {
 		ITM_write("\nReceived: ");
 		ITM_write(buf);
 		//if command was recognised and parsed, put it on queue
-		if (parser->parse(parsedData, buf)) {
+		if (parser->parse(&parsedData, buf)) {
 			instructCnt++;
-			PlotInstruct_t instruct { { parsedData->PenXY.Xmm,
-					parsedData->PenXY.Ymm, 0, 0 }, parsedData->codeType,
-					parsedData->penCur, instructCnt };
+
+			switch (parsedData.codeType) {
+			case (GcodeType::M2):
+				systemData->penUp = parsedData.penUp;
+				systemData->penDown = parsedData.penDown;
+				break;
+
+			case (GcodeType::M5):
+				systemData->Adir = parsedData.Adir;
+				systemData->Bdir = parsedData.Bdir;
+				systemData->canvasLimits.Xmm = parsedData.canvasLimits.Xmm;
+				systemData->canvasLimits.Ymm = parsedData.canvasLimits.Ymm;
+				systemData->speed = parsedData.speed;
+				break;
+
+			default:
+				break;
+			}
+
+			PlotInstruct_t instruct { { parsedData.PenXY.Xum,
+					parsedData.PenXY.Yum, 0, 0 }, parsedData.codeType,
+					parsedData.penCur, parsedData.relativityMode, instructCnt };
 			xQueueSend(qCmd, &instruct, portMAX_DELAY);
 			xEventGroupSetBits(eGrp, TX_b);
 		}
@@ -192,43 +207,40 @@ void plotter_task(void *pvParameters) {
 
 		switch (instrBuf.code) {
 		case (GcodeType::M10):
-			penServo->updatePos(parsedData->penUp);
+			penServo->updatePos(systemData->penUp);
+			systemData->penCur = penServo->getCurVal();
 			break;
 
 		case (GcodeType::M1):
 			penServo->updatePos(instrBuf.penPos);
-			break;
-
-		case (GcodeType::M2):
-			//TODO no action needed here, possibly...
+			systemData->penCur = penServo->getCurVal();
 			break;
 
 		case (GcodeType::M5):
-			plotter->setCanvasSize(parsedData->canvasLimits.Xmm,
-					parsedData->canvasLimits.Ymm);
+			plotter->setCanvasSize(systemData->canvasLimits.Xmm,
+					systemData->canvasLimits.Ymm);
 			break;
 
 		case (GcodeType::G28): {
 
-			int penCur = instrBuf.penPos;
-			parsedData->penCur = parsedData->penUp;
+			int penCur = penServo->getCurVal();
+			systemData->penCur = systemData->penUp;
 
 			xSemaphoreGive(binPen);
 			plotter->plotLine(0, 0);
-			parsedData->penCur = penCur;
+			systemData->penCur = penCur;
 			xSemaphoreGive(binPen);
 		}
 			break;
 
 		case (GcodeType::G1):
-			umsToSteps(&(parsedData->PenXY),
-					parsedData->relativityMode ? RelModes::REL : RelModes::ABS);
-			plotter->plotLine(parsedData->PenXY.Xsteps,
-					parsedData->PenXY.Ysteps);
+			umsToSteps(&(instrBuf.newPos), instrBuf.relMode);
+			plotter->plotLine(instrBuf.newPos.Xsteps, instrBuf.newPos.Ysteps);
 			break;
 
 		default:
 			// No laser (M4) implemented...
+			// M2 is handled in parser_task
 			break;
 		}
 	}
@@ -239,7 +251,7 @@ void pen_task(void *param) {
 
 	while (1) {
 		xSemaphoreTake(binPen, portMAX_DELAY);
-		penServo->updatePos(parsedData->penCur); //TODO change semaphore to queue holding pen value
+		penServo->updatePos(systemData->penCur); //TODO change semaphore to queue holding pen value
 	}
 }
 
@@ -258,12 +270,9 @@ void send_task(void *pvParameters) {
 		case (GcodeType::M10):
 			sprintf(str,
 					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
-					parsedData->canvasLimits.Xmm, parsedData->canvasLimits.Ymm,
-					parsedData->Adir, parsedData->Bdir, parsedData->speed,
-					parsedData->penUp, parsedData->penDown); // these need to be fixed too, like with M11 CDM,
-			// to use plotter instead of data
-			// M2 and M5, which are currently broken,
-			// should affect which info is sent out
+					systemData->canvasLimits.Xmm, systemData->canvasLimits.Ymm,
+					systemData->Adir, systemData->Bdir, systemData->speed,
+					systemData->penUp, systemData->penDown);
 			break;
 
 		case (GcodeType::M11):

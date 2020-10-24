@@ -196,10 +196,10 @@ bool Parser::gotoPositionParser(ParsedGdata_t *data, char *tokLine) {
 
 	switch (tokLine[1]) {
 		case '0':
-			data->relativityMode = false;
+			data->relativityMode = RelModes::ABS;
 			break;
 		case '1':
-			data->relativityMode = true;
+			data->relativityMode = RelModes::REL;
 			break;
 		default:
 			return false;
@@ -371,7 +371,7 @@ bool Parser::saveStepperInfoParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine[0] != 'H')
 		return false;
 
-	if (!extractInt(&data->canvasLimits.Yum, tokLine+1))
+	if (!extractInt(&data->canvasLimits.Ymm, tokLine+1))
 		return false;
 
 	// Extract the width value:
@@ -380,7 +380,7 @@ bool Parser::saveStepperInfoParser(ParsedGdata_t *data, char *tokLine) {
 	if (tokLine[0] != 'W')
 		return false;
 
-	if (!extractInt(&data->canvasLimits.Xum, tokLine+1))
+	if (!extractInt(&data->canvasLimits.Xmm, tokLine+1))
 		return false;
 
 	// Extract the speed value
@@ -449,11 +449,11 @@ bool Parser::extractInt(int *storage, char *numStr, bool hasDelimChar, char deli
 	long val;
 	char *rem;
 
-	if (!isdigit(numStr[0]) || !(numStr[0] == '-' && isdigit(numStr[1])) )
+	if (!isdigit(numStr[0]) && !(numStr[0] == '-' && isdigit(numStr[1])) )
 		return false;
 
-	// probable bug: if the given numLine is long enough ("1111111111..." etc.)
-	// could strtol interpret it as a wrong value?
+	// a possible bug: if the given numLine is long enough ("1111111111..." etc.)
+	// strtol interprets it as garbage
 	val = strtol(numStr, &rem, 10);
 
 	// probable bug in the type conversion:

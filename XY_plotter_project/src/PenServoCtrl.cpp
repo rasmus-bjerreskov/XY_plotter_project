@@ -7,8 +7,10 @@
 
 #include "PenServoCtrl.h"
 
-PenServoController::PenServoController(ParsedGdata_t *_data) {
-	data = _data;
+PenServoController::PenServoController(int _downPos, int _upPos, int _curVal) {
+	downPos = _downPos;
+	upPos = _upPos;
+	curVal = _curVal;
 
 	/*SCT setup
 	 * cf n refers to table in lpc15xx user manual
@@ -18,7 +20,7 @@ PenServoController::PenServoController(ParsedGdata_t *_data) {
 	LPC_SCTLARGE0->CTRL_L |= ((Chip_Clock_GetSystemClockRate() / 1000000 - 1)
 			<< 5); // set prescaler, SCTimer/PWM clock = 1 MHz cf 203 p 240
 	LPC_SCTLARGE0->MATCHREL[0].L = 20000 - 1; // match 0 @ 20000/1MHz = 20ms period
-	LPC_SCTLARGE0->MATCHREL[1].L = convertPos(data->penCur); //non-inverted. duty 1000 = 1ms etc
+	LPC_SCTLARGE0->MATCHREL[1].L = convertPos(curVal); //non-inverted. duty 1000 = 1ms etc
 	LPC_SCTLARGE0->EVENT[0].STATE = 0xFFFFFFFF; // event 0 happens in all states
 	LPC_SCTLARGE0->EVENT[0].CTRL = (1 << 12); // match 0 condition only
 	LPC_SCTLARGE0->EVENT[1].STATE = 0xFFFFFFFF; // event 1 happens in all states
@@ -33,7 +35,7 @@ PenServoController::PenServoController(ParsedGdata_t *_data) {
 }
 
 void PenServoController::updatePos(int newVal) {
-	if ((newVal == data->penDown || newVal == data->penUp) && newVal != curVal) {
+	if (newVal != curVal && (newVal == downPos || newVal == upPos)) {
 		LPC_SCTLARGE0->MATCHREL[1].L = convertPos(newVal);
 		curVal = newVal;
 	}
@@ -42,7 +44,7 @@ void PenServoController::updatePos(int newVal) {
 //convert value 0-255 to 1000-2000
 uint16_t PenServoController::convertPos(int val) {
 
-	uint16_t tmp = SERVO_MIN + (float) val / 255 * 1000;
+	uint16_t tmp = SERVO_MIN + ((float) val / 255 * 1000);
 	uint16_t newVal;
 	tmp > SERVO_MAX ? newVal = SERVO_MAX : newVal = tmp;
 
