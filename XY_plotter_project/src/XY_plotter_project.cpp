@@ -55,9 +55,6 @@ QueueHandle_t qCmd; //Holds commands to hardware functions
 EventGroupHandle_t eGrp;
 SemaphoreHandle_t binPen;
 
-ParsedGdata_t *systemData;  // this should NOT be used anymore...
-// TODO move all non volatile data of the system inside Plotter
-
 Plotter *plotter;
 Parser *parser;
 
@@ -112,20 +109,6 @@ void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
 static void parse_task(void *pvParameters) {
 	ParsedGdata_t parsedData;
 
-	systemData = new ParsedGdata_t;
-	systemData->limitSw[0] = 1;
-	systemData->limitSw[1] = 1;
-	systemData->limitSw[2] = 1;
-	systemData->limitSw[3] = 1;
-	systemData->Adir = 0;
-	systemData->Bdir = 0;
-	systemData->penUp = 160;
-	systemData->penDown = 90;
-	systemData->penCur = systemData->penUp;
-	systemData->speed = 80;
-	systemData->canvasLimits.Xmm = 150;
-	systemData->canvasLimits.Ymm = 100;
-
 	plotter = new Plotter(90, 160, 160);
 
 	binPen = xSemaphoreCreateBinary();
@@ -161,16 +144,14 @@ static void parse_task(void *pvParameters) {
 
 			switch (parsedData.codeType) {
 			case (GcodeType::M2):
-				systemData->penUp = parsedData.penUp;
-				systemData->penDown = parsedData.penDown;
+				plotter->setPenUD(parsedData.penUp, parsedData.penDown);
 				break;
 
 			case (GcodeType::M5):
-				systemData->Adir = parsedData.Adir;
-				systemData->Bdir = parsedData.Bdir;
-				systemData->canvasLimits.Xmm = parsedData.canvasLimits.Xmm;
-				systemData->canvasLimits.Ymm = parsedData.canvasLimits.Ymm;
-				systemData->speed = parsedData.speed;
+				plotter->Adir = parsedData.Adir;
+				plotter->Bdir = parsedData.Bdir;
+				plotter->setCanvasSize(parsedData.canvasLimits.Xmm, parsedData.canvasLimits.Ymm);
+				plotter->speed = parsedData.speed;
 				break;
 
 			default:
@@ -206,31 +187,19 @@ void plotter_task(void *pvParameters) {
 
 		switch (instrBuf.code) {
 		case (GcodeType::M10):
-			penServo->updatePos(systemData->penUp); // TODO replace with plotter->initPenServo() or something similar;
-			systemData->penCur = penServo->getCurVal();  // TODO get rid of this:   all non volatile data go into Plotter
-																			     // from now on
+			plotter->M10();
 			break;
 
 		case (GcodeType::M1):
-			penServo->updatePos(instrBuf.penPos);  // TODO replace this with  with plotter->updatePos() or something similar
-			systemData->penCur = penServo->getCurVal(); // TODO get rid of this:       all non volatile data go into Plotter
-																					// from now on
+			plotter->M1(instrBuf.penPos);
 			break;
 
 		case (GcodeType::M5):
-			plotter->setCanvasSize(systemData->canvasLimits.Xmm,	// TODO all non volatile data are in Plotter,
-					systemData->canvasLimits.Ymm);					// get canvas size from Plotter instead...
+			plotter->calibrateCanvas();
 			break;
 
 		case (GcodeType::G28): {
-			// TODO fix this: (see above)
-			int penCur = penServo->getCurVal();
-			systemData->penCur = systemData->penUp;
-
-			xSemaphoreGive(binPen);
-			plotter->plotLine(0, 0);
-			systemData->penCur = penCur;
-			xSemaphoreGive(binPen);
+			plotter->G28();
 		}
 			break;
 
@@ -262,9 +231,9 @@ void send_task(void *pvParameters) {
 		case (GcodeType::M10):
 			sprintf(str,
 					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
-					systemData->canvasLimits.Xmm, systemData->canvasLimits.Ymm,
-					systemData->Adir, systemData->Bdir, systemData->speed,
-					systemData->penUp, systemData->penDown);
+					plotter->getCanvasWidth(), plotter->getCanvasHeight(),
+					plotter->Adir, plotter->Bdir, plotter->speed,
+					plotter->getPenUpVal(), plotter->getPenDownVal());
 			break;
 
 		case (GcodeType::M11):

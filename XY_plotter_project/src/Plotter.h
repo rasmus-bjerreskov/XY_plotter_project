@@ -38,7 +38,17 @@ public:
 
 	void setCanvasSize(int new_x, int new_y);
 	void setPenUD(int penUP, int penDOWN);
+
+	int getCanvasWidth() { return canvasSize.Xmm; }
+	int getCanvasHeight() { return canvasSize.Ymm; }
+	int getPenUpVal() { return penServo.getPenUpVal(); }
+	int getPenDownVal() { return penServo.getPenDownVal(); }
+
 	void calibrateCanvas();	// determine which limit switch is which and also the size of the canvas in steps
+	void M10();
+	void G28();
+	void M1(int newPenPos);
+
 
 	void isr(portBASE_TYPE xHigherPriorityWoken); // used to make managing the IRQHandlerer bit easier
 
@@ -59,7 +69,7 @@ public:
 	DigitalIoPin *primaryIo;		// used to save dominant axis
 	DigitalIoPin *secondaryIo;		// used to save non-dominant axis
 	SemaphoreHandle_t sbRIT;		// used to end rit-timer at right time
-	CanvasCoordinates_t canvasSize;// used to contain the dimensions of the canvas in steps an in mms
+
 	CanvasCoordinates_t penXYPos;// used to contain the current XY-position of the pen in the canvas.
 
 	DigitalIoPin *LSWPin1;			// used to hold IO-pins of limit switch 1
@@ -78,8 +88,14 @@ public:
 	DigitalIoPin *prim_limsw;
 	DigitalIoPin *sec_limsw;
 
+	// non volatile plotter data, currently unused:
+	int speed;
+	int Adir;
+	int Bdir;
+
 private:
 	PenServoController penServo;
+	CanvasCoordinates_t canvasSize;// used to contain the dimensions of the canvas in steps an in mms
 
 	enum direction {
 		left = 0, right = 1, down = 0, up = 1

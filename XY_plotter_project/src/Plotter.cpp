@@ -20,6 +20,11 @@ Plotter::Plotter(int penUP, int penDOWN, int penPos) : penServo(penUP, penDOWN, 
 
 	canvasSize.Xmm = 150;
 	canvasSize.Ymm = 100;
+	Adir = 0;
+	Bdir = 0;
+	speed = 80;
+
+
 	calibrate = true;
 	offturn = false;
 
@@ -56,6 +61,22 @@ void Plotter::setCanvasSize(int new_x, int new_y){
  */
 void Plotter::setPenUD(int penUP, int penDOWN) {
 	penServo.setPosVals(penUP, penDOWN);
+}
+
+void Plotter::M10() {
+	penServo.raisePen();
+}
+
+void Plotter::G28() {
+	int curVal = penServo.getCurVal();
+	penServo.raisePen();
+	plotLine(0, 0);
+	penServo.updatePos(curVal);
+
+}
+
+void Plotter::M1(int newPenPos) {
+	penServo.updatePos(newPenPos);
 }
 
 //move plotter head to relative coordinates
