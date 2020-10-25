@@ -20,7 +20,7 @@ class PenServoController {
 public:
 	PenServoController(int _downValue, int _upValue, int _curVal);
 	void updatePos(int newVal);
-	void setPosVals(int down, int up);
+	void setPosVals(int down, int up) { downPos = down; upPos = up; }
 	int getCurVal() { return curVal; }
 
 	virtual ~PenServoController();

@@ -24,11 +24,12 @@
 #include "semphr.h"
 
 #include "CanvasCoordinates.h"
+#include "PenServoCtrl.h"
 #include "global_semphrs.h"
 
 class Plotter {
 public:
-	Plotter();
+	Plotter(int penDOWN, int penUP, int penPos);
 	virtual ~Plotter();
 
 	// used to actually draw the line. it uses penXYPos as the origin of the pen position in the canvas.
@@ -36,6 +37,7 @@ public:
 	void plotLine(int x1_l, int y1_l);
 
 	void setCanvasSize(int new_x, int new_y);
+	void setPenUD(int penUP, int penDOWN);
 	void calibrateCanvas();	// determine which limit switch is which and also the size of the canvas in steps
 
 	void isr(portBASE_TYPE xHigherPriorityWoken); // used to make managing the IRQHandlerer bit easier
@@ -77,6 +79,8 @@ public:
 	DigitalIoPin *sec_limsw;
 
 private:
+	PenServoController penServo;
+
 	enum direction {
 		left = 0, right = 1, down = 0, up = 1
 	};

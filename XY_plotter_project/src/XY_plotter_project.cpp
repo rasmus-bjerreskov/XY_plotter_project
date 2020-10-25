@@ -41,7 +41,6 @@
 #include "SimpleUARTWrapper.h"
 #include "Parser.h"
 #include "MockPipe.h"
-#include "PenServoCtrl.h"
 
 #include "Plotter.h"
 
@@ -56,8 +55,9 @@ QueueHandle_t qCmd; //Holds commands to hardware functions
 EventGroupHandle_t eGrp;
 SemaphoreHandle_t binPen;
 
-ParsedGdata_t *systemData;
-PenServoController *penServo;
+ParsedGdata_t *systemData;  // this should NOT be used anymore...
+// TODO move all non volatile data of the system inside Plotter
+
 Plotter *plotter;
 Parser *parser;
 
@@ -112,8 +112,6 @@ void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
 static void parse_task(void *pvParameters) {
 	ParsedGdata_t parsedData;
 
-	plotter = new Plotter();
-
 	systemData = new ParsedGdata_t;
 	systemData->limitSw[0] = 1;
 	systemData->limitSw[1] = 1;
@@ -128,9 +126,10 @@ static void parse_task(void *pvParameters) {
 	systemData->canvasLimits.Xmm = 150;
 	systemData->canvasLimits.Ymm = 100;
 
+	plotter = new Plotter(90, 160, 160);
+
 	binPen = xSemaphoreCreateBinary();
 	qCmd = xQueueCreate(1, sizeof(PlotInstruct_t));
-	penServo = new PenServoController(systemData->penDown, systemData->penUp, systemData->penCur);
 	parser = new Parser();
 
 	char str[MAX_STR_LEN + 1];
@@ -207,22 +206,24 @@ void plotter_task(void *pvParameters) {
 
 		switch (instrBuf.code) {
 		case (GcodeType::M10):
-			penServo->updatePos(systemData->penUp);
-			systemData->penCur = penServo->getCurVal();
+			penServo->updatePos(systemData->penUp); // TODO replace with plotter->initPenServo() or something similar;
+			systemData->penCur = penServo->getCurVal();  // TODO get rid of this:   all non volatile data go into Plotter
+																			     // from now on
 			break;
 
 		case (GcodeType::M1):
-			penServo->updatePos(instrBuf.penPos);
-			systemData->penCur = penServo->getCurVal();
+			penServo->updatePos(instrBuf.penPos);  // TODO replace this with  with plotter->updatePos() or something similar
+			systemData->penCur = penServo->getCurVal(); // TODO get rid of this:       all non volatile data go into Plotter
+																					// from now on
 			break;
 
 		case (GcodeType::M5):
-			plotter->setCanvasSize(systemData->canvasLimits.Xmm,
-					systemData->canvasLimits.Ymm);
+			plotter->setCanvasSize(systemData->canvasLimits.Xmm,	// TODO all non volatile data are in Plotter,
+					systemData->canvasLimits.Ymm);					// get canvas size from Plotter instead...
 			break;
 
 		case (GcodeType::G28): {
-
+			// TODO fix this: (see above)
 			int penCur = penServo->getCurVal();
 			systemData->penCur = systemData->penUp;
 
@@ -243,15 +244,6 @@ void plotter_task(void *pvParameters) {
 			// M2 is handled in parser_task
 			break;
 		}
-	}
-}
-
-void pen_task(void *param) {
-	xEventGroupSync(eGrp, PEN_b, TASK_BITS, portMAX_DELAY);
-
-	while (1) {
-		xSemaphoreTake(binPen, portMAX_DELAY);
-		penServo->updatePos(systemData->penCur); //TODO change semaphore to queue holding pen value
 	}
 }
 
@@ -321,9 +313,6 @@ int main(void) {
 
 	xTaskCreate(plotter_task, "plot", configMINIMAL_STACK_SIZE * 3, NULL,
 	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);
-
-	xTaskCreate(pen_task, "pen", configMINIMAL_STACK_SIZE, NULL,
-	tskIDLE_PRIORITY + 2, NULL);
 
 	xTaskCreate(send_task, "tx", configMINIMAL_STACK_SIZE, NULL,
 	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);
