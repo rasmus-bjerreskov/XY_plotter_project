@@ -62,16 +62,6 @@ Parser *parser;
  * Private functions
  ****************************************************************************/
 
-void laser_disable() {
-	Chip_SCT_Init(LPC_SCT1);
-	Chip_SCTPWM_Stop(LPC_SCT1);
-
-	LPC_SCT1->OUT[1].SET = 0; // event 2 has no effect on  SCTx_OUT1 --> laser is always off
-	LPC_SCT1->MATCHREL[1].H = 1;
-	Chip_SWM_MovablePinAssign(SWM_SCT1_OUT0_O, 12);
-	Chip_SCTPWM_Start(LPC_SCT1);
-}
-
 /* Sets up system hardware */
 static void prvSetupHardware(void) {
 	SystemCoreClockUpdate();
@@ -178,7 +168,7 @@ void plotter_task(void *pvParameters) {
 		xEventGroupWaitBits(eGrp, TX_b, pdTRUE, pdTRUE, portMAX_DELAY);
 		xQueuePeek(qCmd, &instrBuf, portMAX_DELAY); //get data and send it on to tx task
 
-		sprintf(str, "Instr #%d\n", instrBuf.cnt);
+		sprintf(str, "Instr #%lu\n", instrBuf.cnt);
 		ITM_write(str);
 
 		/*set flag here so that sending
@@ -194,9 +184,7 @@ void plotter_task(void *pvParameters) {
 			plotter->M1(instrBuf.penPos);
 			break;
 
-		case (GcodeType::M5):
-			plotter->calibrateCanvas();
-			break;
+			//call to calibrate on M5 handled internally, no need to explicitly call calibrate
 
 		case (GcodeType::G28): {
 			plotter->G28();
@@ -272,7 +260,7 @@ void vConfigureTimerForRunTimeStats(void) {
 int main(void) {
 	prvSetupHardware();
 
-//laser_disable(); //firmware does not support laser operation
+	//disable laser - not implemented
 	DigitalIoPin laser(0, 12, DigitalIoPin::output, true);
 	laser.write(false);
 

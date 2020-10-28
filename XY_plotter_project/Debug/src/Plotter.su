@@ -4,12 +4,19 @@ ritimer_15xx.h:107:20:void Chip_RIT_Enable(LPC_RITIMER_T*)	16	static
 ritimer_15xx.h:117:20:void Chip_RIT_Disable(LPC_RITIMER_T*)	16	static
 ritimer_15xx.h:151:20:void Chip_RIT_EnableCompClear(LPC_RITIMER_T*)	16	static
 ritimer_15xx.h:181:20:void Chip_RIT_ClearIntStatus(LPC_RITIMER_T*)	16	static
-Plotter.cpp:17:1:Plotter::Plotter()	32	static
-Plotter.cpp:38:1:Plotter::~Plotter()	16	static
-Plotter.cpp:38:1:virtual Plotter::~Plotter()	16	static
-Plotter.cpp:43:6:void Plotter::setCanvasSize(int, int)	24	static
-Plotter.cpp:52:6:void Plotter::plotLine(int, int)	32	static
-Plotter.cpp:59:6:void Plotter::plotLine(int, int, int, int)	104	static
-Plotter.cpp:173:6:void Plotter::isr(long int)	16	static
-Plotter.cpp:221:6:void Plotter::calibrateCanvas()	88	static
-Plotter.cpp:337:6:void RIT_IRQHandler()	16	static
+PenServoCtrl.h:22:7:void PenServoController::raisePen()	16	static
+PenServoCtrl.h:25:7:void PenServoController::setPosVals(int, int)	24	static
+PenServoCtrl.h:26:6:int PenServoController::getCurVal()	16	static
+Plotter.cpp:9:1:Plotter::Plotter(int, int, int)	40	static
+Plotter.cpp:35:1:Plotter::~Plotter()	16	static
+Plotter.cpp:35:1:virtual Plotter::~Plotter()	16	static
+Plotter.cpp:40:6:void Plotter::setCanvasSize(int, int)	24	static
+Plotter.cpp:54:6:void Plotter::setPenUD(int, int)	24	static
+Plotter.cpp:58:6:void Plotter::M10()	16	static
+Plotter.cpp:62:6:void Plotter::G28()	24	static
+Plotter.cpp:70:6:void Plotter::M1(int)	16	static
+Plotter.cpp:75:6:void Plotter::plotLine(int, int)	32	static
+Plotter.cpp:82:6:void Plotter::plotLine(int, int, int, int)	104	static
+Plotter.cpp:192:6:void Plotter::isr(long int)	16	static
+Plotter.cpp:240:6:void Plotter::calibrateCanvas()	88	static
+Plotter.cpp:356:6:void RIT_IRQHandler()	16	static

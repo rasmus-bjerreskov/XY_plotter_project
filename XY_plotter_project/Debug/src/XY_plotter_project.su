@@ -1,16 +1,15 @@
 core_cm3.h:1405:22:void NVIC_SetPriority(IRQn_Type, uint32_t)	16	static
-sct_15xx.h:423:20:void Chip_SCT_SetControl(LPC_SCT_T*, uint32_t)	16	static
-sct_15xx.h:434:20:void Chip_SCT_ClearControl(LPC_SCT_T*, uint32_t)	16	static
-sct_pwm_15xx.h:129:20:void Chip_SCTPWM_Start(LPC_SCT_T*)	16	static
-sct_pwm_15xx.h:139:20:void Chip_SCTPWM_Stop(LPC_SCT_T*)	16	static
 gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
-PenServoCtrl.h:24:6:int PenServoController::getCurVal()	16	static
-XY_plotter_project.cpp:68:6:void laser_disable()	8	static
-XY_plotter_project.cpp:79:13:void prvSetupHardware()	8	static
-XY_plotter_project.cpp:95:6:void umsToSteps(CanvasCoordinates_t*, RelModes)	16	static
-XY_plotter_project.cpp:112:13:void parse_task(void*)	264	static
-XY_plotter_project.cpp:191:6:void plotter_task(void*)	112	static
-XY_plotter_project.cpp:249:6:void pen_task(void*)	16	static
-XY_plotter_project.cpp:259:6:void send_task(void*)	168	static
-XY_plotter_project.cpp:298:6:void vConfigureTimerForRunTimeStats()	8	static
-XY_plotter_project.cpp:311:5:int main()	40	static
+PenServoCtrl.h:27:6:int PenServoController::getPenUpVal()	16	static
+PenServoCtrl.h:28:6:int PenServoController::getPenDownVal()	16	static
+Plotter.h:42:6:int Plotter::getCanvasWidth()	16	static
+Plotter.h:43:6:int Plotter::getCanvasHeight()	16	static
+Plotter.h:44:6:int Plotter::getPenUpVal()	16	static
+Plotter.h:45:6:int Plotter::getPenDownVal()	16	static
+XY_plotter_project.cpp:66:13:void prvSetupHardware()	8	static
+XY_plotter_project.cpp:82:6:void umsToSteps(CanvasCoordinates_t*, RelModes)	16	static
+XY_plotter_project.cpp:99:13:void parse_task(void*)	264	static
+XY_plotter_project.cpp:161:6:void plotter_task(void*)	96	static
+XY_plotter_project.cpp:208:6:void send_task(void*)	176	static
+XY_plotter_project.cpp:247:6:void vConfigureTimerForRunTimeStats()	8	static
+XY_plotter_project.cpp:260:5:int main()	40	static

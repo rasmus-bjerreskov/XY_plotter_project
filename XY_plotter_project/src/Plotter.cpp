@@ -1,15 +1,7 @@
-/*
- * Plotter.cpp
- *
- *  Created on: 14.10.2020
- *      Author: Santeri Rauhala
- */
-
 #include "Plotter.h"
 #include "ITM_write.h"
 #include <stdlib.h>
 
-#define DEBUG
 
 static Plotter *plotter; // used to hold the only plotter
 
@@ -90,14 +82,10 @@ void Plotter::plotLine(int x1_l, int y1_l) {
 void Plotter::plotLine(int x0, int y0, int x1, int y1) {
 	//stepper frequency - one step for every other pulse
 	int pps;
-#ifdef DEBUG
 	if (calibrate)
 		pps = 2 * 2000;
 	else
 		pps = 2 * 800;
-#else
-	pps = 2 * 800;
-#endif
 
 	if (calibrate) { //we don't know our exact position during calibration
 		penXYPos.Xsteps = 1;
