@@ -1,12 +1,12 @@
 /*
-===============================================================================
+ ===============================================================================
  Name        : main.c
  Author      : $(author)
  Version     :
  Copyright   : $(copyright)
  Description : main definition
-===============================================================================
-*/
+ ===============================================================================
+ */
 
 #if defined (__USE_LPCOPEN)
 #if defined(NO_BOARD_LIB)
@@ -24,7 +24,25 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
+#include "queue.h"
+#include "event_groups.h"
+
+#include <cstring>
+
+#include "ITM_write.h"
+#include "DigitalIoPin.h"
 #include "heap_lock_monitor.h"
+#include "user_vcom.h"
+
+#include "ParsedGdata.h"
+#include <global_semphrs.h>
+#include "GcodePipe.h"
+#include "SimpleUARTWrapper.h"
+#include "Parser.h"
+#include "MockPipe.h"
+
+#include "Plotter.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -33,69 +51,212 @@
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
+QueueHandle_t qCmd; //Holds commands to hardware functions
+EventGroupHandle_t eGrp;
+SemaphoreHandle_t binPen;
+
+Plotter *plotter;
+Parser *parser;
 
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
 
+void laser_disable() {
+	Chip_SCT_Init(LPC_SCT1);
+	Chip_SCTPWM_Stop(LPC_SCT1);
+
+	LPC_SCT1->OUT[1].SET = 0; // event 2 has no effect on  SCTx_OUT1 --> laser is always off
+	LPC_SCT1->MATCHREL[1].H = 1;
+	Chip_SWM_MovablePinAssign(SWM_SCT1_OUT0_O, 12);
+	Chip_SCTPWM_Start(LPC_SCT1);
+}
+
 /* Sets up system hardware */
-static void prvSetupHardware(void)
-{
+static void prvSetupHardware(void) {
 	SystemCoreClockUpdate();
 	Board_Init();
 	heap_monitor_setup();
+
+	ITM_init();
+
+	Chip_RIT_Init(LPC_RITIMER);
+
+	NVIC_SetPriority(RITIMER_IRQn,
+	configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY + 1);
 
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
 
-/* LED1 toggle thread */
-static void vLEDTask1(void *pvParameters) {
-	bool LedState = false;
+void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
+	coords->Xsteps = coords->Xum / UMS_PER_STEP;
+	coords->Ysteps = coords->Yum / UMS_PER_STEP;
 
-	while (1) {
-		Board_LED_Set(0, LedState);
-		LedState = (bool) !LedState;
+	switch (mode) {
+	case RelModes::REL:
+		coords->Xsteps += plotter->penXYPos.Xsteps;
+		coords->Ysteps += plotter->penXYPos.Ysteps;
+		break;
 
-		/* About a 3Hz on/off toggle rate */
-		vTaskDelay(configTICK_RATE_HZ / 6);
+	case RelModes::ABS:
+		break;
+
 	}
 }
 
-/* LED2 toggle thread */
-static void vLEDTask2(void *pvParameters) {
-	bool LedState = false;
+/*Receive G-code lines from mDraw, validate and parse code into hardware instructions*/
+static void parse_task(void *pvParameters) {
+	ParsedGdata_t parsedData;
+
+	plotter = new Plotter(90, 160, 160);
+
+	binPen = xSemaphoreCreateBinary();
+	qCmd = xQueueCreate(1, sizeof(PlotInstruct_t));
+	parser = new Parser();
+
+	char str[MAX_STR_LEN + 1];
+	char *lf = 0;
+	uint32_t instructCnt = 0;
+	xEventGroupSync(eGrp, RX_b, TASK_BITS, portMAX_DELAY);
 
 	while (1) {
-		Board_LED_Set(1, LedState);
-		LedState = (bool) !LedState;
+		int len = 0;
+		char buf[MAX_STR_LEN + 1];
+		char *curBufPos = buf;
+		//receive-append strings
+		do {
+			len = USB_receive((uint8_t*) str, MAX_STR_LEN);
+			str[len] = 0;
+			lf = strchr(str, '\n');
 
-		/* About a 7Hz on/off toggle rate */
-		vTaskDelay(configTICK_RATE_HZ / 14);
+			memcpy(buf, str, len);
+			curBufPos += len;
+
+		} while (lf == NULL);
+
+		*curBufPos = 0;
+		ITM_write("\nReceived: ");
+		ITM_write(buf);
+		//if command was recognised and parsed, put it on queue
+		if (parser->parse(&parsedData, buf)) {
+			instructCnt++;
+
+			switch (parsedData.codeType) {
+			case (GcodeType::M2):
+				plotter->setPenUD(parsedData.penUp, parsedData.penDown);
+				break;
+
+			case (GcodeType::M5):
+				plotter->Adir = parsedData.Adir;
+				plotter->Bdir = parsedData.Bdir;
+				plotter->setCanvasSize(parsedData.canvasLimits.Xmm, parsedData.canvasLimits.Ymm);
+				plotter->speed = parsedData.speed;
+				break;
+
+			default:
+				break;
+			}
+
+			PlotInstruct_t instruct { { parsedData.PenXY.Xum,
+					parsedData.PenXY.Yum, 0, 0 }, parsedData.codeType,
+					parsedData.penCur, parsedData.relativityMode, instructCnt };
+			xQueueSend(qCmd, &instruct, portMAX_DELAY);
+			xEventGroupSetBits(eGrp, TX_b);
+		}
 	}
 }
 
-/* UART (or output) thread */
-static void vUARTTask(void *pvParameters) {
-	int tickCnt = 0;
+/*Execute hardware instructions*/
+void plotter_task(void *pvParameters) {
+	PlotInstruct_t instrBuf;
+	char str[40];
 
+	xEventGroupSync(eGrp, PLOT_b, TASK_BITS, portMAX_DELAY);
 	while (1) {
-		DEBUGOUT("Tick: %d \r\n", tickCnt);
-		tickCnt++;
+		//Wait for message that new item is on queue. Without this, same instruction may be read multiple times
+		xEventGroupWaitBits(eGrp, TX_b, pdTRUE, pdTRUE, portMAX_DELAY);
+		xQueuePeek(qCmd, &instrBuf, portMAX_DELAY); //get data and send it on to tx task
 
-		/* About a 1s delay here */
-		vTaskDelay(configTICK_RATE_HZ);
+		sprintf(str, "Instr #%d\n", instrBuf.cnt);
+		ITM_write(str);
+
+		/*set flag here so that sending
+		 reply can happen concurrently with executing instructions*/
+		xEventGroupSetBits(eGrp, PLOT_b);
+
+		switch (instrBuf.code) {
+		case (GcodeType::M10):
+			plotter->M10();
+			break;
+
+		case (GcodeType::M1):
+			plotter->M1(instrBuf.penPos);
+			break;
+
+		case (GcodeType::M5):
+			plotter->calibrateCanvas();
+			break;
+
+		case (GcodeType::G28): {
+			plotter->G28();
+		}
+			break;
+
+		case (GcodeType::G1):
+			umsToSteps(&(instrBuf.newPos), instrBuf.relMode);
+			plotter->plotLine(instrBuf.newPos.Xsteps, instrBuf.newPos.Ysteps);
+			break;
+
+		default:
+			// No laser (M4) implemented...
+			// M2 is handled in parser_task
+			break;
+		}
 	}
 }
 
-/*****************************************************************************
- * Public functions
- ****************************************************************************/
+/*Send OK and other required data to mDraw*/
+void send_task(void *pvParameters) {
+	char str[80];
+	PlotInstruct_t instrBuf;
+
+	xEventGroupSync(eGrp, TX_b, TASK_BITS, portMAX_DELAY);
+	while (1) {
+		xEventGroupWaitBits(eGrp, PLOT_b, pdTRUE, pdTRUE, portMAX_DELAY);
+		xQueueReceive(qCmd, &instrBuf, portMAX_DELAY);
+
+		switch (instrBuf.code) {
+
+		case (GcodeType::M10):
+			sprintf(str,
+					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
+					plotter->getCanvasWidth(), plotter->getCanvasHeight(),
+					plotter->Adir, plotter->Bdir, plotter->speed,
+					plotter->getPenUpVal(), plotter->getPenDownVal());
+			break;
+
+		case (GcodeType::M11):
+			sprintf(str, "M11 %d %d %d %d\r\nOK\r\n", plotter->LSWPin1->read(),
+					plotter->LSWPin2->read(), plotter->LSWPin3->read(),
+					plotter->LSWPin4->read());
+			break;
+
+		default:
+			strcpy(str, "OK\r\n");
+			break;
+		}
+		ITM_write("Reply: ");
+		ITM_write(str);
+		USB_send((uint8_t*) str, strlen(str));
+
+	}
+}
 
 /* the following is required if runtime statistics are to be collected */
 extern "C" {
 
-void vConfigureTimerForRunTimeStats( void ) {
+void vConfigureTimerForRunTimeStats(void) {
 	Chip_SCT_Init(LPC_SCTSMALL1);
 	LPC_SCTSMALL1->CONFIG = SCT_CONFIG_32BIT_COUNTER;
 	LPC_SCTSMALL1->CTRL_U = SCT_CTRL_PRE_L(255) | SCT_CTRL_CLRCTR_L; // set prescaler to 256 (255 + 1), and start timer
@@ -108,29 +269,31 @@ void vConfigureTimerForRunTimeStats( void ) {
  * @brief	main routine for FreeRTOS blinky example
  * @return	Nothing, function should not exit
  */
-int main(void)
-{
+int main(void) {
 	prvSetupHardware();
 
-	/* LED1 toggle thread */
-	xTaskCreate(vLEDTask1, "vTaskLed1",
-				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
-				(TaskHandle_t *) NULL);
+//laser_disable(); //firmware does not support laser operation
+	DigitalIoPin laser(0, 12, DigitalIoPin::output, true);
+	laser.write(false);
 
-	/* LED2 toggle thread */
-	xTaskCreate(vLEDTask2, "vTaskLed2",
-				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
-				(TaskHandle_t *) NULL);
+	xTaskCreate(parse_task, "rx",
+	configMINIMAL_STACK_SIZE * 2, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t*) NULL);
 
-	/* UART output thread, simply counts seconds */
-	xTaskCreate(vUARTTask, "vTaskUart",
-				configMINIMAL_STACK_SIZE + 128, NULL, (tskIDLE_PRIORITY + 1UL),
-				(TaskHandle_t *) NULL);
+	xTaskCreate(plotter_task, "plot", configMINIMAL_STACK_SIZE * 3, NULL,
+	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);
 
-	/* Start the scheduler */
+	xTaskCreate(send_task, "tx", configMINIMAL_STACK_SIZE, NULL,
+	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);
+
+	xTaskCreate(cdc_task, "CDC",
+	configMINIMAL_STACK_SIZE * 3, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t*) NULL);
+
+	eGrp = xEventGroupCreate();
+
 	vTaskStartScheduler();
 
-	/* Should never arrive here */
 	return 1;
 }
 
