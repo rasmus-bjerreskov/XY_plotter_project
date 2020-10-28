@@ -1,6 +1,14 @@
 #ifndef CANVASCOORDINATES_H_
 #define CANVASCOORDINATES_H_
 
+#if defined (__USE_LPCOPEN)
+#if defined(NO_BOARD_LIB)
+#include "chip.h"
+#else
+#include "board.h"
+#endif
+#endif
+
 const int UMS_PER_STEP = 25;
 
 struct CanvasCoordinates_t

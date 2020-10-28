@@ -14,12 +14,17 @@
 static Plotter *plotter; // used to hold the only plotter
 
 // in constructor the IO-pins and their settings are set, also some starting values
-Plotter::Plotter() {
+Plotter::Plotter(int penUP, int penDOWN, int penPos) : penServo(penUP, penDOWN, penPos) {
 
 	plotter = this;
 
 	canvasSize.Xmm = 150;
 	canvasSize.Ymm = 100;
+	Adir = 0;
+	Bdir = 0;
+	speed = 80;
+
+
 	calibrate = true;
 	offturn = false;
 
@@ -46,6 +51,32 @@ void Plotter::setCanvasSize(int new_x, int new_y){
 		canvasSize.Ymm = new_y;
 		calibrate = true;
 	}
+}
+
+/**
+ * sets new penUP and penDOWN values for the penServo
+ *
+ * @param penUP the new pen UP value
+ * @param penDOWN the new pen DOWN value
+ */
+void Plotter::setPenUD(int penUP, int penDOWN) {
+	penServo.setPosVals(penUP, penDOWN);
+}
+
+void Plotter::M10() {
+	penServo.raisePen();
+}
+
+void Plotter::G28() {
+	int curVal = penServo.getCurVal();
+	penServo.raisePen();
+	plotLine(0, 0);
+	penServo.updatePos(curVal);
+
+}
+
+void Plotter::M1(int newPenPos) {
+	penServo.updatePos(newPenPos);
 }
 
 //move plotter head to relative coordinates

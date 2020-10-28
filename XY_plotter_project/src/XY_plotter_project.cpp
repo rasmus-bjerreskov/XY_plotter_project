@@ -41,7 +41,6 @@
 #include "SimpleUARTWrapper.h"
 #include "Parser.h"
 #include "MockPipe.h"
-#include "PenServoCtrl.h"
 
 #include "Plotter.h"
 
@@ -56,8 +55,6 @@ QueueHandle_t qCmd; //Holds commands to hardware functions
 EventGroupHandle_t eGrp;
 SemaphoreHandle_t binPen;
 
-ParsedGdata_t *systemData;
-PenServoController *penServo;
 Plotter *plotter;
 Parser *parser;
 
@@ -112,25 +109,10 @@ void umsToSteps(CanvasCoordinates_t *coords, RelModes mode) {
 static void parse_task(void *pvParameters) {
 	ParsedGdata_t parsedData;
 
-	plotter = new Plotter();
-
-	systemData = new ParsedGdata_t;
-	systemData->limitSw[0] = 1;
-	systemData->limitSw[1] = 1;
-	systemData->limitSw[2] = 1;
-	systemData->limitSw[3] = 1;
-	systemData->Adir = 0;
-	systemData->Bdir = 0;
-	systemData->penUp = 160;
-	systemData->penDown = 90;
-	systemData->penCur = systemData->penUp;
-	systemData->speed = 80;
-	systemData->canvasLimits.Xmm = 150;
-	systemData->canvasLimits.Ymm = 100;
+	plotter = new Plotter(90, 160, 160);
 
 	binPen = xSemaphoreCreateBinary();
 	qCmd = xQueueCreate(1, sizeof(PlotInstruct_t));
-	penServo = new PenServoController(systemData->penDown, systemData->penUp, systemData->penCur);
 	parser = new Parser();
 
 	char str[MAX_STR_LEN + 1];
@@ -162,16 +144,14 @@ static void parse_task(void *pvParameters) {
 
 			switch (parsedData.codeType) {
 			case (GcodeType::M2):
-				systemData->penUp = parsedData.penUp;
-				systemData->penDown = parsedData.penDown;
+				plotter->setPenUD(parsedData.penUp, parsedData.penDown);
 				break;
 
 			case (GcodeType::M5):
-				systemData->Adir = parsedData.Adir;
-				systemData->Bdir = parsedData.Bdir;
-				systemData->canvasLimits.Xmm = parsedData.canvasLimits.Xmm;
-				systemData->canvasLimits.Ymm = parsedData.canvasLimits.Ymm;
-				systemData->speed = parsedData.speed;
+				plotter->Adir = parsedData.Adir;
+				plotter->Bdir = parsedData.Bdir;
+				plotter->setCanvasSize(parsedData.canvasLimits.Xmm, parsedData.canvasLimits.Ymm);
+				plotter->speed = parsedData.speed;
 				break;
 
 			default:
@@ -207,29 +187,19 @@ void plotter_task(void *pvParameters) {
 
 		switch (instrBuf.code) {
 		case (GcodeType::M10):
-			penServo->updatePos(systemData->penUp);
-			systemData->penCur = penServo->getCurVal();
+			plotter->M10();
 			break;
 
 		case (GcodeType::M1):
-			penServo->updatePos(instrBuf.penPos);
-			systemData->penCur = penServo->getCurVal();
+			plotter->M1(instrBuf.penPos);
 			break;
 
 		case (GcodeType::M5):
-			plotter->setCanvasSize(systemData->canvasLimits.Xmm,
-					systemData->canvasLimits.Ymm);
+			plotter->calibrateCanvas();
 			break;
 
 		case (GcodeType::G28): {
-
-			int penCur = penServo->getCurVal();
-			systemData->penCur = systemData->penUp;
-
-			xSemaphoreGive(binPen);
-			plotter->plotLine(0, 0);
-			systemData->penCur = penCur;
-			xSemaphoreGive(binPen);
+			plotter->G28();
 		}
 			break;
 
@@ -243,15 +213,6 @@ void plotter_task(void *pvParameters) {
 			// M2 is handled in parser_task
 			break;
 		}
-	}
-}
-
-void pen_task(void *param) {
-	xEventGroupSync(eGrp, PEN_b, TASK_BITS, portMAX_DELAY);
-
-	while (1) {
-		xSemaphoreTake(binPen, portMAX_DELAY);
-		penServo->updatePos(systemData->penCur); //TODO change semaphore to queue holding pen value
 	}
 }
 
@@ -270,9 +231,9 @@ void send_task(void *pvParameters) {
 		case (GcodeType::M10):
 			sprintf(str,
 					"M10 XY %d %d 0.00 0.00 A%d B%d H0 S%d U%d D%d\r\nOK\r\n",
-					systemData->canvasLimits.Xmm, systemData->canvasLimits.Ymm,
-					systemData->Adir, systemData->Bdir, systemData->speed,
-					systemData->penUp, systemData->penDown);
+					plotter->getCanvasWidth(), plotter->getCanvasHeight(),
+					plotter->Adir, plotter->Bdir, plotter->speed,
+					plotter->getPenUpVal(), plotter->getPenDownVal());
 			break;
 
 		case (GcodeType::M11):
@@ -321,9 +282,6 @@ int main(void) {
 
 	xTaskCreate(plotter_task, "plot", configMINIMAL_STACK_SIZE * 3, NULL,
 	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);
-
-	xTaskCreate(pen_task, "pen", configMINIMAL_STACK_SIZE, NULL,
-	tskIDLE_PRIORITY + 2, NULL);
 
 	xTaskCreate(send_task, "tx", configMINIMAL_STACK_SIZE, NULL,
 	tskIDLE_PRIORITY + 1UL, (TaskHandle_t*) NULL);
